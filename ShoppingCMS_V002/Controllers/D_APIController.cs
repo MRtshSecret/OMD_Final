@@ -46,6 +46,11 @@ namespace ShoppingCMS_V002.Controllers
             return View();
         }
 
+        public ActionResult ContactUs()
+        {
+            return View();
+        }
+
         public ActionResult ShoppingCartPopup(int factorId)
         {
             D_APIModelFiller DMF = new D_APIModelFiller();
