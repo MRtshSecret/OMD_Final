@@ -163,7 +163,7 @@ function AddComment(ProId) {
             }
         });
 
-    
+        return false;
 }
 
 

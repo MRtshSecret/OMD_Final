@@ -594,7 +594,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             }
             else if (Type == "گروه اصلی")
             {
-                num = Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_Product] WHERE IS_AVAILABEL=1 AND ISDELETE=0 AND id_SubCategory=" + Id).Rows[0][0]);
+                num = Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_Product] WHERE [IS_AVAILABEL] = 1 AND [ISDELETE] = 0 AND [id_SubCategory] = " + Id).Rows[0][0]);
             }
             else if (Type == "برچسب")
             {
