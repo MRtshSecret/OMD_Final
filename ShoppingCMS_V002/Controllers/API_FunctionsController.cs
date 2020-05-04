@@ -409,6 +409,149 @@ namespace ShoppingCMS_V002.Controllers
             return Content(ENC.DecryptText(str, "OMD_FACTOR"));
         }
 
+        public ActionResult ContactUsMessage(string Name,string Email,string Subject,string Message)
+        {
+            PDBC db = new PDBC("PandaMarketCMS", true);
+            db.Connect();
 
+            List<ExcParameters> parss = new List<ExcParameters>();
+            ExcParameters par = new ExcParameters()
+            {
+                _KEY = "@Name",
+                _VALUE = Name
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@Email",
+                _VALUE = Email
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@Subject",
+                _VALUE = Subject
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@Message",
+                _VALUE = Message
+            };
+            parss.Add(par);
+
+            return Content("Success");
+        }
+
+        public ActionResult AddFactor(string Name,string familly,int cityId,int factorId,string Address,string Email,string Phonenum,string CodePosti,string PaymentToken,string PaymentSerial,int CustomerId, string depositMoney)
+        {
+            PDBC db = new PDBC("PandaMarketCMS", true);
+            db.Connect();
+            List<ExcParameters> parss = new List<ExcParameters>();
+            ExcParameters par = new ExcParameters()
+            {
+                _KEY = "@Name",
+                _VALUE = Name
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@familly",
+                _VALUE = familly
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@CustomerId",
+                _VALUE = CustomerId
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@Phonenum",
+                _VALUE = Phonenum
+            };
+            parss.Add(par);
+
+            db.Script("UPDATE [tbl_Customer_Main]SET [C_Mobile] = @Phonenum,[C_FirstName] =@Name ,[C_LastNAme] =@familly ,[C_ISActivate] = 1 WHERE id_Customer=@CustomerId",parss);
+
+            parss = new List<ExcParameters>();
+            par = new ExcParameters()
+            {
+                _KEY = "@cityId",
+                _VALUE = cityId
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@Address",
+                _VALUE = Address
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@CodePosti",
+                _VALUE = CodePosti
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@CustomerId",
+                _VALUE = CustomerId
+            };
+            parss.Add(par);
+           string AddresId= db.Script("INSERT INTO [tbl_Customer_Address] output inserted.id_CAddress VALUES( @CustomerId ,@cityId ,@CodePosti,@Address)", parss);
+
+
+            parss = new List<ExcParameters>();
+            par = new ExcParameters()
+            {
+                _KEY = "@AddresId",
+                _VALUE = AddresId
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@factorId",
+                _VALUE = factorId
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@PaymentToken",
+                _VALUE = PaymentToken
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@PaymentSerial",
+                _VALUE = PaymentSerial
+            };
+            parss.Add(par);
+
+            
+            par = new ExcParameters()
+            {
+                _KEY = "@depositMoney",
+                _VALUE = depositMoney
+            };
+            parss.Add(par);
+
+            db.Script("UPDATE [tbl_FACTOR_Main] SET[AddressId] = @AddresId,[date] = GetDate(),[deposit_price] = @depositMoney,[Done] = 1,[PaymentSerial] = @PaymentSerial ,[PaymentToken] =@PaymentToken WHERE Factor_Id=@factorId", parss);
+
+            return Content("Success");
+        }
     }
 }

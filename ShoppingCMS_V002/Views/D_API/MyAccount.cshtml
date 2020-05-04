@@ -15,44 +15,32 @@
             <div class="row">
                 <div id="Log" class="col-sm-6">
                     <h3 class="block-title"><span>ورود به حساب کاربری</span></h3>
-                    @using (Html.BeginForm("login", "D_API", FormMethod.Post))
-                    {@Html.AntiForgeryToken()
-
-                    <div class="row">
-                        <div class="col-md-12 hello-text-wrap">
-                            <span class="hello-text text-thin">سلام ، به حساب کاربری خود خوش آمديد.</span>
-                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="col-md-12">
-
-                            <div class="form-group">
-                                @Html.TextBoxFor(m => m.C_Mobile, new { @class = "form-control", required = "required", type = "text", placeholder = "شماره موبایل" })
+                    <div>
+                        <div class="row">
+                            <div class="col-md-12 hello-text-wrap">
+                                <span class="hello-text text-thin">سلام ، به حساب کاربری خود خوش آمديد.</span>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                @Html.TextBoxFor(m => m.C_Password, new { @class = "form-control", required = "required", type = "password", placeholder = "رمز عبور" })
+                            <div class="col-md-12">
+
+                                <div class="form-group">
+                                    <input id="CMobile1" class="form-control" type="text" placeholder="شماره موبایل" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-12 col-lg-6">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input id="CPass11" class="form-control" type="password" placeholder="رمز عبور" />
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="col-md-6">
+                                <button class="btn btn-theme btn-block btn-theme-dark" onclick="return login()">ورود</button>
 
-                            <label>
-                                @Html.CheckBoxFor(m => m.remember_me)
-                                مرا به خاطر بسپار
-                            </label>
-
-                        </div>
-                        <div class="col-md-12 col-lg-6 text-right-lg">
-                            <a class="forgot-password" href="#">رمز عبورتان را فراموش کرده‌اید؟</a>
-                        </div>
-                        <div class="col-md-6">
-                            <button class="btn btn-theme btn-block btn-theme-dark">ورود</button>
+                            </div>
 
                         </div>
 
                     </div>
-
-                }
                 </div>
                 <div id="NewAcc" style="display:none" class="col-sm-6">
                     <h3 class="block-title"><span> حساب کاربری جدید</span></h3>
@@ -156,3 +144,31 @@
 
 </div>
 
+<script>
+    $(document).ready(function () {
+        var cookie = getCookie("OMD_Active");
+        PostJson = {
+            'Token': cookie
+        };
+
+        $.ajax({
+            url: '/API_Functions/DecryptOMD',
+            type: "post",
+            data: JSON.stringify(PostJson),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                var token = JSON.parse(response);
+                if (token.Status == "Active") {
+                    $('#NewAcc').hide();
+                    $('#Log').hide();
+                }
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+                result = "";
+            }
+        });
+
+    });
+</script>

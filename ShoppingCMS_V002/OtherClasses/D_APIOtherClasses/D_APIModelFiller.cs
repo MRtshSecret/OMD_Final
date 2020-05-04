@@ -575,7 +575,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             return query.ToString();
         }
 
-        public int ProList_Pages(string Type, int ProductsInAPage, int Id, string search)
+        public int ProList_Pages(string Type, int ProductsInAPage, int Id, string search,int CustomerId=0)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
@@ -603,6 +603,9 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             else if (Type == "جست و جو")
             {
                 num = Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_Product] WHERE IS_AVAILABEL=1 AND ISDELETE=0 AND Title LIKE N'%" + search + "%' OR [Description] LIKE N'%" + search + "%'").Rows[0][0]);
+            }else if(Type=="علاقه مندی ها")
+            {
+                num = Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_Product] WHERE IS_AVAILABEL=1 AND ISDELETE=0 AND id_MProduct IN (SELECT [ProductId] FROM [tbl_Customer_Favorites]where CustomerId="+ CustomerId + ")").Rows[0][0]);
             }
 
 
@@ -1065,6 +1068,44 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             }
             
             return MPCList;
+        }
+
+        public List<MiniProductModel> FavoriteProducts(int ProductsInAPage, string Type, int Id, int page, string search, string DateType,int CustomerId)
+        {
+            var res = new List<MiniProductModel>();
+            PDBC db = new PDBC("PandaMarketCMS", true);
+            int num = ProList_Pages(Type, ProductsInAPage, Id, search,CustomerId);
+            db.Connect();
+            var Query = "select distinct * from(SELECT NTILE("+num+")over(order by(main.DateCreated)DESC)as tile,main.Search_Gravity,main.[id_MProduct],[Description],[Title],main.DateCreated,(SELECT top 1 [PicAddress] FROM [tbl_ADMIN_UploadStructure_ImageAddress] as A inner join [tbl_Product_PicConnector] as B on A.PicID=B.PicID where B.id_MProduct=main.id_MProduct) as pic ,(SELECT top 1 [PriceXquantity] FROM [tlb_Product_MainProductConnector] where id_MProduct= main.id_MProduct) as [PriceXquantity],(SELECT top 1 [PriceOff] FROM [tlb_Product_MainProductConnector] where id_MProduct=main.id_MProduct) as [PriceOff],(SELECT top 1 [OffType] FROM [tlb_Product_MainProductConnector] where id_MProduct=main.id_MProduct) as [OffType] ,(SELECT top 1 [MoneyTypeName]FROM [tbl_Product_MoneyType] as A inner join [tlb_Product_MainProductConnector] as B on A.MoneyId=B.PriceModule WHERE B.id_MProduct=main.id_MProduct) as priceQ FROM [tbl_Product] as main inner join [tlb_Product_MainProductConnector] as MPC on main.id_MProduct=MPC.id_MProduct where main.IS_AVAILABEL=1 AND main.ISDELETE=0 AND main.id_MProduct In(SELECT [ProductId] FROM [tbl_Customer_Favorites]where CustomerId="+CustomerId+"))b where b.tile="+page;
+            DataTable dt = db.Select(Query);
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                var model = new MiniProductModel()
+                {
+                    Id = Convert.ToInt32(dt.Rows[i]["id_MProduct"]),
+                    Title = dt.Rows[i]["Title"].ToString(),
+                    Discription = dt.Rows[i]["Description"].ToString(),
+                    PicPath = dt.Rows[i]["pic"].ToString(),
+                    OffPrice = dt.Rows[i]["PriceOff"].ToString(),
+                    date = DateReturner(dt.Rows[i]["DateCreated"].ToString(), DateType),
+                    MoneyQ = dt.Rows[i]["priceQ"].ToString()
+                };
+
+                if (dt.Rows[i]["PriceOff"].ToString() == "1")
+                {
+                    model.Price = "";
+                }
+                else
+                {
+                    model.Price = dt.Rows[i]["PriceXquantity"].ToString();
+                }
+
+                res.Add(model);
+
+
+            }
+            return res;
+
         }
     }
 }

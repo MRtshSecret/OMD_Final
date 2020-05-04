@@ -3,6 +3,7 @@ using ShoppingCMS_V002.DBConnect;
 using ShoppingCMS_V002.Models;
 using ShoppingCMS_V002.Models.D_APIModels;
 using ShoppingCMS_V002.ModelViews.D_APIModelViews;
+using ShoppingCMS_V002.OtherClasses;
 using ShoppingCMS_V002.OtherClasses.Blog;
 using ShoppingCMS_V002.OtherClasses.D_APIOtherClasses;
 using System;
@@ -79,7 +80,7 @@ namespace ShoppingCMS_V002.Controllers
             return View(model);
         }
 
-        public ActionResult Product_List(string Type,int Id=0,int Page=1,string Search="")
+        public ActionResult Product_List(string Type,int Id=0,int Page=1,string Search="",int CustomerId=0)
         {
             D_APIModelFiller DMF = new D_APIModelFiller(4);
             D_APIModelFiller DMF2 = new D_APIModelFiller();
@@ -109,7 +110,12 @@ namespace ShoppingCMS_V002.Controllers
             {
                 model.Products = DMF.ChosenProducts("MainTag", 15, "Ago",1);
                 model.Pages = 1;
-            }else
+            }else if(Type== "علاقه مندی ها")
+            {
+                model.Products = DMF2.FavoriteProducts(15, Type, Id, Page, Search, "Date",CustomerId);
+                model.Pages = DMF2.ProList_Pages(Type, 15, Id, Search,CustomerId);
+            }
+            else
             {
                 model.Products = DMF2.ProductList(15, Type, Id, Page, Search, "Date");
                 model.Pages = DMF2.ProList_Pages(Type, 15, Id, Search);
@@ -170,55 +176,31 @@ namespace ShoppingCMS_V002.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult login(tbl_Customer_Main customer_Main)
+        public ActionResult login2(string MobileNum,string pass)
         {
-
-            if (ModelState.IsValid)
-            {
+            Encryption ENC = new Encryption();
+            
                 PDBC dbo = new PDBC("PandaMarketCMS", true);
                 string query;
                 query = "SELECT [id_Customer],[C_Mobile],[C_Password]FROM[PandaMarketCMS].[dbo].[tbl_Customer_Main]";
-                query += $" where[C_Mobile] = N'{customer_Main.C_Mobile}' AND [C_Password] = N'{customer_Main.C_Password}'";
+                query += $" where[C_Mobile] = N'"+MobileNum+"' AND [C_Password] = N'"+ENC.MD5Hash(pass)+"'";
                 dbo.Connect();
                 using (DataTable dt = dbo.Select(query))
                 {
                     if (dt.Rows.Count > 0)
                     {
-                        tbl_Customer_Main data = new tbl_Customer_Main()
-                        {
-                            id_Customer = dt.Rows[0]["id_Customer"].ToString()
-                        };
 
-
-                        if (customer_Main.remember_me)
-                        {
-
-                            HttpCookie reqCookies = new HttpCookie("Cookies");
-                            reqCookies["C_Mobile"] = customer_Main.C_Mobile;
-                            reqCookies["C_Password"] = customer_Main.C_Password;
-                            reqCookies.Expires.Add(new TimeSpan(10000000, 1, 0));
-                            Response.Cookies.Add(reqCookies);
-
-                        }
-                        Session["d1"] = data;
-                        return Redirect("??????????");
+                        return RedirectToAction("EncryptOMD", "API_Functions",new { Token= dt.Rows[0]["id_Customer"].ToString() });
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "شماره موبایل و رمز عبور درست نیست!!!");
-
-                        return View(customer_Main);
+                     
+                        return Content("Wrong value");
 
                     }
                 }
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "failed!!!");
-
-                return View(customer_Main);
-
-            }
+            
+            
 
         }
         /// /////////////////////{ end : login }////////////////////////

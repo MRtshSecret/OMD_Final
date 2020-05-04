@@ -70,9 +70,9 @@
                     </div>
                     <!-- /Header search -->
                     <!-- Header shopping cart -->
-                    <div class="header-cart">
+                    <div id="miniFactor_divM" class="header-cart">
                         <div class="cart-wrapper">
-                            <a href="wishlist.html" class="btn btn-theme-transparent hidden-xs hidden-sm"><i class="fa fa-heart"></i></a>
+                            <button onclick="return wishListFunction()" class="btn btn-theme-transparent hidden-xs hidden-sm"><i class="fa fa-heart"></i></button>
                             <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart"><i class="fa fa-shopping-cart"></i>
                             <div id="Master_miniFactorId" style="display:none"></div>
                             <span class="hidden-xs" id="Master_miniFactor"> 0 عدد - 0 تومان </span> 
@@ -276,6 +276,39 @@
         }
     }
 
+        function wishListFunction() {
+             var cookie = getCookie("OMD_Active");
+    PostJson = {
+        'Token': cookie
+    };
+
+    $.ajax({
+        url: '/API_Functions/DecryptOMD',
+        type: "post",
+        data: JSON.stringify(PostJson),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+            var token = JSON.parse(response);
+            if (token.Status == "Active") {
+               
+                var url = "@Url.Action("Product_List","D_API",null,Request.Url.Scheme)?Type=علاقه مندی ها&CustomerId=" + token.CustomerId;
+                console.log(url);
+                location.href = url;
+                
+            } else {
+                alert(" لطفا ابتدا وارد حساب کاربری خود شوید.");
+
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus);
+            result = "";
+        }
+    });
+
+    return false;
+        }
     </script>
 
 

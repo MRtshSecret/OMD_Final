@@ -100,7 +100,7 @@ function AddFavorite(ProId) {
                     contentType: "application/json; charset=utf-8",
                     success: function (response) {
                         var res = response;
-                        alert(res);
+                        
                         if (res == "1") {
                             alert(" محصول به علاقه مندی ها اضافه شد.");
                         } else if (res == "0") {
@@ -245,7 +245,9 @@ function CheckCode() {
 
                 alert("ثبت نام شما با موفقیت انجام شد.");
                 Enc(Id);
-
+                $('#miniFactor_divM').show();
+                $('#NewAcc').hide();
+                $('#CodeDiv').hide();
 
             } else if (Token == "Wrong Code") {
 
@@ -378,7 +380,7 @@ function AddToShoppingCart() {
 function MsterFactor() {
     var Cookie = getCookie("OMD_Factor");
     if (Cookie == "") {
-
+        $('#miniFactor_divM').hide();
     } else {
         PostJson1 = {
             'str': Cookie
@@ -405,4 +407,93 @@ function MsterFactor() {
     }
 
     return false;
+}
+
+
+function ContactUsMessage()
+{
+
+    var Name = $('#name').val();
+    var Email = $('#email').val();
+    var Subject = $('#subject').val();
+    var Message = $('#input-message').val();
+
+    if (Name == "" || Email == "" || Subject == "" || Message == "") {
+        alert("لطفا همه ی مقادیر ورودی را پر کنید");
+    } else {
+
+        PostJson1 = {
+            'Name': Name,
+            'Email': Email,
+            'Subject': Subject,
+            'Message': Message
+        };
+
+        $.ajax({
+            url: '/API_Functions/ContactUsMessage',
+            type: "post",
+            data: JSON.stringify(PostJson1),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (response == "Success") {
+                    alert("پیام شما با موفقیت ثبت شد !");
+
+                    $('#name').val("");
+                    $('#email').val("");
+                    $('#subject').val("");
+                    $('#input-message').val("");
+                }
+               
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+                return "";
+            }
+        });
+
+    }
+
+    return false;
+}
+
+function login() {
+
+    var MobileNum = $('#CMobile1').val();
+    var Pass1 = $('#CPass11').val();
+    
+    if (MobileNum != "" && Pass1 != "" ) {
+
+            PostJson = {
+                'MobileNum': MobileNum,
+                'pass': Pass1
+            };
+
+
+            $.ajax({
+                url: '/D_API/login2',
+                type: "post",
+                data: JSON.stringify(PostJson),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    if (response == "Wrong value") {
+                        alert("شماره موبایل یا رمز عبور اشتباه است");
+                    } else {
+                        setCookie("OMD_Active", res, 30);
+                        alert("وارد حساب کاربری خود شدید");
+                        $('#Log').hide();
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        
+        
+    } else {
+        alert("لطفا مقدار ورودی را پر کنید");
+    }
+
+
+
 }
