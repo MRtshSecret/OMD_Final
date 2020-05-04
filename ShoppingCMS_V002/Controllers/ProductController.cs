@@ -355,7 +355,8 @@ namespace ShoppingCMS_V002.Controllers
 
         public ActionResult UploadEditorResultActions(string IDToEdit, string picname, string picdesc, string picWords)
         {
-             string SSSession = ""; if (HttpContext.Request.Cookies["TSHPANDAControll"+ StaticLicense.LicName] != null)  { HttpCookie cookie = HttpContext.Request.Cookies.Get("TSHPANDAControll"+ StaticLicense.LicName); if (cookie != null) { SSSession = cookie.Value; } else { SSSession = "N.A"; } } else { SSSession = "N.A"; } CheckAccess check = new CheckAccess(SSSession);
+            string SSSession = ""; if (HttpContext.Request.Cookies["TSHPANDAControll" + StaticLicense.LicName] != null) { HttpCookie cookie = HttpContext.Request.Cookies.Get("TSHPANDAControll" + StaticLicense.LicName); if (cookie != null) { SSSession = cookie.Value; } else { SSSession = "N.A"; } } else { SSSession = "N.A"; }
+            CheckAccess check = new CheckAccess(SSSession);
             if (check.HasAccess)
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
@@ -403,6 +404,39 @@ namespace ShoppingCMS_V002.Controllers
             else
                 return Content("{\"Res\":\"-1\"}");
         }
+
+        public ActionResult UploadDeleteResultActions(string IDToEdit)
+        {
+            string SSSession = ""; if (HttpContext.Request.Cookies["TSHPANDAControll" + StaticLicense.LicName] != null) { HttpCookie cookie = HttpContext.Request.Cookies.Get("TSHPANDAControll" + StaticLicense.LicName); if (cookie != null) { SSSession = cookie.Value; } else { SSSession = "N.A"; } } else { SSSession = "N.A"; }
+            CheckAccess check = new CheckAccess(SSSession);
+            if (check.HasAccess)
+            {
+                PDBC db = new PDBC("PandaMarketCMS", true);
+                db.Connect();
+                List<ExcParameters> EXpars = new List<ExcParameters>();
+                ExcParameters par = new ExcParameters()
+                {
+                    _KEY = "@PicID",
+                    _VALUE = IDToEdit
+                };
+                EXpars.Add(par);
+                string updateRes =
+                    db.Script(
+                        "UPDATE [tbl_ADMIN_UploaderStructure] SET  [ISDELETE] = 1 WHERE [PicID] = @PicID", EXpars);
+                if (updateRes == "1")
+                {
+                    return Content("{\"Res\":\"1\"}");
+                }
+                else
+                {
+                    return Content("{\"Res\":\"-2\"}");
+
+                }
+            }
+            else
+                return Content("{\"Res\":\"-1\"}");
+        }
+
 
         [HttpPost]
         public ActionResult UploadImageResult(string Whattodo)

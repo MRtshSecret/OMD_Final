@@ -13,12 +13,13 @@
                 <div class="badges">
                     <div class="hot">A</div>
                 </div>
+                <div id="MPC_Id" style="display:none"></div>
                 <div class="owl-carousel img-carousel">
                     @foreach (var item in Model.ProductModel.Pictures)
                     {
                         <div class="item">
-                            <a class="btn btn-theme btn-theme-transparent btn-zoom" href="assets/img/preview/shop/parsa 1002-1 .jpg" data-gal="prettyPhoto"><i class="fa fa-plus"></i></a>
-                            <a href="assets/img/preview/shop/parsa 1002-1 .jpg" data-gal="prettyPhoto"><img class="img-responsive" src="@item" alt="" /></a>
+                            <a class="btn btn-theme btn-theme-transparent btn-zoom" href="@item" data-gal="prettyPhoto"><i class="fa fa-plus"></i></a>
+                            <a href="@item" data-gal="prettyPhoto"><img class="img-responsive" src="@item" alt="" /></a>
                         </div>
                     }
                 </div>
@@ -34,14 +35,7 @@
             </div>
             <div class="col-md-6">
                 <div class="back-to-category">
-                    <span class="link"> <i class="fa fa-angle-left"></i><a href=""> بازگشت به  صفحه محصولات</a></span>
-                    <div class="pull-left">
-                        <a class="btn btn-theme btn-theme-transparent btn-next" href="#"><i class="fa fa-angle-right"></i></a>
 
-                        <!---->
-                        <a class="btn btn-theme btn-theme-transparent btn-previous" href="#"><i class="fa fa-angle-left"></i></a>
-
-                    </div>
                 </div>
                 <h2 class="product-title">@Model.ProductModel.Title</h2>
                 <div class="product-rating clearfix">
@@ -49,22 +43,24 @@
                         <!--<span class="star"></span>
 
 
-    <span class="star active"></span>
-    <!--
+            <span class="star active"></span>
+            <!--
 
-    <span class="star active"></span>
-    <!--
+            <span class="star active"></span>
+            <!--
 
-    <span class="star active"></span>
-    <!--
+            <span class="star active"></span>
+            <!--
 
-    <span class="star active"></span>-->
+            <span class="star active"></span>-->
                     </div>
-                    <a class="reviews" href="#">@Model.ProductModel.Comments.Count() نظر</a> | <a class="add-review" href="#">افزودن نظر</a>
+                    <a class="reviews" href="#">@Model.ProductModel.Comments.Count() نظر</a> | <a class="add-review" href="#Comments">افزودن نظر</a>
                 </div>
                 <hr class="page-divider small" />
 
-                <div class="product-price">@Model.ProductModel.PriceOff @Model.ProductModel.PriceQuantity</div>
+                <div id="Price_div" class="product-price">@Model.ProductModel.PriceOff @Model.ProductModel.PriceQuantity</div>
+                <h4 class="text-danger"><del id="off_price_div">@Model.ProductModel.PriceOff @Model.ProductModel.PriceQuantity</del></h4>
+
                 <hr class="page-divider" />
 
                 <form action="#" class="row variable">
@@ -74,11 +70,11 @@
                         <div class="col-sm-6">
                             <div class="form-group selectpicker-wrapper">
                                 <label for="exampleSelect2">@item.NameSub</label>
-                                <select id="exampleSelect2-@item." class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select">
-                                    <option>@item.NameSub مورد نظر خود را انتخاب نمایید</option>
+                                <select id="exampleSelect2-@item.Id" class="PandaSelect123 selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select" onchange="return CheckChanges()">
+
                                     @foreach (var item2 in item.Subs)
                                     {
-                                        <option value="@item.Id">@item2.NameSub</option>
+                                        <option selected value="@item2.Id">@item2.NameSub</option>
                                     }
 
                                 </select>
@@ -93,13 +89,13 @@
 
                 <div class="buttons">
                     <div class="quantity">
-                        <button class="btn"><i class="fa fa-minus"></i></button>
-                        <input class="form-control qty" type="number" step="1" min="1" name="quantity" value="1" title="Qty">
-                        <button class="btn"><i class="fa fa-plus"></i></button>
+                        <button class="btn" onclick="return MinusCount()"><i class="fa fa-minus"></i></button>
+                        <input id="Counter_inp" class="form-control qty" type="number" step="1" min="1" name="quantity" value="1" title="Qty">
+                        <button class="btn" onclick="return PlusCount()"><i class="fa fa-plus"></i></button>
                     </div>
-                    <button class="btn btn-theme btn-cart btn-icon-left" type="submit"><i class="fa fa-shopping-cart"></i>افزودن به سبد خرید</button>
+                    <button class="btn btn-theme btn-cart btn-icon-left" type="submit" onclick="return AddToShoppingCart()"><i class="fa fa-shopping-cart"></i>افزودن به سبد خرید</button>
                     <button onclick="AddFavorite(@Model.ProductModel.Id)" class="btn btn-theme btn-wish-list"><i class="fa fa-heart"></i></button>
-                   
+
                 </div>
 
                 <hr class="page-divider small" />
@@ -110,15 +106,15 @@
                         <td>@Model.ProductModel.MainCat</td>
                     </tr>
                     <tr>
-                        <td class="title">شناسه محصول:</td>
-                        <td>بدون شناسه</td>
+                        <td class="title">ویژگی های محصول:</td>
+                        <td id="Prop_div"></td>
                     </tr>
                     <tr>
                         <td class="title">برچسب ها:</td>
                         <td>
                             @foreach (var item in Model.ProductModel.Tags)
                             {
-                                @item.Value 
+                                @item.Value
                             }
                         </td>
                     </tr>
@@ -179,20 +175,20 @@
                         }
 
                     </div>
-                    <div class="comments-form">
+                    <div id="Comments" class="comments-form">
                         <h4 class="block-title">ارسال نظرات</h4>
                         <form method="post" action="#" name="comments-form" id="comments-form">
                             <div class="form-group">
-                            <input id="Com_Name" type="text" placeholder="نام و نام خانوادگی" class="form-control" title="comments-form-name" name="comments-form-name">
+                                <input id="Com_Name" type="text" placeholder="نام و نام خانوادگی" class="form-control" title="comments-form-name" name="comments-form-name">
                             </div>
                             <div class="form-group">
-                            <input id="Com_Email" type="text" placeholder="ایمیل" class="form-control" title="comments-form-email" name="comments-formemail">
+                                <input id="Com_Email" type="text" placeholder="ایمیل" class="form-control" title="comments-form-email" name="comments-formemail">
                             </div>
                             <div class="form-group">
-                            <textarea id="Com_Mess" placeholder="نظر شما" class="form-control" title="comments-form-comments" name="comments-form-comments" rows="6"></textarea>
+                                <textarea id="Com_Mess" placeholder="نظر شما" class="form-control" title="comments-form-comments" name="comments-form-comments" rows="6"></textarea>
                             </div>
                             <div class="form-group">
-                            <button onclick="return AddComment(@Model.ProductModel.Id)" class="btn btn-theme btn-theme-transparent btn-icon-left"><i class="fa fa-comment"></i> ثبت</button>
+                                <button onclick="return AddComment(@Model.ProductModel.Id)" class="btn btn-theme btn-theme-transparent btn-icon-left"><i class="fa fa-comment"></i> ثبت</button>
                             </div>
                         </form>
                     </div>
@@ -219,9 +215,9 @@
                 }
             </div>
         </div>
-            <hr class="page-divider half" />
-            <a class="btn btn-theme btn-view-more-block" href="#" style="max-width: 100%;">مشاهده بیشتر</a>
-        </div>
+        <hr class="page-divider half" />
+        
+    </div>
 </section>
 <!-- /PAGE -->
 <!-- PAGE -->
@@ -243,6 +239,72 @@
 </section>
 
 <!-- /PAGE -->
-        
 <!-- /CONTENT AREA -->
+@Scripts.Render("~/bundles/omd/jquery2")
+<script>
+    var MPCs;
+     $(document).ready(function () {
+         PostJson = {
+                'id': @Model.ProductModel.Id
+            };
 
+
+            $.ajax({
+                url: '/API_Functions/GetMPCs',
+                type: "post",
+                data: JSON.stringify(PostJson),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                   MPCs = response;
+                    CheckChanges();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+    });
+
+
+    function CheckChanges() {
+        
+        var json = '{';
+        var otArr = [];
+        $('.PandaSelect123').each(function (e, obj) {
+
+            var idSelected = obj.id.replace("exampleSelect2-", "");
+            var ids = $('#exampleSelect2-' + idSelected+' option:selected').val();
+
+            if (idSelected != "") {
+                otArr.push('"' + idSelected + '":' + ids);
+            }
+
+        });
+
+        json += otArr.join(",") + '}';
+
+        $(MPCs).each(function (e, obj) {
+            
+             
+            if (obj.JsonProperty == json) {
+                console.log(obj.JsonProperty);
+                $('#Prop_div').text(obj.Properties);
+                $('#MPC_Id').text(obj.Id);
+                $('#Price_div').text();
+
+                if (obj.PriceXQ != obj.PriceOff) {
+                    $('#off_price_div').text(obj.PriceXQ);
+                } else {
+                    $('#off_price_div').text("");
+                }
+               
+            }
+            
+        });
+
+
+    }
+
+
+
+
+</script>

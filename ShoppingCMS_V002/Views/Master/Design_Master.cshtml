@@ -21,7 +21,7 @@
 
     <!-- CSS Global -->
     @Styles.Render("~/Content/omd/css")
-
+    
 
     <!-- Head Libs -->
     <!--[if lt IE 9]>
@@ -73,7 +73,10 @@
                     <div class="header-cart">
                         <div class="cart-wrapper">
                             <a href="wishlist.html" class="btn btn-theme-transparent hidden-xs hidden-sm"><i class="fa fa-heart"></i></a>
-                            <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs"> 0 عدد - 0 تومان </span> <i class="fa fa-angle-down"></i></a>
+                            <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart"><i class="fa fa-shopping-cart"></i>
+                            <div id="Master_miniFactorId" style="display:none"></div>
+                            <span class="hidden-xs" id="Master_miniFactor"> 0 عدد - 0 تومان </span> 
+                            <i class="fa fa-angle-down"></i></a>
 
                             <!-- Mobile menu toggle button -->
                             <a href="#" class="menu-toggle btn btn-theme-transparent"><i class="fa fa-bars"></i></a>
@@ -106,7 +109,7 @@
 
                             </li>
                             <li><a href="@Url.Action("AboutUs","D_API")">درباره ما</a></li>
-                            <li><a href="contact.html">تماس با ما</a></li>
+                            <li><a href="@Url.Action("ContactUs","D_API")">تماس با ما</a></li>
                             <li><a href="@Url.Action("MyAccount","D_API")">حساب کاربری من</a></li>
                         </ul>
                     </nav>
@@ -144,8 +147,8 @@
                                 <ul>
                                     <li><a href="@Url.Action("Terms","D_API")">شرایط و ضوابط</a></li>
                                     <li><a href="@Url.Action("Terms","D_API")">قوانین و مقررات</a></li>
-                                    <li><a href="#">اطلاعات ارسال محصول</a></li>
-                                    <li><a href="#">تماس با ما</a></li>
+                                    
+                                    <li><a href="@Url.Action("ContactUs","D_API")">تماس با ما</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -197,11 +200,16 @@
     </div>
     <!-- /WRAPPER -->
     <!-- JS Global -->
-@Scripts.Render("~/bundles/omd/jquery")
-<script>
-    $(document).ready(function () {
-         const url='@Url.Action("ShoppingCartPopup","D_API",null,Request.Url.Scheme)?factorId=1';
-        $('#popup-cart').load(url);
+    @Scripts.Render("~/bundles/omd/jquery")
+    <script>
+        $(document).ready(function () {
+            MsterFactor();
+
+            setTimeout(function () {
+                var factorId = $('#Master_miniFactorId').text();
+                const url = '@Url.Action("ShoppingCartPopup","D_API",null,Request.Url.Scheme)?factorId=' + factorId;
+                $('#popup-cart').load(url);
+            }, 200);
 
             $.ajax({
                 url: '/API_Functions/MasterTags',
@@ -268,7 +276,7 @@
         }
     }
 
-</script>
+    </script>
 
 
 </body>

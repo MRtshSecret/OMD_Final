@@ -426,32 +426,33 @@
         };
         var aaa = JSON.stringify(PostJson);
         console.log("aaa : " + aaa);
-         $.ajax({
-                    url: '/Product/Save_Step4',
-                    type: "post",
-                    data: JSON.stringify(PostJson),
-                    contentType: "application/json; charset=utf-8",
-                    success: function (response) {
-                        
-                        var sub = $("#Select2_C option:selected").val();
-                        var url = "@Url.Action("Add_Page5","Product",null,Request.Url.Scheme)?Id="+$("#Mpro_").text()+"&SubId="+sub;
-                        $('#step5').load(url);
+        $.ajax({
+            url: '/Product/Save_Step4',
+            type: "post",
+            data: JSON.stringify(PostJson),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
 
-                        deleteCookie("AddProCookie");
-                        $('#KTPortletSection_BodyLoad_TSHPanda-' + param).hide(200);
-                        SectionPosition('3', param);
-                        $('#KTPortletSection_Body_TSHPanda-' + param).show(200);
-                        $("#btn_next").show(200);
-                        $("#EditBtnP1").hide(200);
-                        $("#EditBtnP2").hide(200);
-                        $("#EditBtnP3").hide(200);
+                var sub = $("#Select2_C option:selected").val();
+                var url = "@Url.Action("Add_Page5","Product",null,Request.Url.Scheme)?Id=" + $("#Mpro_").text() + "&SubId=" + sub;
+                $('#step5').load(url);
 
-                        
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            alert(textStatus);
-                        }
-                    });
+                deleteCookie("AddProCookie");
+                $('#KTPortletSection_BodyLoad_TSHPanda-' + param).hide(200);
+                SectionPosition('3', param);
+                $('#KTPortletSection_Body_TSHPanda-' + param).show(200);
+                $("#btn_next").show(200);
+                $("#EditBtnP1").hide(200);
+                $("#EditBtnP2").hide(200);
+                $("#EditBtnP3").hide(200);
+
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
+        return false;
 
     }
 

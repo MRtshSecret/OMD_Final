@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewBag.Title = "ContactUs";
+    Layout = "~/Views/Master/Design_Master.cshtml";
+}
+
+<!-- CONTENT AREA -->
+<div class="content-area">
+
+    <!-- BREADCRUMBS -->
+    <section class="page-section breadcrumbs">
+        <div class="container">
+            <div class="page-header">
+                <h1>تماس با ما</h1>
+                <br>
+            </div>
+        </div>
+    </section>
+    <!-- /BREADCRUMBS -->
+    <!-- PAGE -->
+    <section class="page-section color">
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="contact-info">
+
+                        <h2 class="block-title"><span>ارتباط با ما</span></h2>
+
+                        <div class="media-list">
+                            <div class="media">
+                                <i class="pull-right fa fa-home"></i>
+                                <div class="media-body">
+                                    <strong>آدرس:</strong><br> تهران خیابان شریعتی ، خیابان خواجه نصیر غربی ، نرسیده به میدان سپاه ، پلاک 179 ، واحد
+                                </div>
+                            </div>
+                            <div class="media">
+                                <i class="pull-right fa fa-phone"></i>
+                                <div class="media-body">
+                                    <strong>شماره تماس :</strong><br> موبایل : 09120601930
+                                </div>
+                            </div>
+                            <div class="media">
+                                <i class="pull-right fa fa-envelope-o"></i>
+                                <div class="media-body">
+                                    <strong>فکس:</strong><br> 0123456789
+                                </div>
+                            </div>
+                            <div class="media">
+                                <div class="media-body">
+                                    از همراهی شما سپاس گذاریم.
+                                </div>
+                            </div>
+                            <div class="media">
+                                <div class="media-body">
+                                    <strong>خدمات مشتریان:</strong><br>
+                                    <a href="mailto:hello@bella.com">hello@bella.com</a>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <div class="media-body">
+                                    <strong>برگشت از خرید و بازپرداخت:</strong><br>
+                                    <a href="mailto:hello@bella.com">hello@bella.com</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-8 text-right">
+
+                    <h2 class="block-title"><span>فرم تماس</span></h2>
+
+                    <!-- Contact form -->
+                    <form name="contact-form" method="post" action="#" class="contact-form" id="contact-form">
+
+                        <div class="outer required">
+                            <div class="form-group af-inner">
+                                <label class="sr-only" for="name">نام و نام خانوادگی</label>
+                                <input type="text" name="name" id="name" placeholder="نام و نام خانوادگی" value="" size="30" data-toggle="tooltip" title="Name is required" class="form-control placeholder" />
+                            </div>
+                        </div>
+
+                        <div class="outer required">
+                            <div class="form-group af-inner">
+                                <label class="sr-only" for="email">ایمیل</label>
+                                <input type="text" name="email" id="email" placeholder="ایمیل" value="" size="30" data-toggle="tooltip" title="Email is required" class="form-control placeholder" />
+                            </div>
+                        </div>
+
+                        <div class="outer required">
+                            <div class="form-group af-inner">
+                                <label class="sr-only" for="subject">موضوع</label>
+                                <input type="text" name="subject" id="subject" placeholder="موضوع" value="" size="30" data-toggle="tooltip" title="Subject is required" class="form-control placeholder" />
+                            </div>
+                        </div>
+
+                        <div class="form-group af-inner">
+                            <label class="sr-only" for="input-message">پیام</label>
+                            <textarea name="message" id="input-message" placeholder="پیام" rows="4" cols="50" data-toggle="tooltip" title="Message is required" class="form-control placeholder"></textarea>
+                        </div>
+
+                        <div class="outer required">
+                            <div class="form-group af-inner">
+                                <input type="submit" name="submit" class="form-button form-button-submit btn btn-theme btn-theme-dark" id="submit_btn" value="ارسال پیام" />
+                            </div>
+                        </div>
+
+                    </form>
+                    <!-- /Contact form -->
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+    <!-- /PAGE -->
+    <!-- PAGE -->
+    <section class="page-section no-padding no-bottom-space">
+        <div class="container full-width">
+
+            <!-- Google map -->
+            <div class="google-map">
+                <div id="map-canvas"></div>
+            </div>
+            <!-- /Google map -->
+
+        </div>
+    </section>
+    <!-- /PAGE -->
+
+</div>
+<!-- /CONTENT AREA -->

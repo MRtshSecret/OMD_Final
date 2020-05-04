@@ -56,6 +56,29 @@ function Dec(str) {
     PostJson = {
         'Token': str
     };
+    var result = "";
+    $.ajax({
+        url: '/API_Functions/DecryptOMD',
+        type: "post",
+        data: JSON.stringify(PostJson),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+            result = response;
+            
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus);
+            result= "";
+        }
+    });
+    
+}
+
+function AddFavorite(ProId) {
+    var cookie = getCookie("OMD_Active");
+    PostJson = {
+        'Token': cookie
+    };
 
     $.ajax({
         url: '/API_Functions/DecryptOMD',
@@ -63,73 +86,45 @@ function Dec(str) {
         data: JSON.stringify(PostJson),
         contentType: "application/json; charset=utf-8",
         success: function (response) {
-            var res = response;
-            return res;
+            var token = JSON.parse(response);
+            if (token.Status == "Active") {
+                PostJson = {
+                    'Id': ProId,
+                    'CustomerId': token.CustomerId
+                };
+
+                $.ajax({
+                    url: '/API_Functions/AddToFavorite',
+                    type: "post",
+                    data: JSON.stringify(PostJson),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        var res = response;
+                        alert(res);
+                        if (res == "1") {
+                            alert(" محصول به علاقه مندی ها اضافه شد.");
+                        } else if (res == "0") {
+                            alert(" محصول از علاقه مندی ها حذف شد.");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus);
+                        return "";
+                    }
+                });
+            } else {
+                alert(" لطفا ابتدا وارد حساب کاربری خود شوید.");
+
+            }
+
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert(textStatus);
-            return "";
+            result = "";
         }
     });
-}
 
-function CheckActive() {
-    var cookie = getCookie("OMD_Active");
-    if (cookie == "") {
-        return 0;
-    } else {
-        var token = JSON.parse(Dec(cookie));
-        if (token.Status == 'Active') {
-            return 1;
-        } else {
-            return 2;
-        }
-    }
-
-}
-
-function GetId() {
-    var cookie = getCookie("OMD_Active");
-
-        var token = JSON.parse(Dec(cookie));
-    if (token.Status == 'Active') {
-        return token.CustomerId;
-    } else {
-        return "";
-    }
-    
-}
-
-function AddFavorite(ProId) {
-    if (CheckActive == 1) {
-
-        PostJson = {
-            'Id': ProId,
-            'CustomerId': GetId()
-        };
-
-        $.ajax({
-            url: '/API_Functions/AddToFavorite',
-            type: "post",
-            data: JSON.stringify(PostJson),
-            contentType: "application/json; charset=utf-8",
-            success: function (response) {
-                var res = response;
-                if (res == "1") {
-                    alert(" محصول به علاقه مندی ها اضافه شد.");
-                } else if (res == "0") {
-                    alert(" محصول از علاقه مندی ها حذف شد.");
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus);
-                return "";
-            }
-        });
-
-    } else {
-        alert(" لطفا ابتدا وارد حساب کاربری خود شوید.");
-    }
+    return false;
 }
 
 
@@ -166,5 +161,248 @@ function AddComment(ProId) {
         return false;
 }
 
+function PlusCount() {
+
+    $('#Counter_inp').val(+$('#Counter_inp').val() + 1);
+
+    return false;
+}
+
+function MinusCount() {
+
+    $('#Counter_inp').val($('#Counter_inp').val() - 1);
+
+    return false;
+}
+/////MyAccount
+function SendCode() {
+    var MobileNum = $('#CMobile').val();
+    var Pass1 = $('#CPass1').val();
+    var pass2 = $('#CPass2').val();
+    if (MobileNum != "" && Pass1 != "" && pass2 != "") {
+        if (Pass1 == pass2) {
+
+            $('#SendCodeBtn').attr("disabled", true);
+
+            setTimeout(function () { $('#SendCodeBtn').attr("disabled", false); }, 60000);
 
 
+            PostJson = {
+                'MobileNum': MobileNum,
+                'Pass': Pass1
+            };
+
+
+            $.ajax({
+                url: '/API_Functions/SmsRegister',
+                type: "post",
+                data: JSON.stringify(PostJson),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    var Token = response;
+                    if (Token.StatusCode == "smsX:200OK") {
+                        alert("پیامک با موفقیت ارسال شد.");
+                        $('#Id_UUU').text(Token.CustomerId);
+                        $('#NewAcc').hide();
+                        $('#CodeDiv').show();
+
+                    } else {
+                        alert("در پروسه ی ارسال پیامک مشکلی ایجاد شده ، لطفا بعد از 60 ثانیه دوباره تلاش کنید ");
+                        console.log(Token);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        } else {
+            alert("مقدار دو رمز عبور یکسان نیست");
+        }
+    } else {
+        alert("لطفا مقدار ورودی را پر کنید");
+    }
+
+
+
+}
+
+function CheckCode() {
+    var Id = $('#Id_UUU').text();
+    var Code = $('#C_Token').val();
+    PostJson = {
+        'UId': Id,
+        'Code': Code
+    };
+
+    $.ajax({
+        url: '/API_Functions/CheckCode',
+        type: "post",
+        data: JSON.stringify(PostJson),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+            var Token = response;
+            if (Token == "Success") {
+
+                alert("ثبت نام شما با موفقیت انجام شد.");
+                Enc(Id);
+
+
+            } else if (Token == "Wrong Code") {
+
+                alert("کد وارد شده اشتباه است . دوباره تلاش کنید");
+                $('#C_Token').val("");
+            } else {
+                alert("مشکلی در پروسه ی ثبت نام ایجاد شده ، لطفادوباره تلاش کنید");
+                $('#NewAcc').show();
+                $('#CodeDiv').hide();
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus);
+        }
+    });
+
+}
+
+function NewAccount() {
+
+    $('#NewAcc').show();
+    $('#Log').hide();
+}
+
+function AddToShoppingCart() {
+    var ProId = $('#MPC_Id').text();
+    var cookie = getCookie("OMD_Active");
+    PostJson = {
+        'Token': cookie
+    };
+
+    $.ajax({
+        url: '/API_Functions/DecryptOMD',
+        type: "post",
+        data: JSON.stringify(PostJson),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+            var token = JSON.parse(response);
+            if (token.Status == "Active") {
+
+                if (getCookie("OMD_Factor") == "") {
+                    PostJson = {
+                        'proId': ProId,
+                        'CustomerId': token.CustomerId,
+                        'FactorId': 0,
+                        'number': $('#Counter_inp').val()
+                    };
+
+                    $.ajax({
+                        url: '/API_Functions/Add_ShoppingCart',
+                        type: "post",
+                        data: JSON.stringify(PostJson),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+                            var res = response;
+                            setCookie("OMD_Factor", response, 2);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(textStatus);
+                            return "";
+                        }
+                    });
+                } else {
+
+                    var Cookie = getCookie("OMD_Factor");
+
+                    PostJson1 = {
+                        'str': Cookie
+                    };
+
+                    $.ajax({
+                        url: '/API_Functions/DecryptFactor',
+                        type: "post",
+                        data: JSON.stringify(PostJson1),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+                            var res = JSON.parse(response);
+
+                            PostJson = {
+                                'proId': ProId,
+                                'CustomerId': token.CustomerId,
+                                'FactorId': res.Id,
+                                'number': $('#Counter_inp').val()
+                            };
+
+                            $.ajax({
+                                url: '/API_Functions/Add_ShoppingCart',
+                                type: "post",
+                                data: JSON.stringify(PostJson),
+                                contentType: "application/json; charset=utf-8",
+                                success: function (response) {
+                                    var res = response;
+                                    deleteCookie("OMD_Factor");
+                                    setCookie("OMD_Factor", response, 2);
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(textStatus);
+                                    return "";
+                                }
+                            });
+
+
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(textStatus);
+                            return "";
+                        }
+                    });
+
+                }
+
+
+                
+            } else {
+                alert(" لطفا ابتدا وارد حساب کاربری خود شوید.");
+
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus);
+            result = "";
+        }
+    });
+
+    return false;
+}
+
+function MsterFactor() {
+    var Cookie = getCookie("OMD_Factor");
+    if (Cookie == "") {
+
+    } else {
+        PostJson1 = {
+            'str': Cookie
+        };
+
+        $.ajax({
+            url: '/API_Functions/DecryptFactor',
+            type: "post",
+            data: JSON.stringify(PostJson1),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                var res = JSON.parse(response);
+                var text1 = res.Items + " عدد  " + res.totality+" تومان "
+                $('#Master_miniFactor').text(text1);
+                $('#Master_miniFactorId').text(res.Id);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+                return "";
+            }
+        });
+
+    }
+
+    return false;
+}

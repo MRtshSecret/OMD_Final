@@ -113,7 +113,9 @@ namespace ShoppingCMS_V002
                 "~/assetsOMD/css/theme-blue-1.css",
                 "~/assetsOMD/css/custome.css"));
 
-
+            bundles.Add(new ScriptBundle("~/bundles/omd/jquery2").Include(
+                 "~/assetsOMD/plugins/jquery/jquery-1.11.1.min.js",
+                 "~/CustomScript/OMD.js"));
         }
     }
 }

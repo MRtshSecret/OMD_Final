@@ -200,14 +200,6 @@ namespace ShoppingCMS_V002.SMS_Module
                 }
 
             }
-
-
-            return new SMS_ir_Status()
-            {
-                StatusCode = "smsX:400",
-                StatusMessage = "CannotConnectToDataBase",
-                StatusReturnedTime = new DateTime().ToString()
-            };
         }
 
 

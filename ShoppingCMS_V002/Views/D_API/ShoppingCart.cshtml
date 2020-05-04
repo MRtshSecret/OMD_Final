@@ -78,14 +78,14 @@
             <form action="#" class="form-delivery">
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="form-group"><input class="form-control" type="text" placeholder="نام"></div>
+                        <div class="form-group"><input id="Name_inp" class="form-control" type="text" placeholder="نام"></div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group"><input class="form-control" type="text" placeholder="نام خانوادگی"></div>
+                        <div class="form-group"><input id="Family_inp" class="form-control" type="text" placeholder="نام خانوادگی"></div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group"><input class="form-control" type="text" placeholder="کد ملی"></div>
-                    </div>
+                    @*<div class="col-md-4">
+                        <div class="form-group">< input class="form-control" type="text" placeholder="کد ملی"></div>
+                    </div>*@
                     <div class="col-md-3">
                         <div class="form-group selectpicker-wrapper">
                             <select id="OstanSelect" class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select" onchange="CityChange()">
@@ -106,16 +106,16 @@
                         </div>
                     </div>
                     <div class="col-md-7">
-                        <div class="form-group"><input class="form-control" type="text" placeholder="آدرس"></div>
+                        <div class="form-group"><input id="Address_inp" class="form-control" type="text" placeholder="آدرس"></div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group"><input class="form-control" type="text" placeholder="کد پستی"></div>
+                        <div class="form-group"><input id="Address_hint_inp" class="form-control" type="text" placeholder="کد پستی"></div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group"><input class="form-control" type="text" placeholder="تلفن تماس"></div>
+                        <div class="form-group"><input id="Phone_inp" class="form-control" type="text" placeholder="تلفن تماس"></div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group"><input class="form-control" type="text" placeholder="آدرس ایمیل ( اختیاری )"></div>
+                        <div class="form-group"><input id="Email_inp" class="form-control" type="text" placeholder="آدرس ایمیل ( اختیاری )"></div>
                     </div>
                 </div>
             </form>
@@ -131,16 +131,15 @@
                             <table>
                                 <tr>
                                     <td>جمع فاکتور:</td>
-                                    <td>1.200.000 تومان</td>
+                                    <td id="totality">@Model.FactorModel.totality @Model.FactorModel.MoneyQuantity</td>
                                 </tr>
                                 <tr>
                                     <td>مالیات بر ارزش افزوده (%9): </td>
-                                    <td> 25.000 تومان</td>
                                 </tr>
                                 <tfoot>
                                     <tr>
                                         <td><strong>جمع کل:</strong></td>
-                                        <td>1.225.000 تومان</td>
+                                        <td id="deposit">@Model.FactorModel.Deposit @Model.FactorModel.MoneyQuantity</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -178,7 +177,6 @@
     $(document).ready(function () {
 
         $('#CitySelect').prop("disabled", true);
-
     });
 
 
@@ -220,4 +218,6 @@
 
 
     }
+
+
 </script>

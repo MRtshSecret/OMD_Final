@@ -689,6 +689,12 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 res.items = items;
                 res.itemNumbers = items.Count();
 
+                if(res.Deposit=="0")
+                {
+                    long totality = long.Parse(res.totality);
+                    res.Deposit = (totality * 1.09).ToString();
+                }
+
             }
             return res;
         }
@@ -858,7 +864,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 
                 
 
-                DataTable Pictures = db.Select("SELECT B.PicAddress FROM [tbl_Product_PicConnector] as A inner join [tbl_ADMIN_UploadStructure_ImageAddress] as B on A.PicID=B.PicID where A.id_MProduct="+res.Id);
+                DataTable Pictures = db.Select("SELECT distinct B.PicAddress FROM [tbl_Product_PicConnector] as A inner join [tbl_ADMIN_UploadStructure_ImageAddress] as B on A.PicID=B.PicID where A.id_MProduct=" + res.Id);
                 var pic = new List<string>();
                 for (int i = 0; i < Pictures.Rows.Count; i++)
                 {
@@ -879,7 +885,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 }
                 res.Options = options;
 
-                DataTable mpc_options = db.Select("SELECT A.[id_SCOK],B.SCOKName FROM [tbl_Product_ConnectorSCOK_Product] as A inner join [tbl_Product_SubCategoryOptionKey] as B on A.id_SCOK=B.id_SCOK where A.id_MProduct=" + res.Id);
+                DataTable mpc_options = db.Select("SELECT distinct A.[id_SCOK],B.SCOKName FROM [tbl_Product_ConnectorSCOK_Product] as A inner join [tbl_Product_SubCategoryOptionKey] as B on A.id_SCOK=B.id_SCOK where A.id_MProduct=" + res.Id+ " order by(id_SCOK)Asc");
                 var MPC_options = new List<TreeModel>();
                 for (int i = 0; i < mpc_options.Rows.Count; i++)
                 {
@@ -895,15 +901,18 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                     {
                         var model2 = new TreeModel()
                         {
-                            Id = Convert.ToInt32(subs.Rows[i]["id_SCOV"]),
-                            NameSub = subs.Rows[i]["SCOVValueName"].ToString()
+                            Id = Convert.ToInt32(subs.Rows[j]["id_SCOV"]),
+                            NameSub = subs.Rows[j]["SCOVValueName"].ToString()
                         };
                         MPC_options_sub.Add(model2);
                     }
 
                     model.Subs = MPC_options_sub;
 
-                    MPC_options.Add(model);
+                    if(model.Subs.Count!=0)
+                    {
+                        MPC_options.Add(model);
+                    }
                 }
                 res.MPC_Options = MPC_options;
 
@@ -956,6 +965,39 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 res.Comments = Com;
 
 
+                var MPCList = new List<MPCModel>();
+                DataTable MPC = db.Select("SELECT [id_MPC],[PriceXquantity],[PricePerquantity],[PriceOff],[offTypeValue],[OffType]FROM [tlb_Product_MainProductConnector]where id_MProduct="+res.Id);
+                for (int i = 0; i < MPC.Rows.Count; i++)
+                {
+                    var model = new MPCModel()
+                    {
+                        Id=Convert.ToInt32(MPC.Rows[i]["id_MPC"]),
+                        PricePerQ= MPC.Rows[i]["PricePerquantity"].ToString(),
+                        PriceXQ = MPC.Rows[i]["PriceXquantity"].ToString(),
+                        PriceOff = MPC.Rows[i]["PriceOff"].ToString(),
+                        OffValue = MPC.Rows[i]["offTypeValue"].ToString(),
+                        OffType = Convert.ToInt32(MPC.Rows[i]["OffType"])
+                    };
+                    DataTable props = db.Select("SELECT distinct B.id_SCOK,B.id_SCOV,B.SCOVValueName FROM [tbl_Product_connectorToMPC_SCOV] as A inner join [tbl_Product_SubCategoryOptionValue] as B on A.id_SCOV=B.id_SCOV where A.id_MPC=" + model.Id + " order by(id_SCOK)ASC");
+                    model.JsonProperty = "{";
+                    model.Properties = "(";
+                    for (int j = 0; j < props.Rows.Count; j++)
+                    {
+                        if(j!=props.Rows.Count-1)
+                        {
+                            model.JsonProperty += "\"" + props.Rows[j]["id_SCOK"] + "\":" + props.Rows[j]["id_SCOV"] + ",";
+                            model.Properties += props.Rows[j]["SCOVValueName"] + " , ";
+                        }
+                        else
+                        {
+                            model.JsonProperty += "\"" + props.Rows[j]["id_SCOK"] + "\":" + props.Rows[j]["id_SCOV"] + "}";
+                            model.Properties += props.Rows[j]["SCOVValueName"] + ") ";
+                        }
+                    }
+
+                    MPCList.Add(model);
+                }
+                res.MPCs = MPCList;
             }
 
 
@@ -983,6 +1025,46 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             }
 
             return res;
+        }
+
+        public List<MPCModel> MPCs(int Id)
+        {
+            var MPCList = new List<MPCModel>();
+            PDBC db = new PDBC("PandaMarketCMS", true);
+            db.Connect();
+            DataTable MPC = db.Select("SELECT [id_MPC],[PriceXquantity],[PricePerquantity],[PriceOff],[offTypeValue],[OffType]FROM [tlb_Product_MainProductConnector]where id_MProduct=" +Id);
+            for (int i = 0; i < MPC.Rows.Count; i++)
+            {
+                var model = new MPCModel()
+                {
+                    Id = Convert.ToInt32(MPC.Rows[i]["id_MPC"]),
+                    PricePerQ = MPC.Rows[i]["PricePerquantity"].ToString(),
+                    PriceXQ = MPC.Rows[i]["PriceXquantity"].ToString(),
+                    PriceOff = MPC.Rows[i]["PriceOff"].ToString(),
+                    OffValue = MPC.Rows[i]["offTypeValue"].ToString(),
+                    OffType = Convert.ToInt32(MPC.Rows[i]["OffType"])
+                };
+                DataTable props = db.Select("SELECT distinct B.id_SCOK,B.id_SCOV,B.SCOVValueName FROM [tbl_Product_connectorToMPC_SCOV] as A inner join [tbl_Product_SubCategoryOptionValue] as B on A.id_SCOV=B.id_SCOV where A.id_MPC=" + model.Id + " order by(id_SCOK)ASC");
+                model.JsonProperty = "{";
+                model.Properties = "(";
+                for (int j = 0; j < props.Rows.Count; j++)
+                {
+                    if (j != props.Rows.Count - 1)
+                    {
+                        model.JsonProperty += "\"" + props.Rows[j]["id_SCOK"] + "\":" + props.Rows[j]["id_SCOV"] + ",";
+                        model.Properties += props.Rows[j]["SCOVValueName"] + " , ";
+                    }
+                    else
+                    {
+                        model.JsonProperty += "\"" + props.Rows[j]["id_SCOK"] + "\":" + props.Rows[j]["id_SCOV"] + "}";
+                        model.Properties += props.Rows[j]["SCOVValueName"] + ") ";
+                    }
+                }
+
+                MPCList.Add(model);
+            }
+            
+            return MPCList;
         }
     }
 }

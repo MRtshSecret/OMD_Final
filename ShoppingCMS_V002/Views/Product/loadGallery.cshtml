@@ -6,51 +6,144 @@
 @foreach (ImageGalleryModel mymodel in Model.models)
 {
 
-<div class="col-lg-3">
-    <div class="kt-portlet " id="ktportlet-@mymodel.id">
-        <div class="kt-portlet__head kt-portlet__head--right kt-portlet__head--noborder  kt-ribbon kt-ribbon--clip kt-ribbon--left kt-ribbon--info" style="padding: 10px;">
-            <div class="kt-ribbon__target StatusInputSelected" style="top: -2px; right: 20px; background-color: #099fae; display: none" id="CheckPickSelected-@mymodel.id" tshpdatatargetid="@mymodel.id" tshpischeck="@mymodel.check">
-                <i class="flaticon2-correct" style="font-size: 20px;"></i>
-            </div>
-            <div class="kt-portlet__head-label" style="width: 100%;">
-                <h3 class="kt-portlet__head-title" style="width: 100%;">
-                    <img src="@mymodel.Address" id="IMGktportlet-@mymodel.id" style="width: 100%; border-radius: 5px;" onclick="SelectPicID('@mymodel.id')">
-                </h3>
-            </div>
-        </div>
-        <div class="kt-portlet__body kt-portlet__body--fit-top">
-            <gethertags id="GetherTagsID-@mymodel.id" style="display: none">
-                <div class="row">
-                    <div class="input-group">
-                        <span class="input-group-text w-100">نام عکس</span>
-                    </div>
-                    <input type="text" id="PicSelectedIDNAme-@mymodel.id" class="form-control" readonly="readonly" value="@mymodel.ImageName" style="direction: rtl;text-align: right;">
-                    <div class="input-group pt-1">
-
-                        <span class="input-group-text w-100">لیبل</span>
-
-                        <input type="text" class="form-control" readonly="readonly" value="@mymodel.label" style="direction: rtl;text-align: right;">
-                    </div>
-                    <div class="input-group pt-1">
-
-                        <span class="input-group-text w-100">توضیح مختصر</span>
-
-                        <input type="text" class="form-control" readonly="readonly" value="@mymodel.Description" style="direction: rtl;text-align: right;">
-                    </div>
+    <div class="col-lg-3" id="MainDivktportlet-@mymodel.id">
+        <div class="kt-portlet " id="ktportlet-@mymodel.id">
+            <div class="kt-portlet__head kt-portlet__head--right kt-portlet__head--noborder  kt-ribbon kt-ribbon--clip kt-ribbon--left kt-ribbon--info" style="padding: 10px;">
+                <div class="kt-ribbon__target StatusInputSelected" style="top: -2px; right: 20px; background-color: #099fae; display: none" id="CheckPickSelected-@mymodel.id" tshpdatatargetid="@mymodel.id" tshpischeck="@mymodel.check">
+                    <i class="flaticon2-correct" style="font-size: 20px;"></i>
                 </div>
-                <div class="row pt-1">
-                    <div class="col-6" style="padding: 1px 1px;">
-
-                        <button class="btn btn-danger w-100" type="button" onclick="return NewClick(@mymodel.id)">حذف!</button>
-                    </div>
-                    <div class="col-6" style="padding: 1px 1px;">
-                        <button class="btn btn-warning w-100" type="button" onclick="return NewClick(@mymodel.id)">ویرایش!</button>
-                    </div>
-
+                <div class="kt-portlet__head-label" style="width: 100%;">
+                    <h3 class="kt-portlet__head-title" style="width: 100%;">
+                        <img src="@mymodel.Address" id="IMGktportlet-@mymodel.id" style="width: 100%; border-radius: 5px;" onclick="SelectPicID('@mymodel.id')">
+                    </h3>
                 </div>
-            </gethertags>
+            </div>
+            <div class="kt-portlet__body kt-portlet__body--fit-top">
+                <gethertags id="GetherTagsID-@mymodel.id" style="display: none">
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-text w-100">نام عکس</span>
+                        </div>
+                        <input type="text" id="PicSelectedIDNAme-@mymodel.id" class="form-control" readonly="readonly" value="@mymodel.ImageName" style="direction: rtl;text-align: right;">
+                        <div class="input-group pt-1">
+
+                            <span class="input-group-text w-100">لیبل</span>
+
+                            <input type="text" id="PicSelectedIDLable-@mymodel.id" class="form-control" readonly="readonly" value="@mymodel.label" style="direction: rtl;text-align: right;">
+                        </div>
+                        <div class="input-group pt-1">
+
+                            <span class="input-group-text w-100">توضیح مختصر</span>
+
+                            <input type="text" id="PicSelectedIDDescription-@mymodel.id" class="form-control" readonly="readonly" value="@mymodel.Description" style="direction: rtl;text-align: right;">
+                        </div>
+                    </div>
+                    @*=========================================*@
+                    <div class="row pt-1" id="ActionsPart1-@mymodel.id">
+                        <div class="col-6" style="padding: 1px 1px;">
+                            <button class="btn btn-danger w-100" type="button" onclick="return GalleryActionLoadGalleryActions(@mymodel.id, 'Delete')">حذف!</button>
+                        </div>
+                        <div class="col-6" style="padding: 1px 1px;">
+                            <button class="btn btn-warning w-100" type="button" onclick="return GalleryActionLoadGalleryActions(@mymodel.id, 'Edit')">ویرایش!</button>
+                        </div>
+                    </div>
+                    @*=======================================*@
+                    <div class="row pt-1" id="ActionsPartDelete-@mymodel.id" style="display: none">
+                        <div class="input-group">
+                            <span class="input-group-text w-100">آیا از حذف این عکس اطمینان دارید؟</span>
+                        </div>
+                        <div class="col-8" style="padding: 1px 1px;">
+                            <button class="btn btn-warning w-100" type="button" onclick="return GalleryActionLoadGalleryActions(@mymodel.id, 'CancelDelete')">انصراف!</button>
+                        </div>
+                        <div class="col-4" style="padding: 1px 1px;">
+                            <button class="btn btn-danger w-100" type="button" onclick="return GalleryActionLoadGalleryActions(@mymodel.id, 'AccDelete')">حذف شود!</button>
+                        </div>
+
+                    </div>
+                    @*=======================================*@
+                    <div class="row pt-1" id="ActionsPartEdit-@mymodel.id" style="display: none">
+                        <div class="input-group">
+                            <span class="input-group-text w-100">شما در حال ویرایش این تصویر میباشید</span>
+                        </div>
+                        <div class="col-6" style="padding: 1px 1px;">
+                            <button class="btn btn-warning w-100" type="button" onclick="return GalleryActionLoadGalleryActions(@mymodel.id, 'CancelEdit')">انصراف!</button>
+                        </div>
+                        <div class="col-6" style="padding: 1px 1px;">
+                            <button class="btn btn-success w-100" type="button" onclick="return GalleryActionLoadGalleryActions(@mymodel.id, 'AccEdit')">ثبت ویرایش!</button>
+                        </div>
+
+                    </div>
+                </gethertags>
+            </div>
         </div>
     </div>
-</div>
-
+    <input style="display: none" id="PicSelectedIDNAme--@mymodel.id" value="" />
+    <input style="display: none" id="PicSelectedIDLable--@mymodel.id" value="" />
+    <input style="display: none" id="PicSelectedIDDescription--@mymodel.id" value="" />
 }
+<script>
+    function GalleryActionLoadGalleryActions(idPic, Action) {
+
+        const MainPart = "ActionsPart1-" + idPic;
+        const EditPart = "ActionsPartEdit-" + idPic;
+        const DeletePart = "ActionsPartDelete-" + idPic;
+        if (Action === 'Delete') {
+            $("#" + MainPart).hide(300);
+            $("#" + EditPart).hide(300);
+            $("#" + DeletePart).show(300);
+        } else if (Action === 'Edit') {
+            $("#PicSelectedIDNAme--" + idPic).val($("#PicSelectedIDNAme-" + idPic).val());
+            $("#PicSelectedIDLable--" + idPic).val($("#PicSelectedIDLable-" + idPic).val());
+            $("#PicSelectedIDDescription--" + idPic).val($("#PicSelectedIDDescription-" + idPic).val());
+            $("#" + MainPart).hide(300);
+            $("#" + DeletePart).hide(300);
+            $("#" + EditPart).show(300);
+            $("#PicSelectedIDNAme-" + idPic).attr("readonly", false);
+            $("#PicSelectedIDLable-" + idPic).attr("readonly", false);
+            $("#PicSelectedIDDescription-" + idPic).attr("readonly", false);
+        } else if (Action === 'CancelEdit') {
+            $("#PicSelectedIDNAme-" + idPic).val($("#PicSelectedIDNAme--" + idPic).val());
+            $("#PicSelectedIDLable-" + idPic).val($("#PicSelectedIDLable--" + idPic).val());
+            $("#PicSelectedIDDescription-" + idPic).val($("#PicSelectedIDDescription--" + idPic).val());
+            $("#PicSelectedIDNAme-" + idPic).attr("readonly", true);
+            $("#PicSelectedIDLable-" + idPic).attr("readonly", true);
+            $("#PicSelectedIDDescription-" + idPic).attr("readonly", true);
+            $("#" + DeletePart).hide(300);
+            $("#" + EditPart).hide(300);
+            $("#" + MainPart).show(300);
+        }else if (Action === 'CancelDelete') {
+            $("#" + DeletePart).hide(300);
+            $("#" + EditPart).hide(300);
+            $("#" + MainPart).show(300);
+        }else if (Action === 'AccDelete') {
+            $.get("@Url.Action("UploadDeleteResultActions", "Product", null, Request.Url.Scheme)?IDToEdit="+idPic)
+                .done(function (dataa) {
+                    console.log(dataa);
+                    var datssa = JSON.parse(dataa);
+                    if (datssa.Res == "1") {
+                        alert("با موفقیت حذف شد");
+                        $("#MainDivktportlet-" + idPic).html("");
+                        $("#MainDivktportlet-" + idPic).hide(300);
+                    }
+                });
+
+        } else if (Action === 'AccEdit') {
+            $.get("@Url.Action("UploadEditorResultActions", "Product", null, Request.Url.Scheme)?IDToEdit="+idPic+"&picname="+$("#PicSelectedIDNAme-" + idPic).val()+"&"+"picdesc="+$("#PicSelectedIDLable-" + idPic).val()+"&"+"picWords="+$("#PicSelectedIDDescription-" + idPic).val())
+                .done(function (dataa) {
+                    console.log(dataa);
+                    var datssa = JSON.parse(dataa);
+                    if (datssa.Res == "1") {
+                        alert("با موفقیت ثبت شد");
+                    }
+                });
+            $("#PicSelectedIDNAme-" + idPic).attr("readonly", true);
+            $("#PicSelectedIDLable-" + idPic).attr("readonly", true);
+            $("#PicSelectedIDDescription-" + idPic).attr("readonly", true);
+            $("#" + DeletePart).hide(300);
+            $("#" + EditPart).hide(300);
+            $("#" + MainPart).show(300);
+        }
+
+    }
+</script>
+

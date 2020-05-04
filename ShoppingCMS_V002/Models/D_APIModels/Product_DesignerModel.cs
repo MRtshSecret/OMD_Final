@@ -26,6 +26,7 @@ namespace ShoppingCMS_V002.Models.D_APIModels
         public string SEO_Discription { get; set; }
         public string PriceQuantity { get; set; }
         public string Quantity { get; set; }
+        public List<MPCModel> MPCs { get; set; }
 
 
     }
