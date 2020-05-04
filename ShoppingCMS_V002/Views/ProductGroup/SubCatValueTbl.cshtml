@@ -1,0 +1,149 @@
+﻿@using ShoppingCMS_V002.Models
+@model List<ProGroupModel>
+
+@{
+    ViewBag.Title = "SubCatValueTbl";
+}
+
+<!--START : TBLS-->
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                لیست جزئیات ویژگی های محصولات
+            </h3>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <div style="display:none" id="TypeId"></div>
+        <!--begin::Section-->
+        <div class="kt-section">
+            <span class="kt-section__info">
+                لیست تمامی جزئیات ویژگی های محصولات را در جدول زیر میتوانید مشاهده کنید.
+            </span>
+            <div class="kt-section__content">
+                <table class="table table-light--dark">
+                    <thead>
+                        <tr>
+                            <th style="width:5%; margin:auto;">#</th>
+                            <th style="width:13%; margin:auto;">نام سر دسته </th>
+                            <th style="width:14%; margin:auto;">نام گروه اصلی</th>
+                            <th style="width:14%; margin:auto;">نام گروه </th>
+                            <th style="width:14%; margin:auto;">نام ویژگی </th>
+                            <th style="width:20%; margin:auto;">جزئیات ویژگی </th>
+                            <th style="width:20%; margin:auto;">اقدامات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <th scope="row">@item.Num</th>
+                            <td id="IdItem-@item.Id" style="display:none">@item.Id</td>
+                            <td id="TypeName-@item.Id">@item.Type</td>
+                            <td>@item.Main</td>
+                            <td>@item.Sub</td>
+                            <td>@item.SubK</td>
+                            <th id="CatName-@item.Id">@item.SubVal</th>
+
+                            <td>
+
+                                <div class="btn-group mr-2" role="group" aria-label="...">
+
+                                        <button style="border:none" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#kt_modal_Del" onclick="return ModelLoader('del',@item.Id)"><i class="la la-trash"></i></button>
+                                            <button style="border:none" type="button" class="btn btn-secondary" onclick="return Edit_op(@item.Id)"><i class="la la-edit"></i></button>
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--end::Section-->
+    </div>
+    <!--end::Form-->
+</div>
+<!--END : TBLS-->
+<!-- remote datatable modal -->
+<!-- Modal -->
+<div class="modal fade" id="kt_modal_Del" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLongTitle">حذف کردن</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="Id_Modal_del" style="display:none"></div>
+                <p>با حذف کردن این  جزئیات ویژگی تمام زیرمجموعه های این جزئیات ویژگی نیز حذف خواهند شد.</p>
+                <p>آیا از حذف کردن این جزئیات ویژگی مطمئن هستید ؟</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">منصرف شدم</button>
+                <button type="button" class="btn btn-danger" onclick="return Model_Click_Del()">بله حذف کن!</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+
+<script>
+
+     function ModelLoader(Act_, Id_) {
+
+        if (Act_ == "del") {
+
+            $('#Id_Modal_del').text(Id_);
+        } 
+
+
+    }
+
+   
+   
+    function Model_Click_Del()
+    {
+        var id_ = $('#Id_Modal_del').text();
+        var PostJson = {
+                    'ActToDo': 'Delete',
+                    'id': id_
+                };
+
+                $.ajax({
+                    url: "/ProductGroup/SubValue_Actions",
+                    type: "post",
+                    data: PostJson,
+                    success: function (response) {
+                        if (response == "Success") {
+                            $('#MainCatTBl').load("@Url.Action("SubCatValueTbl","ProductGroup",null,Request.Url.Scheme)");
+                            $(".fade").hide();
+                             $('#kt_modal_Del').modal('toggle');
+                        } else {
+                            alert(" شما به این قسمت دسترسی ندارید!");
+                            $(".fade").hide();
+                             $('#kt_modal_Del').modal('toggle');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+    }
+
+    function Edit_op(Id__) {
+        var name = $('#CatName-' + Id__).text();
+
+        $('#MainCatName').val(name);
+        $('#Edit_btn').show();
+        $('#Sub_btn').hide();
+        $('#EditId').text(Id__);
+        $("#Select_inp").hide();
+    }
+</script>
+

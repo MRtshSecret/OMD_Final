@@ -1,0 +1,248 @@
+﻿@model ShoppingCMS_V002.ModelViews.D_APIModelViews.ProductDetail_ModelView
+@{
+    ViewBag.Title = "Product_Detail";
+    Layout = "~/Views/Master/Design_Master.cshtml";
+}
+
+<!-- PAGE -->
+<section class="page-section">
+    <div class="container">
+
+        <div class="row product-single">
+            <div class="col-md-6">
+                <div class="badges">
+                    <div class="hot">A</div>
+                </div>
+                <div class="owl-carousel img-carousel">
+                    @foreach (var item in Model.ProductModel.Pictures)
+                    {
+                        <div class="item">
+                            <a class="btn btn-theme btn-theme-transparent btn-zoom" href="assets/img/preview/shop/parsa 1002-1 .jpg" data-gal="prettyPhoto"><i class="fa fa-plus"></i></a>
+                            <a href="assets/img/preview/shop/parsa 1002-1 .jpg" data-gal="prettyPhoto"><img class="img-responsive" src="@item" alt="" /></a>
+                        </div>
+                    }
+                </div>
+                <div class="row product-thumbnails">
+
+                    @foreach (var item in Model.ProductModel.Pictures)
+                    {
+                        <div class="col-xs-2 col-sm-2 col-md-3">
+                            <a href="#" onclick="jQuery('.img-carousel').trigger('to.owl.carousel', [0, 300]);"><img src="@item" alt="" /></a>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="back-to-category">
+                    <span class="link"> <i class="fa fa-angle-left"></i><a href=""> بازگشت به  صفحه محصولات</a></span>
+                    <div class="pull-left">
+                        <a class="btn btn-theme btn-theme-transparent btn-next" href="#"><i class="fa fa-angle-right"></i></a>
+
+                        <!---->
+                        <a class="btn btn-theme btn-theme-transparent btn-previous" href="#"><i class="fa fa-angle-left"></i></a>
+
+                    </div>
+                </div>
+                <h2 class="product-title">@Model.ProductModel.Title</h2>
+                <div class="product-rating clearfix">
+                    <div class="rating">
+                        <!--<span class="star"></span>
+
+
+    <span class="star active"></span>
+    <!--
+
+    <span class="star active"></span>
+    <!--
+
+    <span class="star active"></span>
+    <!--
+
+    <span class="star active"></span>-->
+                    </div>
+                    <a class="reviews" href="#">@Model.ProductModel.Comments.Count() نظر</a> | <a class="add-review" href="#">افزودن نظر</a>
+                </div>
+                <hr class="page-divider small" />
+
+                <div class="product-price">@Model.ProductModel.PriceOff @Model.ProductModel.PriceQuantity</div>
+                <hr class="page-divider" />
+
+                <form action="#" class="row variable">
+
+                    @foreach (var item in Model.ProductModel.MPC_Options)
+                    {
+                        <div class="col-sm-6">
+                            <div class="form-group selectpicker-wrapper">
+                                <label for="exampleSelect2">@item.NameSub</label>
+                                <select id="exampleSelect2-@item." class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select">
+                                    <option>@item.NameSub مورد نظر خود را انتخاب نمایید</option>
+                                    @foreach (var item2 in item.Subs)
+                                    {
+                                        <option value="@item.Id">@item2.NameSub</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+                    }
+
+
+                </form>
+                <hr class="page-divider small" />
+
+
+                <div class="buttons">
+                    <div class="quantity">
+                        <button class="btn"><i class="fa fa-minus"></i></button>
+                        <input class="form-control qty" type="number" step="1" min="1" name="quantity" value="1" title="Qty">
+                        <button class="btn"><i class="fa fa-plus"></i></button>
+                    </div>
+                    <button class="btn btn-theme btn-cart btn-icon-left" type="submit"><i class="fa fa-shopping-cart"></i>افزودن به سبد خرید</button>
+                    <button onclick="AddFavorite(@Model.ProductModel.Id)" class="btn btn-theme btn-wish-list"><i class="fa fa-heart"></i></button>
+                   
+                </div>
+
+                <hr class="page-divider small" />
+                <hr class="page-divider" />
+                <table>
+                    <tr>
+                        <td class="title">دسته:</td>
+                        <td>@Model.ProductModel.MainCat</td>
+                    </tr>
+                    <tr>
+                        <td class="title">شناسه محصول:</td>
+                        <td>بدون شناسه</td>
+                    </tr>
+                    <tr>
+                        <td class="title">برچسب ها:</td>
+                        <td>
+                            @foreach (var item in Model.ProductModel.Tags)
+                            {
+                                @item.Value 
+                            }
+                        </td>
+                    </tr>
+                </table>
+                <hr class="page-divider small" />
+
+                <ul class="social-icons list-inline">
+                    <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="https://www.instagram.com/omdedaran/" class="instagram"><i class="fa fa-instagram"></i></a></li>
+                    <li><a href="#" class="pinterest"><i class="fa fa-pinterest"></i></a></li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- /PAGE -->
+<!-- PAGE -->
+<section class="page-section">
+    <div class="container">
+        <div class="tabs-wrapper content-tabs">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#item-description" data-toggle="tab">توضیحات تکمیلی</a></li>
+                <li><a href="#reviews" data-toggle="tab">نظرات (@Model.ProductModel.Comments.Count())</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="item-description">
+                    <tbody>
+                        @foreach (var item in Model.ProductModel.Options)
+                        {
+                            <tr class="woocommerce-product-attributes-item woocommerce-product-attributes-item--attribute_pa_producer">
+                                <th class="woocommerce-product-attributes-item__label">@item.Key</th>
+                                <td class="woocommerce-product-attributes-item__value">
+                                    <p><a href="https://omdedaran.com/producer/%d8%b4%d9%87%d9%be%d8%b1/" rel="tag">@item.Value</a></p>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </div>
+                <div class="tab-pane fade" id="reviews">
+
+                    <div class="comments">
+                        @foreach (var item in Model.ProductModel.Comments)
+                        {
+                            <div class="media comment">
+                                <a href="#" class="pull-right comment-avatar">
+                                    <img alt="" src="@item.ImagePath" class="media-object">
+                                </a>
+                                <div class="media-body">
+                                    <p class="comment-meta">
+                                        <span class="comment-author"><a href="#">@item.Name</a> <span class="comment-date">@item.Date<i class="fa fa-flag"></i></span></span>
+                                    </p>
+                                    <p class="comment-text">@item.Message</p>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <div class="comments-form">
+                        <h4 class="block-title">ارسال نظرات</h4>
+                        <form method="post" action="#" name="comments-form" id="comments-form">
+                            <div class="form-group">
+                            <input id="Com_Name" type="text" placeholder="نام و نام خانوادگی" class="form-control" title="comments-form-name" name="comments-form-name">
+                            </div>
+                            <div class="form-group">
+                            <input id="Com_Email" type="text" placeholder="ایمیل" class="form-control" title="comments-form-email" name="comments-formemail">
+                            </div>
+                            <div class="form-group">
+                            <textarea id="Com_Mess" placeholder="نظر شما" class="form-control" title="comments-form-comments" name="comments-form-comments" rows="6"></textarea>
+                            </div>
+                            <div class="form-group">
+                            <button onclick="AddComment(@Model.ProductModel.Id)" class="btn btn-theme btn-theme-transparent btn-icon-left"><i class="fa fa-comment"></i> ثبت</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- // -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /PAGE -->
+<!-- PAGE -->
+<section class="page-section">
+    <div class="container">
+        <h2 class="section-title section-title-lg"><span>محصولات مشابه</span></h2>
+        <div class="featured-products-carousel">
+            <div class="owl-carousel" id="featured-products-carousel">
+
+
+
+                @foreach (var item in Model.RelatedProducts)
+                {
+                    @Html.Partial("_ProductMini1", item);
+                }
+            </div>
+        </div>
+            <hr class="page-divider half" />
+            <a class="btn btn-theme btn-view-more-block" href="#" style="max-width: 100%;">مشاهده بیشتر</a>
+        </div>
+</section>
+<!-- /PAGE -->
+<!-- PAGE -->
+<section class="page-section">
+    <div class="container">
+        <h2 class="section-title"><span>Brand &amp; Clients</span></h2>
+        <div class="partners-carousel">
+            <div class="owl-carousel" id="partners">
+
+                @foreach (var item in Model.Company)
+                {
+                    <div>
+                        <a href="#"><img src="@item.ImagePath" alt="" /></a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- /PAGE -->
+        
+<!-- /CONTENT AREA -->
+

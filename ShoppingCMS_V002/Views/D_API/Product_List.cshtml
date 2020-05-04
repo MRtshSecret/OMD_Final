@@ -1,0 +1,321 @@
+﻿@model ShoppingCMS_V002.ModelViews.D_APIModelViews.D_ProductList_ModelView
+@{
+    ViewBag.Title = "Product_List";
+    Layout = "~/Views/Master/Design_Master.cshtml";
+}
+
+<!-- CONTENT AREA -->
+<div class="content-area">
+
+    <!-- BREADCRUMBS -->
+    <section class="page-section breadcrumbs">
+        <div class="container">
+            <div class="page-header">
+                <h1>محصولات</h1>
+                <br>
+            </div>
+        </div>
+    </section>
+    <!-- /BREADCRUMBS -->
+    <!-- PAGE WITH SIDEBAR -->
+    <section class="page-section with-sidebar">
+        <div class="container">
+            <div class="row">
+                <!-- SIDEBAR -->
+                <aside class="col-md-3 sidebar" id="sidebar">
+                    <!-- widget search -->
+                    <div class="widget">
+                        <div class="widget-search">
+                            <input id="SearchBox" class="form-control" type="text" placeholder="جست و جوی محصول ..">
+                            <button onclick="return SearchFunction()"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                    <!-- /widget search -->
+                    <!-- widget shop categories -->
+                    <div class="widget shop-categories">
+                        <h4 class="widget-title">دسته بندی ها</h4>
+                        <div class="widget-content">
+                            <ul>
+                                @foreach (var item in Model.Cateqories)
+                                {
+                                    <li>
+                                        <span class="arrow"><i class="fa fa-angle-down"></i></span>
+                                        <a href="#">@item.NameSub</a>
+                                        <ul class="children">
+
+                                            @foreach (var item2 in item.Subs)
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Product_List","D_API",new {Type="گروه اصلی",Id=item2.Id })">
+                                                        @item2.NameSub
+
+                                                    </a>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /widget shop categories -->
+                    <!-- 
+                    <div class="widget widget-colors">
+                        <h4 class="widget-title">رنگ ها</h4>
+                        <div class="widget-content">
+                            <ul>
+                                <li><a href="#"><span style="background-color: #ffffff"></span></a></li>
+                                <li><a href="#"><span style="background-color: #161618"></span></a></li>
+                                <li><a href="#"><span style="background-color: #e74c3c"></span></a></li>
+                                <li><a href="#"><span style="background-color: #783ce7"></span></a></li>
+                                <li><a href="#"><span style="background-color: #3498db"></span></a></li>
+                                <li><a href="#"><span style="background-color: #00a847"></span></a></li>
+                                <li><a href="#"><span style="background-color: #3ce7d9"></span></a></li>
+                                <li><a href="#"><span style="background-color: #fa17bc"></span></a></li>
+                                <li><a href="#"><span style="background-color: #a87e00"></span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /widget product color -->
+                    <!--
+                    <div class="widget widget-filter-price">
+                        <h4 class="widget-title">قیمت</h4>
+                        <div class="widget-content">
+                            <div id="slider-range"></div>
+                            <input type="text" id="amount" readonly />
+                            <button class="btn btn-theme">بررسی</button>
+                        </div>
+                    </div>
+                    <!-- /widget price filter -->
+                    <!-- widget tabs -->
+                    <div class="widget widget-tabs">
+                        <div class="widget-content">
+                            <ul id="tabs" class="nav nav-justified">
+                                <li class="active"><a href="#tab-s1" data-toggle="tab">جدید ترین ها</a></li>
+                                <li><a href="#tab-s2" data-toggle="tab">فروش ویژه</a></li>
+                                <li><a href="#tab-s3" data-toggle="tab">پرفروش ها</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <!-- tab 1 -->
+                                <div class="tab-pane fade in active" id="tab-s1">
+                                    <div class="product-list">
+                                        @foreach (var item in Model.NewProducts)
+                                        {
+                                            @Html.Partial("_ProductMini2", item);
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- tab 2 -->
+                                <div class="tab-pane fade " id="tab-s2">
+                                    <div class="product-list">
+                                        @foreach (var item in Model.ProductsG3)
+                                        {
+                                            @Html.Partial("_ProductMini2", item);
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- tab 3 -->
+                                <div class="tab-pane fade" id="tab-s3">
+                                    <div class="product-list">
+                                        @foreach (var item in Model.Sale_Products)
+                                        {
+                                            @Html.Partial("_ProductMini2", item);
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="btn btn-theme btn-theme-dark btn-theme-sm btn-block" href="@Url.Action("Product_List","D_API",new {Type="پرفروش ها",Id=0 })">مشاهده بیشتر</a>
+                        </div>
+                    </div>
+                    <!-- /widget tabs -->
+                    <!-- widget tag cloud -->
+                    <div class="widget widget-tag-cloud">
+                        <button class="btn btn-theme btn-title-more" onclick="return Tagfiller()">مشاهده همه</button>
+                        <h4 class="widget-title"><span>برچسب ها</span></h4>
+                        <ul id="TagList">
+
+                            @foreach (var item in Model.tags)
+                            {
+                                <li><a href="@Url.Action("Product_List","D_API",new {Type="برچسب",Id=item.Id })">@item.Value</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <!-- /widget tag cloud -->
+                    <!-- widget products carousel -->
+                   
+                    <!-- /widget products carousel -->
+                    <!-- widget shop hot deals -->
+
+                    <!-- /widget shop hot deals -->
+                </aside>
+                <!-- /SIDEBAR -->
+                <!-- CONTENT -->
+                <div class="col-md-9 content" id="content">
+
+                    <div class="main-slider sub">
+                        <div class="owl-carousel" id="main-slider">
+
+                            <!-- Slide 1 -->
+                           
+                            <!-- /Slide 1 -->
+                            <!-- Slide 2 -->
+                           
+                            <!-- /Slide 2 -->
+
+                        </div>
+                    </div>
+
+                    <!-- shop-sorting -->
+                    <div class="shop-sorting">
+                        <div class="row">
+                            
+                        </div>
+                    </div>
+                    <!-- /shop-sorting -->
+                    <!-- Products grid -->
+                    <div class="row products grid">
+                        @foreach (var item in Model.Products)
+                        {
+                            <div class="col-md-4 col-sm-6">
+                                @Html.Partial("_ProductMini1", item);
+                            </div>
+                        }
+                       
+                    </div>
+                    <!-- /Products grid -->
+                    <!-- Pagination -->
+                    <div class="pagination-wrapper">
+                        <ul class="pagination">
+                            @if (Model.thisPage == 1)
+                            {
+                                <li class="disabled"><a href="#"><i class="fa fa-angle-double-right"></i> صفحه قبلی</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="@Url.Action("Product_List","D_API",new {Type=Model.Cat,Id=Model.CatId,Page=Model.thisPage-1,Search=Model.Search})"><i class="fa fa-angle-double-right"></i> صفحه قبلی</a></li>
+                            }
+
+
+
+
+                            @if (Model.Pages > 6 && Model.thisPage - 2 > 0)
+                            {
+
+                                if (Model.Pages - Model.thisPage + 2 > 6)
+                                {
+                                    for (int i = Model.thisPage - 2; i < 6; i++)
+                                    {
+                                        if (i == Model.thisPage)
+                                        {
+                                            <li class="active"><a href="@Url.Action("Product_List","D_API",new {Type=Model.Cat,Id=Model.CatId,Page=i,Search=Model.Search})">@i <span class="sr-only">(current)</span></a></li>
+                                        }
+                                        else
+                                        {
+                                            <li><a href="@Url.Action("Product_List","D_API",new {Type=Model.Cat,Id=Model.CatId,Page=i,Search=Model.Search})">@i</a></li>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    for (int i = Model.thisPage - 2; i < Model.Pages; i++)
+                                    {
+                                        if (i == Model.thisPage)
+                                        {
+                                            <li class="active"><a href="@Url.Action("Product_List","D_API",new {Type=Model.Cat,Id=Model.CatId,Page=i,Search=Model.Search})">@i <span class="sr-only">(current)</span></a></li>
+                                        }
+                                        else
+                                        {
+                                            <li><a href="@Url.Action("Product_List","D_API",new {Type=Model.Cat,Id=Model.CatId,Page=i,Search=Model.Search})">@i</a></li>
+                                        }
+                                    }
+
+                                }
+
+                            }
+                            else
+                            {
+                                for (int i = 1; i < Model.Pages + 1; i++)
+                                {
+                                    if (i == Model.thisPage)
+                                    {
+                                        <li class="active"><a href="@Url.Action("Product_List","D_API",new {Type=Model.Cat,Id=Model.CatId,Page=i,Search=Model.Search})">@i <span class="sr-only">(current)</span></a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="@Url.Action("Product_List","D_API",new {Type=Model.Cat,Id=Model.CatId,Page=i,Search=Model.Search})">@i</a></li>
+                                    }
+                                }
+                            }
+
+
+                            @if (Model.thisPage == Model.Pages)
+                            {
+                                <li class="disabled"><a href="#">صفحه بعدی <i class="fa fa-angle-double-left"></i></a></li>
+                            }
+                            else
+                            {
+                                <li><a href="@Url.Action("Product_List","D_API",new {Type=Model.Cat,Id=Model.CatId,Page=Model.thisPage+1,Search=Model.Search})">صفحه بعدی <i class="fa fa-angle-double-left"></i></a></li>
+                            }
+
+
+
+
+                        </ul>
+                    </div>
+                    <!-- /Pagination -->
+
+                </div>
+                <!-- /CONTENT -->
+
+            </div>
+        </div>
+    </section>
+    <!-- /PAGE WITH SIDEBAR -->
+
+
+
+</div>
+<!-- /CONTENT AREA -->
+<script>
+    function SearchFunction() {
+         var m = $('#SearchBox').val();
+        if (m != "") {
+            var url = "@Url.Action("Product_List","D_API",null,Request.Url.Scheme)?Type=جست و جو&Search=" + m;
+            console.log(url);
+            location.href = url;
+        }
+    }
+
+    function Tagfiller() {
+
+        $.ajax({
+            url: '/API_Functions/TagsFiller',
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+
+                var token = response;
+                var s = "";
+
+               
+                for (var i = 0; i < token.length; i++) {
+
+                    var url = "@Url.Action("Product_List","D_API",null)?Type=برچسب&Id=" + token[i].Id ;
+                    s += '<li><a href="'+url+'">'+ token[i].Value+'</a></li>';
+                }
+
+                //document.getElementById('CitySelect').innerHTML = s;
+                $('#TagList').html(s);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
+
+    }
+
+</script>

@@ -1,0 +1,33 @@
+﻿@model ShoppingCMS_V002.Models.D_APIModels.MiniProductModel
+<div class="media">
+    <a class="pull-right media-link" href="@Url.Action("Product_Detail","D_API",new {Id=Model.Id })">
+        <img style="width:70px; height:90px;" class="media-object" src="@Model.PicPath" alt="">
+        <i class="fa fa-plus"></i>
+    </a>
+    <div class="media-body">
+        <h4 class="media-heading"><a href="@Url.Action("Product_Detail","D_API",new {Id=Model.Id })">@Model.Title</a></h4>
+        <div class="rating">
+            <!--  <span class="star"></span>
+
+
+    <span class="star active"></span>
+
+    <span class="star active"></span>
+
+    <span class="star active"></span>
+
+
+    <span class="star active"></span>
+        -->
+        </div>
+        @if (Model.Price == Model.OffPrice)
+        {
+            <div class="price">@Model.OffPrice @Model.MoneyQ</div>
+        }
+        else
+        {
+            <div class="price"><ins>@Model.OffPrice @Model.MoneyQ</ins> <del>@Model.Price</del></div>
+        }
+
+    </div>
+</div>

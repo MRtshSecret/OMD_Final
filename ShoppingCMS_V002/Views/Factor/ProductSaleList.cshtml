@@ -1,0 +1,83 @@
+﻿@using ShoppingCMS_V002.Models
+@model List<TableModel>
+@{
+    ViewBag.Title = "ProductSaleList";
+    Layout = "~/Views/Master/Master.cshtml";
+}
+
+    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+        <!-- begin:: Subheader -->
+        <div class="kt-subheader   kt-grid__item" id="kt_subheader">
+            <div class="kt-container  kt-container--fluid ">
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        داشبورد
+                    </h3>
+                    <span class="kt-subheader__separator kt-hidden"></span>
+                    <div class="kt-subheader__breadcrumbs">
+                        <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                        <span class="kt-subheader__breadcrumbs-separator"></span>
+                        <a href="#" class="kt-subheader__breadcrumbs-link">
+                            سفارشات
+                        </a>
+                        <span class="kt-subheader__breadcrumbs-separator"></span>
+                        <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">میزان فروش محصولات </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        لیست میزان فروش محصولات
+                    </h3>
+                </div>
+            </div>
+            <!--Begin::Section-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__body kt-portlet__body--fit">
+                    <div class="row row-no-padding row-col-separator-xl">
+                        <div class="col-md-12 col-lg-12 col-xl-4">
+                            <!--begin:: Widgets/Stats2-1 -->
+                            <div class="kt-widget1">
+                                @foreach (var item in Model)
+                                {
+
+                                    <div class="kt-widget1__item" onclick="Click_Btn(@item.Num,@item.Id)">
+                                        <div class="kt-widget1__info">
+                                            <h3 class="kt-widget1__title">@item.Group1</h3>
+                                            <span class="kt-widget1__desc">@item.Group2</span>
+                                        </div>
+                                        @if (item.Group3 == "")
+                                        {
+                                            <span class="kt-widget1__number kt-font-danger">- 0 -</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="kt-widget1__number kt-font-brand">@item.Group3+</span>
+                                        }
+                                    </div>
+
+
+                                }
+                                <!--end:: Widgets/Stats2-1 -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--End::Section-->
+        </div>
+    </div>
+        <script>
+            function Click_Btn(num,Id) {
+                if (num == 1) {
+
+                    var url = "@Url.Action("ProductSaleList","Factor",null,Request.Url.Scheme)?Gp=جزئیات&Id=" + Id;
+                    window.location.href = url;
+                }
+            }
+        </script>

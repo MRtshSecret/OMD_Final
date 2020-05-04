@@ -1,0 +1,298 @@
+﻿@model ShoppingCMS_V002.Models.Blog.SinglePostModel
+@{
+    ViewBag.Title = "PostDetails";
+    Layout = "~/Views/Master/AfraMater.cshtml";
+}
+
+
+<!--====================================================================
+                            Start Section Breadcrumb
+====================================================================-->
+<section class="section-breadcrumb overlay-color" style="background-image:url(@Url.Content("~/assetsAfra/images/breadcrumb/1.jpg")">
+    <span class="bg-color bg-dark-60"></span>
+    <div class="container pt-90 pb-90 vertical-wrap">
+        <div class="vertical-inner text-center">
+            <h1>@Model.SPPD.Title</h1>
+            <h4 style="color: white">@Model.SPPD.Text_min</h4>
+        </div>
+        <div class="breadcrumb-box">
+            <div class="row row-0">
+                <div class="col-12 col-sm-8">
+                    <ol class="breadcrumb text-light">
+                        <li>
+                            <a href="@Url.Action("MainPage","BlogAPI_Designer")" class="breadcrumb-icon">
+                                <i class="fa fa-home"></i>
+                            </a>
+                        </li>
+                        <li>
+
+                            <a href="@Url.Action("BlogPosts", "BlogAPI_Designer")">تمامی مطالب</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("BlogPosts","BlogAPI_Designer",new {Cat="گروه بندی",Id=Model.SPPD.GroupId })">@Model.SPPD.Gpname</a>
+                        </li>
+                        <li class="active">@Model.SPPD.Title</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--====================================================================
+                            End Section Breadcrumb
+====================================================================-->
+<!--====================================================================
+                            Start Section Single Post
+====================================================================-->
+<section class="section section-single-post">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-9 div-center">
+                <div class="single-post">
+                    <div class="post-content">
+                        @if (Model.BlogPicSlider.Count > 0)
+                        {
+                            <div class="owl-carousel" id="SliderBlogPage">
+                                @foreach (var item in Model.BlogPicSlider)
+                                {
+                                    <img src="@item.PicAddress" alt="@item.alt" title="@item.uploadPicName">
+                                }
+                            </div>
+                        }
+                        <div class="post-details">
+                            <div class="post-author-image">
+                                <img src="@Model.SPPD.ad_avatarprofile" alt="@Model.SPPD.ad_firstname @Model.SPPD.ad_lastname" title="@Model.SPPD.ad_firstname @Model.SPPD.ad_lastname">
+                            </div>
+                            <div class="post-info">
+                                توسط <a href="#" onclick="return false;" class="post-author">@Model.SPPD.ad_firstname @Model.SPPD.ad_lastname</a>
+                                در تاریخ <span class="post-date">@Model.SPPD.Date</span>
+                            </div>
+                            <h2 class="post-title">@Model.SPPD.Title</h2>
+                        </div>
+                        <div class="widget widget-categories">
+
+                            <div class="widget-body">
+                                <ul class="tcategories categories-simple">
+                                    <li>
+                                        <a href="@Url.Action("BlogPosts","BlogAPI_Designer",new {Cat="گروه بندی",Id=Model.SPPD.GroupId })" rel="tag">
+                                            <i class="fa fa-group"></i>
+                                            @Model.SPPD.Gpname
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        @Html.Raw(Model.SPPD.Text)
+                    </div>
+                    @*<div class="divider divider-line" style="width: 65%"></div>*@
+                    @*<div class="post-tags">
+            <span>برچسب ها:</span>
+            <ul>
+                <li>
+                    <a href="#">@Model.SPPD.Gpname</a>
+                </li>
+                <li>
+                    <a href="#">@Model.SPPD.</a>
+                </li>
+                <li>
+                    <a href="#">کسب و کار</a>
+                </li>
+            </ul>
+        </div>*@
+                </div>
+                @*<div class="comments">
+                        <div class="comments-form">
+                            <div class="comments-head">
+                                <h4 class="comments-title">ارسال نظر</h4>
+                                <div class="divider divider-line"></div>
+                            </div>
+                            <div class="comments-body">
+                                <form class="form form-simple">
+                                    <div class="row row-sm">
+                                        <div class="form-item col-12 col-sm-6">
+                                            <input type="text" placeholder="نام">
+                                        </div>
+                                        <div class="form-item col-12 col-sm-6">
+                                            <input type="email" placeholder="ایمیل">
+                                        </div>
+                                        <div class="form-item col-12 col-sm-12">
+                                            <textarea placeholder="پیام"></textarea>
+                                        </div>
+                                        <div class="col-12 col-sm-12">
+                                            <button class="button button-md button-primary">ارسال نظر</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="comments-list">
+                            <div class="comments-head">
+                                <h4 class="comments-title">نظرات</h4>
+                                <div class="divider divider-line"></div>
+                            </div>
+                            <div class="comments-body">
+                                <ul>
+                                    <li>
+                                        <div class="comment">
+                                            <div class="comment-head">
+                                                <div class="comment-image">
+                                                    <img src="assets/images/clients/person-1.jpg" alt="Relevant textual alternative to the person-1 image" />
+                                                </div>
+                                                <h5 class="comment-author">جعفر عباسی</h5>
+                                                <span class="comment-date">آبان 1398</span>
+                                            </div>
+                                            <div class="comment-body">
+                                                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.</p>
+                                                <a href="#" class="comment-reply">
+                                                    <i class="fa fa-reply"></i>
+                                                    پاسخ
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <ul class="comment-children">
+                                            <li>
+                                                <div class="comment">
+                                                    <div class="comment-head">
+                                                        <div class="comment-image">
+                                                            <img src="assets/images/clients/person-2.jpg" alt="Relevant textual alternative to the person-2 image" />
+                                                        </div>
+                                                        <h5 class="comment-author">طاهر خان</h5>
+                                                        <span class="comment-date">1398 آبان</span>
+                                                    </div>
+                                                    <div class="comment-body">
+                                                        <p>
+                                                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است .
+                                                            ما راهکارهایی برای رشد و توسعه مشاغل شما ارائه می دهیم.
+                                                        </p>
+                                                        <a href="#" class="comment-reply">
+                                                            <i class="fa fa-reply"></i>
+                                                            پاسخ
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <div class="comment">
+                                            <div class="comment-head">
+                                                <div class="comment-image">
+                                                    <img src="assets/images/clients/person-3.jpg" alt="Relevant textual alternative to the person-3 image" />
+                                                </div>
+                                                <h5 class="comment-author">جعفر خان</h5>
+                                                <span class="comment-date">1398 آبان</span>
+                                            </div>
+                                            <div class="comment-body">
+                                                <p>
+                                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است
+                                                    طراح راست چین.
+                                                </p>
+                                                <a href="#" class="comment-reply">
+                                                    <i class="fa fa-reply"></i>
+                                                    پاسخ
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="comment">
+                                            <div class="comment-head">
+                                                <div class="comment-image">
+                                                    <img src="assets/images/clients/person-4.jpg" alt="Relevant textual alternative to the person-4 image" />
+                                                </div>
+                                                <h5 class="comment-author">مجتبی شاهی</h5>
+                                                <span class="comment-date">1398 آبان</span>
+                                            </div>
+                                            <div class="comment-body">
+                                                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.</p>
+                                                <a href="#" class="comment-reply">
+                                                    <i class="fa fa-reply"></i>
+                                                    پاسخ
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</section>
+<!--====================================================================
+                            End Section Single Post
+====================================================================-->
+<!--====================================================================
+                            Start Section Posts
+====================================================================-->
+<section class="section section-posts section-posts-2 section-related-posts">
+    <div class="container">
+        <div class="section-title section-title-2 div-center text-center max-w-576">
+            <h2>پست های اخیر</h2>
+            <p>
+                <span class="divider divider-line"></span>
+                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. .
+            </p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            @if (Model.PostModel.Count > 0)
+            {
+
+                foreach (var item in Model.PostModel)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="post-item">
+                            <div class="post-image">
+                                <a href="blog-single.html">
+                                    <img src="@item.ImagePath" alt="@item.title">
+                                </a>
+                                <div class="post-meta" style="padding-top: 15px;">
+                                    <span class="post-meta-date">@item.date</span>
+                                </div>
+                                <div class="widget widget-categories">
+
+                                    <div class="widget-body">
+                                        <ul class="tcategories categories-simple">
+
+                                            <li>
+                                                <a href="@Url.Action("BlogPosts","BlogAPI_Designer",new {Cat="گروه بندی",Id=item.GPIDforPostPAge })" rel="tag">
+                                                    <i class="fa fa-group"></i>
+                                                    @item.InGroup
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-info">
+                                <h3>
+                                    <a href="@Url.Action("PostDetails", "BlogAPI_Designer", new {Id = item.Id})">
+                                        @item.title
+                                    </a>
+                                </h3>
+                                <div class="divider divider-line"></div>
+                                <p>
+                                    @item.text_min
+                                </p>
+                                <a href="@Url.Action("PostDetails", "BlogAPI_Designer", new {Id = item.Id})" class="button-read-more">
+                                    مطالعه بیشتر
+                                    <i class="fa fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>موردی برای نمایش وجود ندارد!</p>
+            }
+        </div>
+    </div>
+</section>
+<!--====================================================================
+                            End Section Posts
+====================================================================-->

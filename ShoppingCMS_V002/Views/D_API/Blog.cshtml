@@ -1,0 +1,252 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+
+@model ShoppingCMS_V002.Models.D_APIModels.blogclass
+@{
+    ViewBag.Title = "Blog";
+    Layout = "~/Views/Master/Design_Master.cshtml";
+}
+
+
+<!-- CONTENT AREA -->
+<div class="content-area">
+
+    <!-- BREADCRUMBS -->
+    <section class="page-section breadcrumbs">
+        <div class="container">
+            <div class="page-header">
+
+                @if (Model.pages.PnamePage == "post")
+                {
+                    <h1>اطلاعیه ها</h1>
+                }
+                else if (Model.pages.PnamePage == "Categories")
+                {
+                    <h1>دسته بندی</h1>
+                    <h4>@Model.pages.Pvaluepage</h4>
+                }
+                else if (Model.pages.PnamePage == "tag")
+                {
+                    <h1>برچسب</h1>
+                    <h4>@Model.pages.Pvaluepage</h4>
+                }
+                else if (Model.pages.PnamePage == "Search")
+                {
+                    <h1>جست و جو </h1>
+                    <h4>@Model.pages.Pvaluepage</h4>
+                }
+
+                <br>
+            </div>
+        </div>
+    </section>
+    <!-- /BREADCRUMBS -->
+    <!-- PAGE WITH SIDEBAR -->
+    <section class="page-section with-sidebar">
+        <div class="container">
+            <div class="row">
+                <!-- SIDEBAR -->
+                <aside class="col-md-3 sidebar" id="sidebar">
+                    <!-- widget search -->
+                    <div class="widget">
+                        <div class="widget-search">
+                            <form action="/MS/blog?NamePage=Search&page=1" method="post">
+                                <input class="form-control" type="text" id="Valuepage" name="Valuepage" placeholder="Search" required>
+                                <button><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /widget search -->
+                    <!-- widget tabs -->
+                    <div class="widget widget-tabs alt">
+                        <div class="widget-content">
+                            <ul id="tabs" class="nav nav-justified">
+                                <li><a href="#tab-s1" data-toggle="tab">جدید ترین ها</a></li>
+                                <li class="active"><a href="#tab-s2" data-toggle="tab">محبوب ترین ها</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <!-- tab 1 -->
+                                <div class="tab-pane fade" id="tab-s1">
+                                    <div class="recent-post">
+                                        @foreach (var player in Model.TabS1)
+                                        {
+
+                                            <div class="media">
+                                                <a class="pull-right media-link" href="@Url.Action("Blog_Post", "D_API", new {IdPage=@player.Id})">
+                                                    <img class="media-object" style="width: 100%;" src="@player.PicAddress" alt="@player.Title">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
+                                                <div class="media-body">
+                                                    <div class="media-meta">
+                                                        @player.Date
+                                                        <span class="divider">/</span><a href="#"><i class="fa fa-comment"></i>@player.Comments</a>
+                                                    </div>
+                                                    <h4 class="media-heading"><a href="@Url.Action("Blog_Post", "D_API", new {IdPage=@player.Id})">@player.Title</a></h4>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- tab 2 -->
+                                <div class="tab-pane fade in active" id="tab-s2">
+                                    <div class="recent-post">
+                                        @foreach (var player in Model.TabS2)
+                                        {
+                                            <div class="media">
+                                                <a class="pull-right media-link" href="@Url.Action("Blog_Post", "D_API", new {IdPage=@player.Id})">
+                                                    <img class="media-object" style="width: 100%;" src="@player.PicAddress" alt="@player.Title">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
+                                                <div class="media-body">
+                                                    <div class="media-meta">
+                                                        @player.Date
+                                                        <span class="divider">/</span><a href="#"><i class="fa fa-comment"></i>@player.Comments</a>
+                                                    </div>
+                                                    <h4 class="media-heading"><a href="@Url.Action("Blog_Post", "D_API", new {IdPage=@player.Id})">@player.Title</a></h4>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <a class="btn btn-theme btn-theme-transparent btn-theme-sm btn-block" href="#">محصولات بیشتر</a>
+                        </div>
+                    </div>
+                    <!-- /widget tabs -->
+                    <!-- widget archives -->
+                    <div class="widget shop-categories">
+                        <h4 class="widget-title">دسته بندی</h4>
+                        <div class="widget-content">
+                            <ul>
+                                <li>
+                                    @foreach (var player in Model.BLOG_Categories)
+                                    {
+                                        <a href="@Url.Action("Blog", "D_API", new { NamePage = "Categories", Valuepage = player.name, page = 1 })">@player.name<span class="count"> @player.count   </span></a>
+                                        <hr />
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /widget archive -->
+                    <!-- widget tag cloud -->
+                    <div class="widget widget-tag-cloud">
+                        <a class="btn btn-theme btn-title-more" href="@Url.Action("Blog", "D_API", new { NamePage = "tag", Valuepage = "مشاهده همه", page = 1 })">مشاهده همه</a>
+                        <h4 class="widget-title"><span>برچسب ها</span></h4>
+                        <ul>
+                            @foreach (var player in Model.BLOG_Tags)
+                            {
+                                <li><a href="@Url.Action("Blog", "D_API", new { NamePage = "tag", Valuepage = @player.name, page = 1 })">@player.name</a></li>
+                            }
+
+                        </ul>
+                    </div>
+                    <!-- /widget tag cloud -->
+
+                </aside>
+                <!-- /SIDEBAR -->
+                <!-- CONTENT -->
+
+                <div class="col-md-9 content" id="content">
+
+                    @if (Model.pages.PnamePage == "tag" && Model.pages.Pvaluepage == "مشاهده همه")
+                    {
+                        <!-- widget tag cloud -->
+                        <div class="widget widget-tag-cloud">
+                            <ul>
+                                @foreach (var player in Model.BLOG)
+                                {
+                                    <li><a href="@Url.Action("Blog", "D_API", new { NamePage = "tag", Valuepage = @player.name, page = 1 })">@player.name</a></li>
+                                }
+
+                            </ul>
+                        </div>
+                        <!-- /widget tag cloud -->
+                        <div class="pagination-wrapper">
+
+                            @Html.PagedListPager((IPagedList)Model.BLOG, page => Url.Action("Blog","D_API", new { NamePage = Model.pages.PnamePage, Valuepage = Model.pages.Pvaluepage, page = page }))
+
+                        </div>
+                    }
+                    else
+                    {
+
+                        <!-- Blog posts-->
+                        <!-- / -->
+                        <article class="post-wrap">
+
+                            @foreach (var item in Model.BLOG)
+                            {
+
+                                <div class="post-media">
+
+                                    @if (item.list_pic.Count == 1)
+                                    {
+                                        foreach (var player in item.list_pic)
+                                        {
+                                            <div class="item">
+                                                <a href="@player.PicAddress" data-gal="prettyPhoto"><img class="img-responsive" src="@player.PicAddress" alt="@item.Title" /></a>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="owl-carousel img-carousel">
+                                            @foreach (var player in item.list_pic)
+                                            {
+                                                <div class="item">
+                                                    <a href="@player.PicAddress" data-gal="prettyPhoto"><img class="img-responsive" src="@player.PicAddress" alt="@item.Title" /></a>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+
+
+
+                                </div>
+                                <div class="post-header">
+                                    <h2 class="post-title"><a href="@Url.Action("Blog_Post", "D_API", new {IdPage=item.Id})"> @Html.DisplayFor(modelItem => item.Title)</a></h2>
+                                    <div class="post-meta">نویسنده: <a href="#">  @Html.DisplayFor(modelItem => item.WrittenBy_AdminId)</a> / @Html.DisplayFor(modelItem => item.Date) / دسته بندی : <a href="@Url.Action("Blog","D_API" ,new {NamePage = "Categories", Valuepage=  item.Cat_Id , page = 1 })">@Html.DisplayFor(modelItem => item.Cat_Id)</a> /نظرات <a>@Html.DisplayFor(modelItem => item.Comments) </a></div>
+                                </div>
+                                <div class="post-body">
+                                    <div class="post-excerpt">
+                                        <p>@Html.DisplayFor(modelItem => item.Text_min)</p>
+                                    </div>
+                                </div>
+                                <div class="post-footer">
+                                    <span class="post-read-more"><a href="@Url.Action("Blog_Post", "D_API", new {IdPage=item.Id})" class="btn btn-theme btn-theme-transparent btn-icon-left"><i class="fa fa-file-text-o"></i>بیشتر</a></span>
+                                </div>
+
+                            }
+
+                        </article>
+                        <!-- / -->
+                        <!-- /Blog posts -->
+                        <!-- Pagination -->
+                        <div class="pagination-wrapper">
+                            @if (Model.pages.PnamePage == "post")
+                            {
+                                @Html.PagedListPager((IPagedList)Model.BLOG, page => Url.Action("Blog","D_API", new { NamePage = Model.pages.PnamePage, page = page }))
+
+                            }
+                            else
+                            {
+                                @Html.PagedListPager((IPagedList)Model.BLOG, page => Url.Action("Blog","D_API", new { NamePage = Model.pages.PnamePage, Valuepage = Model.pages.Pvaluepage, page = page }))
+                            }
+                        </div>
+                        <!-- /Pagination -->
+                    }
+                </div>
+                <!-- /CONTENT -->
+
+            </div>
+        </div>
+    </section>
+    <!-- /PAGE WITH SIDEBAR -->
+
+
+</div>
+<!-- /CONTENT AREA -->

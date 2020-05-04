@@ -1,0 +1,306 @@
+﻿@model ShoppingCMS_V002.ModelViews.AddProductModelV_3
+
+@{
+    ViewBag.Title = "Add_Page3";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<button style="display:none; margin-bottom:1%" type="button" id="EditBtnP3" onclick="return EditBtnP3Clk()" class="btn btn-warning"><i class="fa fa-edit"></i> ویرایش</button>
+<div class="kt-portlet">
+    <div style="display:none" id="abcd">@Model.Id</div>
+    <div style="display:none" id="Url_4"></div>
+
+
+    <div class="kt-portlet__body">
+
+        <!--begin::Section-->
+        <div class="kt-section">
+
+            @foreach (var item in Model.Item_List)
+            {
+                @Html.Partial("_OptionValue", item);
+            }
+
+
+            <div style="margin-top:1%" id="Add_option" class="form-group ">
+                <label>ثبت جزئیات</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Key :</span>
+                    </div>
+                    <input id="Add_Key" type="text" class="form-control" aria-label="Text input with checkbox">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Value : </span>
+                    </div>
+                    <input id="Add_Value" type="text" class="form-control" aria-label="Text input with checkbox">
+                    <div class="input-group-prepend">
+                        <button id="NewClkSub" class="btn btn-success" type="button" onclick="return NewClick(@Model.Id)">ثبت!</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="editOption" class="form-group " style="display:none; margin-top:1%">
+                <label>ویرایش جزئیات</label>
+                <div style="display:none" id="edit_id"></div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Key :</span>
+                    </div>
+                    <input id="edit_key" type="text" class="form-control">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Value : </span>
+                    </div>
+                    <input id="edit_value" type="text" class="form-control">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-warning" type="button" onclick="return EditClick(@Model.Id)">اعمال تغییرات!</button>
+                    </div>
+                </div>
+            </div>
+            <!--begin::Alerts-->
+            <div id="SuccesAlertEdit3" class="alert alert-solid-success alert-bold fade show kt-margin-t-20 kt-margin-b-40" role="alert" style="display:none">
+                <div class="alert-icon"><i class="fa fa-exclamation-triangle"></i></div>
+                <div class="alert-text">با موفقیت ثبت شد!</div>
+            </div>
+            <div id="ERRAlertEdit3" class="alert alert-solid-danger alert-bold fade show kt-margin-t-20 kt-margin-b-40" role="alert" style="display:none">
+                <div class="alert-icon"><i class="fa fa-exclamation-triangle"></i></div>
+                <div class="alert-text">مقدار ورودی باید پرشده باشد!</div>
+            </div>
+            <!--End::Alerts-->
+            <div id="optiontable">
+
+            </div>
+
+
+        </div>
+    </div>
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <div class="col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-12 col-xs-12">
+                <button id="Sub_btn3" style="width: 100%;" class="btn btn-success" onclick="return SubmitedType3()">ثبت</button>
+            </div>
+
+        </div>
+    </div>
+    <!--end::Form-->
+    <!--begin::Page Scripts(used by this page) -->
+</div>
+
+    <script>
+        $(document).ready(function () {
+            //========================================Begin :: init
+
+           var url = '@Url.Action("Options_Table","Product",null,Request.Url.Scheme)?id=@Model.Id';
+            $('#optiontable').load(url);
+
+            $("select[name='tshpSelect2']").select2();
+            $(".multyselectSuccess").hide();
+            $(".multySelectError").hide();
+            $(".multiSelectLoading").hide();
+            $(".multiActionSuccessTXT").hide();
+            $(".multiActionFailTXT").hide();
+
+            //=========================================End :: init
+
+
+            $('.tshpSelect23').on('select2:select', function (e) {
+                //inja oon itemi ke select shode bara ADD ro migire
+                var data = e.params.data;
+                var idSelected = e.currentTarget.id.replace("tshpSelect2-","");
+                console.log("e.currentTarget.id : "+e.currentTarget.id);
+                console.log("Selected value is: " + data.id);
+                console.log("Selected Text is: " + data.text);
+                //END
+                $("#multyselectSuccess-"+idSelected).hide();
+                $("#multySelectError-"+idSelected).hide();
+                $("#multiSelectLoading-"+idSelected).hide();
+                $("#multiActionSuccessTXT-"+idSelected).hide();
+                $("#multiActionFailTXT-"+idSelected).hide();
+                $("#multiSelectLoading-"+idSelected).show();
+                //ye AjaxMizani
+                //if dorost add shod ya hazf shod
+                $("#multiSelectLoading-"+idSelected).hide(1000);
+                $("#multyselectSuccess-"+idSelected).show(500);
+                $("#multiActionSuccessTXT-"+idSelected).show(500);
+
+            });
+            $('.tshpSelect23').on('select2:unselect', function (e) {
+                //inja oon itemi ke select shode bara DELETE ro migire
+                var data = e.params.data;
+                var idSelected = e.currentTarget.id.replace("tshpSelect2-","");
+                console.log("UnSelected value is: " + data.id);
+                console.log("UnSelected Text is: " + data.text);
+
+                //END
+                $("#multyselectSuccess-"+idSelected).hide();
+                $("#multySelectError-"+idSelected).hide();
+                $("#multiSelectLoading-"+idSelected).hide();
+                $("#multiActionSuccessTXT-"+idSelected).hide();
+                $("#multiActionFailTXT-"+idSelected).hide();
+                $("#multiSelectLoading-"+idSelected).show();
+                //ye AjaxMizani
+                //if dorost add shod ya hazf shod
+                $("#multiSelectLoading-"+idSelected).hide(1000);
+                $("#multySelectError-"+idSelected).show(500);
+                $("#multiActionFailTXT-"+idSelected).show(500);
+
+
+            });
+
+            setTimeout(function () {
+                $('.tshpSelect23').each(function (e, obj) {
+                    var idSelected = obj.id.replace("tshpSelect2-", "");
+
+                    $('#tshpSelect2-' + idSelected + ' option[value = 0 ]').prop("selected", false);
+
+                });
+            }, 1000);
+
+        });
+
+
+        function EditClick(pId) {
+            //alert("EditClick");
+            var id = $('#edit_id').text();
+            var key = $('#edit_key').val();
+            //alert(key);
+
+            var Value = $('#edit_value').val();
+           // alert(Value);
+            if (key != "" && Value != "") {
+                var PostJson = {
+                    'action': 'edit',
+                    'id': id,
+                    'Key': key,
+                    'value': Value
+                };
+                $.ajax({
+                    url: "/Product/Op_delete_edit",
+                    type: "post",
+                    data: PostJson,
+                    success: function (response) {
+
+                        var url = '@Url.Action("Options_Table","Product",null,Request.Url.Scheme)?id='+pId;
+                        $('#optiontable').load(url);
+
+                        
+                        $('#SuccesAlertEdit3').show();
+                        setTimeout(function () { $('#SuccesAlertEdit3').hide(500); }, 2000);
+                        $('#ERRAlertEdit3').hide(200);
+                        setTimeout(function ()
+                        {
+                            $('#editOption').hide();
+                            $('#Add_option').show();
+                        }
+                            , 3000);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            } else {
+                
+                $('#ERRAlertEdit3').show(200);
+            }
+        }
+
+        function NewClick(id) {
+
+            
+            var key = $('#Add_Key').val();
+           
+            var Value = $('#Add_Value').val();
+            if (key != "" && Value != "") {
+                var PostJson = {
+                    'action': 'new',
+                    'id': id,
+                    'Key': key,
+                    'value': Value
+                };
+
+                $.ajax({
+                    url: "/Product/Op_delete_edit",
+                    type: "post",
+                    data: PostJson,
+                    success: function (response) {
+
+                        var url = '@Url.Action("Options_Table","Product",null,Request.Url.Scheme)?id='+id;
+                        $('#optiontable').load(url);
+                        $('#Add_Key').val("");
+                        $('#Add_Value').val("");
+                        
+                        $('#SuccesAlertEdit3').show(200);
+                        $('#ERRAlertEdit3').hide(200);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            } else {
+               
+                $('#ERRAlertEdit3').show(200);
+            }
+        }
+
+        function SubmitedType3()
+        {
+            var json = '[';
+            var otArr = [];
+            var flag = false;
+            $('.tshpSelect23').each(function (e, obj) {
+                var idSelected = obj.id.replace("tshpSelect2-", "");
+                var ids = $('#tshpSelect2-' + idSelected).val();
+                if (ids == "") {
+                    flag = true;
+                }
+
+                    otArr.push('{' + "Mainid:" + idSelected + ',Ids:"' + ids + '"}');
+            });
+
+            json += otArr.join(",") + ']';
+
+
+            if (flag) {
+                $('#ERRAlertEdit3').show(200);
+            } else {
+                var PostJson = {
+                    'Json': json
+                };
+                $.ajax({
+                    url: "/Product/Save_Step3",
+                    type: "post",
+                    data: PostJson,
+                    success: function (response) {
+                        var sub = $("#Select2_C option:selected").val();
+                        var url = "@Url.Action("Add_Page4","Product",null,Request.Url.Scheme)?SubId="+sub;
+                        $('#step4').load(url);
+                        FreezItmsP3();
+                         $('#Url_4').text(url);
+                        $("#Sub_btn3").hide(200);
+                        $("#btn_next").show(200);
+                         ChangeAllInput('4');
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            }
+
+            }
+
+             function EditBtnP3Clk()
+        {
+                 $('.tshpSelect23').each(function (e, obj) {
+                     var idSelected = obj.id.replace("tshpSelect2-", "");
+                     $('#tshpSelect2-' + idSelected).prop("disabled", false);
+                 });
+
+                 $('#NewClkSub').prop("disabled", false);
+                 $('#Add_Key').prop("disabled", false);
+                 $('#Add_Value').prop("disabled", false);
+                 $("#Sub_btn3").show(200);
+                 $("#EditBtnP3").hide(200);
+        }
+    </script>
+    <!--end::Page Scripts -->
+

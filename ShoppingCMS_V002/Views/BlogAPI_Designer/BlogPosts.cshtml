@@ -1,0 +1,302 @@
+﻿@model ShoppingCMS_V002.Models.BlogPostsModel
+@{
+    ViewBag.Title = "صفحه بلاگ-MCDMSolver";
+    Layout = "~/Views/Master/AfraMater.cshtml";
+}
+
+<!--====================================================================
+                            Start Section Breadcrumb
+====================================================================-->
+<section class="section-breadcrumb overlay-color" style="background-image: url('@Url.Content("~/assets/MasterAfra.jpg")');
+">
+    <span class="bg-color bg-dark-60"></span>
+
+    <div class="container pt-90 pb-90 vertical-wrap">
+        <div class="vertical-inner text-center">
+
+            <h1>@Model.SearchNAmeHeaderH1</h1>
+        </div>
+        <div class="breadcrumb-box">
+            <div class="row row-0">
+                <div class="col-12 col-sm-8">
+                    <ol class="breadcrumb text-light">
+                        <li>
+                            <a href="@Url.Action("MainPage","BlogAPI_Designer")" class="breadcrumb-icon">
+                                <i class="fa fa-home"></i>
+                            </a>
+                        </li>
+                        @if (@Model.SearchNAmeHeaderH1 != "تمامی مطالب")
+                        {
+                            <li>
+                                <a href="@Url.Action("BlogPosts","BlogAPI_Designer")">
+                                    تمامی مطالب
+                                </a>
+                            </li>
+                        }
+                        <li class="active">@Model.SearchNAmeHeaderH1</li>
+                    </ol>
+                </div>
+                @*<div class="col-12 col-sm-4">
+                        <div class="breadcrumb-search text-right">
+                                <button class="button button-circle">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                <input type="text" placeholder="جستجو ...">
+                            </div>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</section>
+<!--====================================================================
+                            End Section Breadcrumb
+====================================================================-->
+<!--====================================================================
+                           Start Section Posts
+   ====================================================================-->
+<section class="section section-posts section-posts-1">
+    @*<div class="container">
+            <div class="section-title section-title-2 div-center text-center max-w-576">
+                <h2>بلاگ ما</h2>
+                <h3>اخبار و موضوعات تجاری</h3>
+                <p>
+                    <span class="divider divider-line"></span>
+                    ما می توانیم به توسعه تجارت خود کمک کنیم. ما بهترین خدمات را با بهترین نتایج ارائه می دهیم.
+                </p>
+            </div>
+        </div>*@
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                @if (Model.Posts.Count > 0)
+                {
+                    foreach (var item in Model.Posts)
+                    {
+                        <div class="post-item col-10" style="margin: auto; margin-top: 3%">
+                            <div class="post-image bg-gradient-180">
+                                <a href="@Url.Action("PostDetails", "BlogAPI_Designer", new {Id = item.Id})">
+                                    <img src="@item.ImagePath" alt="@item.title">
+                                </a>
+                            </div>
+                            <div class="post-meta">
+                                <a href="#" onclick='return false;' class="post-author-image">
+                                    <img src="@item.AdminPic" alt="@item.by">
+                                </a>
+                                <div class="post-author-name">
+                                    <span>توسط: </span>
+                                    <a href="#" onclick='return false;'>
+                                        @item.by
+                                    </a>
+                                </div>
+                                <span class="post-date">@item.date</span>
+                            </div>
+                            <div class="post-info">
+                                <h3>
+                                    <a href="@Url.Action("PostDetails", "BlogAPI_Designer", new {Id = item.Id})">@item.title</a>
+                                </h3>
+                                <div class="widget widget-categories">
+
+                                    <div class="widget-body">
+                                        <ul class="tcategories categories-simple">
+
+                                            <li>
+                                                <a href="@Url.Action("BlogPosts","BlogAPI_Designer",new {Cat="گروه بندی",Id=item.GPIDforPostPAge })" rel="tag">
+                                                    <i class="fa fa-group"></i>
+                                                    @item.InGroup
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <p>@item.text_min</p>
+
+                                <a href="@Url.Action("PostDetails", "BlogAPI_Designer", new {Id = item.Id})" class="button-read-more">
+                                    مطالعه بیشتر
+                                    <i class="fa fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="divider divider-line" style="width: 65%"></div>
+                    }
+                }
+                else
+                {
+                    <p>موردی برای نمایش موجود نمی باشد</p>
+                }
+
+            </div>
+            <div class="col-12 col-lg-4">
+                <!--====================================================================
+                                            Start Sidebar
+                ====================================================================-->
+                <aside class="site-sidebar">
+                    <div class="widget widget-search">
+                        <div class="widget-body">
+                            <div class="form form-simple">
+                                <div class="form-item">
+                                    <input id="SearchBox" type="text" placeholder="جستجوی چیزی ...">
+                                </div>
+                                <button class="btn-search" onclick="return ChSearch()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                            <div id="SearchB"></div>
+                        </div>
+                    </div>
+                    <div class="widget widget-categories">
+                        <div class="widget-head">
+                            <h3 class="widget-title">گروه بندی مطالب</h3>
+                            <div class="divider divider-line"></div>
+                        </div>
+                        <div class="widget-body">
+                            <ul class="tcategories categories-simple">
+                                @foreach (var item in Model.GroupsList)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("BlogPosts","BlogAPI_Designer",new {Cat="گروه بندی",Id=item.Id })" rel="tag">
+                                            <i class="fa fa-group"></i>
+                                            @item.Value
+                                        </a>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="widget widget-categories">
+                        <div class="widget-head">
+                            <h3 class="widget-title">دسته بندی ها</h3>
+                            <div class="divider divider-line"></div>
+                        </div>
+                        <div class="widget-body">
+                            <ul class="tcategories categories-simple">
+                                @foreach (var item in Model.Categories)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("BlogPosts","BlogAPI_Designer",new {Cat="دسته بندی",Id=item.Id })" rel="tag">
+                                            <i class="fa fa-folder-open"></i>
+                                            @item.Value
+                                        </a>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="widget widget-tags">
+                        <div class="widget-head">
+                            <h3 class="widget-title">ابر برچسب ها</h3>
+                            <div class="divider divider-line"></div>
+                        </div>
+                        <div class="widget-body">
+                            <ul class="tags tags-simple">
+                                @foreach (var item in Model.Tags)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("BlogPosts","BlogAPI_Designer",new { Cat = "برچسب", Id = item.Id })">@item.Value</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </aside>
+                <!--====================================================================
+                                            End Sidebar
+                ====================================================================-->
+            </div>
+        </div>
+        <nav class="nav-pagination nav-pagination-1" aria-label="navigation">
+            <ul>
+                <li class="prev">
+                    <a href="#" title="صفحه قبلی">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                </li>
+
+                @if (Model.Pages > 6 && Model.Page - 2 > 0)
+                {
+
+                    if (Model.Pages - Model.Page + 2 > 6)
+                    {
+                        for (int i = Model.Page - 2; i < 6; i++)
+                        {
+                            if (i == Model.Page)
+                            {
+                                <li class="active">
+                                    @i
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a href="@Url.Action("BlogPosts", "BlogAPI_Designer", new { Cat = Model.Cat, Page = i, Id = Model.Id })" title="">@i</a>
+                                </li>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = Model.Page - 2; i < Model.Pages; i++)
+                        {
+                            if (i == Model.Page)
+                            {
+                                <li class="active">
+                                    @i
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a href="@Url.Action("BlogPosts", "BlogAPI_Designer", new { Cat = Model.Cat, Page = i, Id = Model.Id })" title="">@i</a>
+                                </li>
+                            }
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    for (int i = 1; i < Model.Pages + 1; i++)
+                    {
+                        if (i == Model.Page)
+                        {
+                            <li class="active">
+                                @i
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="@Url.Action("BlogPosts", "BlogAPI_Designer", new { Cat = Model.Cat, Page = i, Id = Model.Id })" title="">@i</a>
+                            </li>
+                        }
+                    }
+                }
+
+
+
+                <li class="next">
+                    <a href="#" title="صفحه بعدی">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
+<!--====================================================================
+                            End Section Posts
+====================================================================-->
+
+<script>
+    function ChSearch() {
+
+        var m = $('#SearchBox').val();
+        var url = "@Url.Action("BlogPosts","BlogAPI_Designer",null,Request.Url.Scheme)?Cat=جست و جو&search=" + m;
+        console.log(url);
+        location.href = url;
+
+    }
+</script>

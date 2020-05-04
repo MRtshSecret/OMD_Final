@@ -1,0 +1,13 @@
+﻿@model ShoppingCMS_V002.Models.BlogPostsModel
+@{
+    Layout = null;
+}
+
+@foreach (var item in Model.GroupsList)
+{
+
+    <li>
+        <a href="@Url.Action("BlogPosts","BlogAPI_Designer",new {Cat="گروه بندی",Id=item.Id })">@item.Value</a>
+    </li>
+
+}

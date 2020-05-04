@@ -1,0 +1,454 @@
+﻿
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+
+    <!--Begin::App-->
+    <div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+        <!--Begin:: App Aside Mobile Toggle-->
+        <button class="kt-app__aside-close" id="kt_user_profile_aside_close">
+            <i class="la la-close"></i>
+        </button>
+        <!--End:: App Aside Mobile Toggle-->
+        <!--Begin:: App Aside-->
+        <div class="kt-grid__item kt-app__toggle kt-app__aside" id="kt_user_profile_aside">
+            <!--begin:: Widgets/Applications/User/Profile1-->
+            <div class="kt-portlet ">
+                <div class="kt-portlet__head  kt-portlet__head--noborder">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                        </h3>
+                    </div>
+
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit-y">
+                    <!--begin::Widget -->
+                    <div class="kt-widget kt-widget--user-profile-1">
+                        <div class="kt-widget__head">
+                            <div class="kt-widget__media">
+                                <img src="@ViewBag.Show_Pro.ad_avatarprofile" alt="image">
+                            </div>
+                            <div class="kt-widget__content">
+                                <div class="kt-widget__section">
+                                    <a class="kt-widget__username">
+                                        @ViewBag.Show_Pro.ad_firstname   @ViewBag.Show_Pro.ad_lastname
+                                    </a>
+                                    <span class="kt-widget__subtitle">
+                                        @ViewBag.Show_Pro.ad_type_name
+                                    </span>
+                                </div>
+
+                                <div class="kt-widget__action">
+                                    <button type="button" class="btn btn-info btn-sm">چت</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kt-widget__body">
+                            <div class="kt-widget__content">
+                                <div class="kt-widget__info">
+                                    <span class="kt-widget__label">ایمیل:</span>
+                                    <a class="kt-widget__data"> @ViewBag.Show_Pro.ad_email</a>
+                                </div>
+                                <div class="kt-widget__info">
+                                    <span class="kt-widget__label">موبایل:</span>
+                                    <a class="kt-widget__data">@ViewBag.Show_Pro.ad_mobile</a>
+                                </div>
+                                <div class="kt-widget__info">
+                                    <span class="kt-widget__label">تلفن:</span>
+                                    <span class="kt-widget__data">@ViewBag.Show_Pro.ad_phone</span>
+                                </div>
+                            </div>
+
+                            <div class="kt-widget__items">
+                                <a id="info" onclick="getdata('info')" class="kt-widget__item ">
+                                    <span class="kt-widget__section">
+                                        <span class="kt-widget__icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                                                    <path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                                    <path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" fill="#000000" fill-rule="nonzero"></path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <span class="kt-widget__desc">
+                                            اطلاعات شخصی
+                                        </span>
+                                    </span>
+                                </a>
+
+
+                                <a id="access" onclick="getdata('access')" class="kt-widget__item ">
+                                    <span class="kt-widget__section">
+                                        <span class="kt-widget__icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24"></rect>
+                                                    <path d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z" fill="#000000" opacity="0.3"></path>
+                                                    <path d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z" fill="#000000"></path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <span class="kt-widget__desc">
+                                            مدیریت دسترسی
+                                        </span>
+                                    </span>
+                                </a>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Widget -->
+                </div>
+            </div>
+            <!--end:: Widgets/Applications/User/Profile1-->
+        </div>
+        <!--End:: App Aside-->
+        <!--Begin:: App Content-->
+        <div id="_info" class="kt-grid__item kt-grid__item--fluid kt-app__content " style="display:none">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="kt-portlet">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+
+                                <h3 class="kt-portlet__head-title">اطلاعات شخصی <small>اطلاعات شخصی خود را به روز کنید</small></h3>
+                            </div>
+
+                        </div>
+
+                        <div class="kt-form kt-form--label-right">
+                            <div class="kt-portlet__body">
+                                <div class="kt-section kt-section--first">
+                                    <div class="kt-section__body">
+                                        <div class="row">
+                                            <label class="col-xl-3"></label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <h3 class="kt-section__title kt-section__title-sm">اطلاعات سرپرست:</h3>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 col-form-label">تصویر</label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <div class="kt-avatar kt-avatar--outline" id="kt_user_avatar">
+
+                                                    <div id="show_image" class="kt-avatar__holder" style="background-image: url(@ViewBag.Show_Pro.ad_avatarprofile)"></div>
+                                                    <label id="picss" class="kt-avatar__upload" data-toggle="modal" data-target="#kt_modal_6" onclick="modalloader()">
+                                                        <i class="fa fa-pen"></i>
+
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input style="display:none" class="form-text text-muted" id="Pics_p2" readonly="readonly" />
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 col-form-label">نام</label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <input id="name" class="form-control" type="text" value=" @ViewBag.Show_Pro.ad_firstname" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 col-form-label">نام خانوادگی</label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <input id="last" class="form-control" type="text" value=" @ViewBag.Show_Pro.ad_lastname" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 col-form-label">نام مستعار</label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <input id="nick" class="form-control" type="text" value=" @ViewBag.Show_Pro.ad_NickName">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <label class="col-xl-3"></label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <h3 class="kt-section__title kt-section__title-sm">اطلاعات تماس:</h3>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 col-form-label">شماره تلفن</label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                                    <input id="phone" type="text" class="form-control" value="@ViewBag.Show_Pro.ad_phone" placeholder="تلفن" aria-describedby="basic-addon1" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 col-form-label">شماره موبایل</label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-mobile"></i></span></div>
+                                                    <input id="mobile" type="text" class="form-control" value="@ViewBag.Show_Pro.ad_mobile" placeholder="موبایل" aria-describedby="basic-addon1" required>
+                                                </div>
+                                                <span class="form-text text-muted">ما هرگز موبایل شما را با هیچ کسی به اشتراک نمی گذاریم.</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 col-form-label">آدرس ایمیل</label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
+                                                    <input id="email" type="email" class="form-control" value="@ViewBag.Show_Pro.ad_email" placeholder=" ایمیل" aria-describedby="basic-addon1" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div id="ERRAlertNew" class="alert alert-solid-danger alert-bold fade show kt-margin-t-20 kt-margin-b-40" role="alert" style="display: none;">
+                                <div class="alert-icon"><i class="fa fa-exclamation-triangle"></i></div>
+                                <div class="alert-text">مقدار ورودی باید پرشده باشد!</div>
+                                <div class="alert-close">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true"><i class="la la-close"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="kt-portlet__foot">
+                                <div class="kt-form__actions">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-xl-3">
+                                        </div>
+
+
+                                        <div class="col-lg-9 col-xl-9">
+                                            <button type="submit" onclick="postto('information')" class="btn btn-success">ثبت</button>&nbsp;
+                                            <button type="reset" class="btn btn-secondary">لغو کردن</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="_access" class="kt-grid__item kt-grid__item--fluid kt-app__content" style="display:none">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="kt-portlet kt-portlet--height-fluid">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">مدیریت دسترسی<small></small></h3>
+                            </div>
+
+                        </div>
+                        <div class="kt-form kt-form--label-right">
+                            <div class="kt-portlet__body">
+                                <div class="kt-section kt-section--first">
+                                    <div class="kt-section__body">
+
+
+
+                                        <div class="form-group row">
+                                            <label for="datatype" class="col-xl-3 col-lg-3 col-form-label">دسترسی:</label>
+                                            <div class="col-lg-9 col-xl-6">
+                                                <select id="data_acc" class="form-control" onchange="ChangeClick()">
+                                                    @foreach (var item in @ViewBag.Show_Pro.ad_Types)
+                                                    {
+                                                        if (@ViewBag.Show_Pro.ad_type_name == item.Id.ToString())
+                                                        {
+                                                            <option selected value="@item.Id">@item.Value</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Id">@item.Value</option>
+                                                        }
+
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+
+
+                                        <div class="form-group row" id="AccassTree">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="ERRAlertNew2" class="alert alert-solid-danger alert-bold fade show kt-margin-t-20 kt-margin-b-40" role="alert" style="display: none;">
+                                <div class="alert-icon"><i class="fa fa-exclamation-triangle"></i></div>
+                                <div id="_ERRAlertNew2" class="alert-text">مقدار ورودی باید پرشده باشد!</div>
+                                <div class="alert-close">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true"><i class="la la-close"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="kt-portlet__foot">
+                                <div class="kt-form__actions">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-xl-3">
+                                        </div>
+
+                                        <div class="col-lg-9 col-xl-9">
+                                            <button onclick="postto('access')" class="btn btn-brand btn-bold">تغییر </button>&nbsp;
+                                            <button type="reset" class="btn btn-secondary">لغو کردن</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--End:: App Content-->
+        </div>
+
+        <!--End:: App Content-->
+    </div>
+    <!--End::App-->
+</div>
+<!-- end:: Content -->
+
+<div class="modal fade" id="kt_modal_6" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row w-100">
+                    <div class="col-10">
+                        <button class="btn btn-success" id="btnpageUp-0" onclick="return UploadModalPage(this,0)">آپلود</button>
+                        <button class="btn btn-primary" id="btnpageUp-1" onclick="return UploadModalPage(this,1)">گالری</button>
+
+                    </div>
+                    <div class="col-2">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <input style="width: 100%; height: 50px; display: none" type="text" value="" id="modalRep1">
+                <input style="width: 100%; height: 50px; display: none" type="text" value="" id="modalRep2">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                <button type="button" class="btn btn-primary" onclick="savePicss()" data-dismiss="modal">اتمام فرایند</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+     function ChangeClick()
+    {
+        var itemSelected =document.getElementById("data_acc").value;
+        if (itemSelected != '0') {
+            var url = "@Url.Action("ModalTree","Admin",null,Request.Url.Scheme)?id=" + itemSelected;
+            $('#AccassTree').load(url);
+        }
+
+    }
+
+     function modalloader() {
+        $('#kt_modal_6 .modal-body').load("@Url.Action("UploadPage", "Product", null, Request.Url.Scheme)");
+    }
+
+
+    function DeleteSelectedImage(IMAGEIDSELECT) {
+        $("#imageSelectedNum-" + IMAGEIDSELECT).hide(500);
+        var jsobj = JSON.parse($("#PicsJson_p1").val());
+        var indexSelected = jsobj.findIndex(x => x.imageID === IMAGEIDSELECT);
+        if (indexSelected !== undefined) jsobj.splice(indexSelected, 1);
+        var allids = "";
+        console.log("dds = " + jsobj.length);
+        for (var __I__ = 0; __I__ < jsobj.length; __I__++) {
+            allids += jsobj[__I__].imageID + ",";
+        }
+        $("#Pics_p1").val(allids);
+        $("#Pics_p2").val(allids);
+        $("#PicsJson_p1").val(JSON.stringify(jsobj));
+    }
+    function savePicss() {
+        $("#Pics_p1").val($("#modalRep1").val());
+        $("#Pics_p2").val($("#modalRep1").val());
+        $("#PicsJson_p1").val($("#modalRep2").val());
+        GenerateSelectedImages($("#modalRep2").val(), 1);
+        $('#kt_modal_6 .modal-body').html('MRM');
+    }
+    function SelectPicID(idparameter) {
+        var PicPosition = $("#CheckPickSelected-" + idparameter);
+        $("gethertags").each(function (e) {
+            $(this).hide(100);
+        });
+        if ($(PicPosition).attr("tshpischeck") == "0") {
+            $("#CheckPickSelected-" + idparameter).show(200);
+            $("#ktportlet-" + idparameter).addClass("bg-success");
+            $("#GetherTagsID-" + idparameter).show(200);
+            $(PicPosition).attr("tshpischeck", "1");
+        } else {
+            $("#CheckPickSelected-" + idparameter).hide(200);
+            $("#ktportlet-" + idparameter).removeClass("bg-success");
+            $("#GetherTagsID-" + idparameter).show(200);
+            $(PicPosition).attr("tshpischeck", "0");
+        }
+        CalcPicSelected();
+    }
+    function GenerateSelectedImages(jsonSelectedIMGs, ForID) {
+        console.log("aa : " + jsonSelectedIMGs);
+        console.log("bb : " + ForID);
+        if (ForID == 1) {
+            var imagestr = "";
+
+            var objjsonSelectedIMGs = JSON.parse(jsonSelectedIMGs);
+            for (var Ilooper = 0; Ilooper < objjsonSelectedIMGs.length; Ilooper++) {
+                imagestr+='<div class="col-lg-3" id="imageSelectedNum-'+objjsonSelectedIMGs[Ilooper].imageID+'"><div class="kt-portlet bg-success"><div class="kt-portlet__head kt-portlet__head--right kt-portlet__head--noborder  kt-ribbon kt-ribbon--clip kt-ribbon--left kt-ribbon--info" style="padding: 10px;"><div class="kt-ribbon__target StatusInputSelected" style="top: -2px; right: 20px; background-color: rgb(9, 159, 174);"><i class="flaticon2-correct" style="font-size: 20px;"></i></div><div class="kt-portlet__head-label" style="width: 100%;"><h3 class="kt-portlet__head-title" style="width: 100%;"><img src="'+objjsonSelectedIMGs[Ilooper].imgAddress+'"  style="width: 100%; border-radius: 5px;"></h3></div></div><div class="kt-portlet__body kt-portlet__body--fit-top"><div class="row"><div class="input-group"><span class="input-group-text w-100">نام عکس</span></div><input type="text" class="form-control" readonly="readonly" value="'+objjsonSelectedIMGs[Ilooper].PicSelectedIDNAme+'" style="direction: rtl;text-align: right;"></div><div class="row pt-1"><div class="col-12" style="padding: 1px 1px;"><button class="btn btn-danger w-100" type="button" onclick="return DeleteSelectedImage('+objjsonSelectedIMGs[Ilooper].imageID+
+                    ')">حذف!</button></div></div></div></div></div>';
+            }
+            console.log(imagestr);
+            $("#ImgSelecteds").html( imagestr);
+
+        } else {
+
+        }
+
+    }
+    function CalcPicSelected() {
+
+        var IDSSelectedimg = "";
+        var Allids = [];
+        $(".StatusInputSelected").each(function (e) {
+            if ($(this).attr("tshpischeck") == "1") {
+                item = {};
+                item["imageID"] = $(this).attr("tshpdatatargetid");
+                var imgadd = $("#IMGktportlet-" + item["imageID"]).attr("src");
+                if (imgadd.length > 0) {
+                    item["imgAddress"] = imgadd;
+                } else {
+                    item["imgAddress"] = "";
+                }
+                item["PicSelectedIDNAme"] = $("#PicSelectedIDNAme-" + item["imageID"]).val();
+                Allids.push(item);
+                console.log("#IMGktportlet-" + item["imageID"]);
+                console.log("imgadd " + imgadd);
+                IDSSelectedimg += item["imageID"] + ",";
+            }
+        });
+        var jsonString = JSON.stringify(Allids);
+        $("#modalRep1").val(IDSSelectedimg);
+        $("#modalRep2").val(jsonString);
+        console.log($("#modalRep2").val());
+        }
+        ///////////////////////////////
+</script>

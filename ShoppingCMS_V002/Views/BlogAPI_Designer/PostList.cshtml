@@ -1,0 +1,19 @@
+﻿@using ShoppingCMS_V002.Models
+@model List<TableModel>
+@{
+    ViewBag.Title = "PostList";
+}
+
+@foreach (var item in Model)
+{
+    <div class="post-meta">
+        <a href="@Url.Action("PostDetails","BlogAPI_Designer",new { Id=item.Id })" class="post-author-image" style="margin">
+            <img src="@item.Group1" alt="Miranda Fox image">
+        </a>
+        <div class="post-author-name">
+            <a href="@Url.Action("PostDetails","BlogAPI_Designer",new { Id=item.Id })">
+                @item.Group2
+            </a>
+        </div>
+    </div>
+}

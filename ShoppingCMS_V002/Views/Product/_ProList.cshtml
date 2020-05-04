@@ -1,0 +1,76 @@
+﻿@model ShoppingCMS_V002.Models.ProductModel
+
+<tr>
+    <th style="display: none" scope="Id">@Model.Id</th>
+    <th scope="row">@Model.Num</th>
+    <td><a href="">@Model.Title</a></td>
+    <td><span>@Model.Description</span></td>
+    <td>
+        <div style="text-align: center;">
+            <img src="@Model.PicPath"
+                 alt="" height="100%" width="100%">
+        </div>
+    </td>
+    <td>
+        <div style="text-align: center;">
+            @if (@Model.deleted)
+            {
+                <button type="button"
+                        class="btn btn-danger">
+                    حذف
+                </button>
+            }
+            else if (@Model.disabled)
+            {
+                <button type="button" class="btn btn-warning">
+                    غیر
+                    فعال
+                </button>
+            }
+            else
+            {
+                <button type="button"
+                        class="btn btn-success">
+                    فعال
+                </button>
+            }
+
+
+        </div>
+    </td>
+
+    <td>@Model.Date</td>
+    <td>@Model.Category</td>
+    @*<td>@Model.MainPrice</td>*@
+    <td>@Model.AddBy</td>
+    <td>
+
+        <div class="btn-group-vertical mr-2" role="group" aria-label="...">
+
+
+            <a href="@Url.Action("ProductDetails","Product",new {Id_Pro=Model.Id, Sub=Model.SubId })" style="border:none" type="button" class="btn btn-secondary"><i class="la la-info-circle"></i></a>
+
+
+
+            @if (!Model.deleted)
+            {
+                <button style="border:none" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#kt_modal_Del" onclick="return ModelLoader('del',@Model.Id)"><i class="la la-trash"></i></button>
+                if (!Model.disabled)
+                {
+                    <a href="@Url.Action("Update_Product","Product",new {Id_Pro=Model.Id })" style="border:none" type="button" class="btn btn-secondary"><i class="la la-edit"></i></a>
+                    <button style="border:none" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#kt_modal_DeAct" onclick="return ModelLoader('DeAct',@Model.Id)"><i class="fa fa-ban"></i></button>
+                }
+                else
+                {
+
+                    <a href="@Url.Action("Update_Product","Product",new {Id_Pro=Model.Id })" style="border:none" type="button" class="btn btn-secondary"><i class="la la-edit"></i></a>
+
+                    <button style="border:none" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#kt_modal_Act" onclick="return ModelLoader('Act',@Model.Id)"><i class="fa fa-redo-alt"></i></button>
+                }
+            }
+
+
+        </div>
+
+    </td>
+</tr>

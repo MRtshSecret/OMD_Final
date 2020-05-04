@@ -1,0 +1,223 @@
+﻿@model ShoppingCMS_V002.ModelViews.D_APIModelViews.ShoppingCartModelView
+@{
+    ViewBag.Title = "ShoppingCart";
+    Layout = "~/Views/Master/Design_Master.cshtml";
+}
+
+<!-- CONTENT AREA -->
+<div class="content-area">
+
+    <!-- BREADCRUMBS -->
+    <section class="page-section breadcrumbs">
+        <div class="container">
+            <div class="page-header">
+                <h1>فاکتور</h1>
+                <br>
+            </div>
+        </div>
+    </section>
+    <!-- /BREADCRUMBS -->
+    <!-- PAGE -->
+    <section class="page-section color">
+        <div class="container">
+
+
+            <h3 class="block-title alt"><i class="fa fa-angle-down color"></i>لیست سفارشات</h3>
+            <div class="row orders">
+                <div class="col-md-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="4%">ردیف</th>
+                                <th width="23%">تصویر</th>
+                                <th width="15%">نام محصول</th>
+                                <th width="10%">قیمت واحد</th>
+                                <th width="8%">تعداد در کارتن</th>
+                                <th width="10%">قیمت کارتن</th>
+                                <th width="20%">تعداد سفارش</th>
+                                <th width="10%">مجموع</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.FactorModel.items)
+                            {
+                            <tr>
+                                <td style="display:none" id="Id">@item.Id</td>
+                                <td class="quantity">@item.Num</td>
+                                <td class="image" ><a  class="media-link" href="#"><i class="fa fa-plus"></i><img style="width:50%; height:auto" src="@item.ImagePath" alt="" /></a></td>
+                                <td class="description">
+                                    <h4><a href="#">@item.Title</a></h4>
+                                    @item.property
+                                </td>
+                                <td class="total">@item.PricePerQ @Model.FactorModel.MoneyQuantity </td>
+                                <td class="total">@item.Quantity</td>
+                                @if (item.PriceXQ == item.PriceOff)
+                                {
+                                    <td class="total">@item.PriceOff @Model.FactorModel.MoneyQuantity</td>
+                                }
+                                else
+                                {
+                                    <td class="total">
+                                        <p><del> @item.PriceXQ @Model.FactorModel.MoneyQuantity</del></p>
+                                        <p><ins> @item.PriceOff @Model.FactorModel.MoneyQuantity</ins></p>
+                                    </td>
+                                }
+                                <td class="quantity">
+                                    <input class="form-control qty ; col-md-5" type="number" step="1" min="1" name="quantity" value="@item.number" title="Qty">
+                                </td>
+                                <td class="total">@item.total @Model.FactorModel.MoneyQuantity <a href="#"><i class="fa fa-close"></i></a></td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <h3 class="block-title alt"><i class="fa fa-angle-down color"></i>مشخصات دریافت کننده </h3>
+            <form action="#" class="form-delivery">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group"><input class="form-control" type="text" placeholder="نام"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group"><input class="form-control" type="text" placeholder="نام خانوادگی"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group"><input class="form-control" type="text" placeholder="کد ملی"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group selectpicker-wrapper">
+                            <select id="OstanSelect" class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select" onchange="CityChange()">
+                                @foreach (var item in Model.Ostan)
+                                {
+                                    <option value="@item.Id">@item.Value</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group selectpicker-wrapper">
+                            <select id="CitySelect" class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select">
+                                <option>شهر</option>
+                                <option>شهر</option>
+                                <option>شهر</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group"><input class="form-control" type="text" placeholder="آدرس"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group"><input class="form-control" type="text" placeholder="کد پستی"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group"><input class="form-control" type="text" placeholder="تلفن تماس"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group"><input class="form-control" type="text" placeholder="آدرس ایمیل ( اختیاری )"></div>
+                    </div>
+                </div>
+            </form>
+            <br>
+
+            <h3 class="block-title alt"><i class="fa fa-angle-down color"></i>تسویه حساب</h3>
+            <form action="#" class="form-sign-in">
+                <div class="row ">
+
+                    <div class="col-md-12">
+
+                        <div class="shopping-cart;row orders">
+                            <table>
+                                <tr>
+                                    <td>جمع فاکتور:</td>
+                                    <td>1.200.000 تومان</td>
+                                </tr>
+                                <tr>
+                                    <td>مالیات بر ارزش افزوده (%9): </td>
+                                    <td> 25.000 تومان</td>
+                                </tr>
+                                <tfoot>
+                                    <tr>
+                                        <td><strong>جمع کل:</strong></td>
+                                        <td>1.225.000 تومان</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div>
+                                <div class="col-md-2">
+                                    <input class="form-control qty" type="text" placeholder="کد تخفیف" />
+                                </div>
+                                <div class="col-md-1"><button class="btn btn-theme btn-theme-dark btn-block">ثبت</button></div>
+                            </div>
+                            <br><br>
+
+
+                        </div>
+                    </div>
+                    <button class="btn btn-theme btn-theme-dark btn-block">پرداخت</button>
+
+
+                </div>
+            </form>
+
+
+
+
+
+        </div>
+    </section>
+    <!-- /PAGE -->
+
+
+
+</div>
+<!-- /CONTENT AREA -->
+
+<script>
+    $(document).ready(function () {
+
+        $('#CitySelect').prop("disabled", true);
+
+    });
+
+
+    function CityChange()
+    {
+        var Ost = $('#OstanSelect').val();
+        alert(Ost);
+        $('#CitySelect').prop("disabled", false);
+
+
+          PostJson = {
+              'Cat': 'City',
+              'Id': Ost
+        };
+
+        $.ajax({
+            url: '/API_Functions/City',
+            type: "post",
+            data: JSON.stringify(PostJson),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+
+                var token = response;
+                var s = "";
+
+                
+                for (var i = 0; i < token.length; i++) {
+
+                    s += ' <option value="' + token[i].Id + '">' + token[i].Value + '</option>';
+                }
+
+                //document.getElementById('CitySelect').innerHTML = s;
+                $('#CitySelect').html(s);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
+
+
+    }
+</script>

@@ -1,0 +1,130 @@
+﻿@using ShoppingCMS_V002.Models
+@model List<AdminTypeTbl_Model>
+@{
+    ViewBag.Title = "AdminTbl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--START : TBLS-->
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                لیست سطوح ادمین
+            </h3>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+    <div style="display:none" id="TypeId"></div>    
+        <!--begin::Section-->
+        <div class="kt-section">
+            <span class="kt-section__info">
+                لیست تمامی سطوح ادمین را در جدول زیر میتوانید مشاهده کنید.
+            </span>
+            <div class="kt-section__content">
+                <table class="table table-light--dark">
+                    <thead>
+                        <tr>
+                            <th style="width:20%; margin:auto;">#</th>
+                            <th style="width:40%">نام سطح ادمین</th>
+                            <th style="width:40%">اقدامات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <th scope="row">@item.Num</th>
+                            <td id="IdItem-@item.TypeId" style="display:none">@item.TypeId</td>
+                            <td id="EditingStr-@item.TypeId" style="display:none">@item.EditString</td>
+                            <td id="TypeName-@item.TypeId">@item.AT_Name</td>
+                            <td>
+                                <div class="btn-group mr-2" role="group" aria-label="...">
+                                    <button style="border:none" type="button" class="btn btn-secondary" onclick="return Click_op_edit(@item.TypeId)"><i class="la la-edit"></i></button>
+
+                                    <button style="border:none" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#kt_modal_Access" onclick="return Click_op_Detail(@item.TypeId)"><i class="la la-info"></i></button>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--end::Section-->
+    </div>
+    <!--end::Form-->
+</div>
+<!--END : TBLS-->
+<!-- remote datatable modal -->
+<div id="kt_modal_Access" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content" style="min-height: 100px;">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    دسترسی های ادمین
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="TreeModalBody">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-clean btn-bold btn-upper btn-font-sm" data-dismiss="modal">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function Click_op_Detail(id__)
+    {
+        var url = "@Url.Action("ModalTree","Admin",null,Request.Url.Scheme)?id=" + id__;
+        $('#TreeModalBody').load(url);
+    }
+
+    function Click_op_edit(id__) {
+
+        $('#Sub_btn1').hide();
+        $('#Sub_btn12').show();
+
+        var EditingStr = $('#EditingStr-' + id__).text().split(',');
+
+        $('.Check_Route').each(function (e, obj) {
+            for (var i = 0; i < EditingStr.length; i++) {
+                if (obj.id == 'ruoteitm-' + EditingStr[i]) {
+                   $('#ruoteitm-' + EditingStr[i]).prop("checked", true);
+                }
+            }
+        });
+
+        $('.RoutList').each(function (e, obj) {
+            var id_ = obj.id;
+            $('#' + id_).show();
+        });
+
+         $('.Cat').each(function (e, obj) {
+
+            var id__ = obj.id.replace("Cat_","");
+            
+
+            if ($('.route-' + id__ + ':checked').length == $('.route-' + id__).length) {
+                    $('#Cat_' + id__).prop("checked", true);
+                } else {
+                    $('#Cat_' + id__).prop("checked", false);
+                }
+
+        });
+
+        var name_ = $('#TypeName-'+ id__).text();
+        $('#AD_type_name').val(name_);
+
+        $('#EditId').text(id__);
+
+    }
+</script>

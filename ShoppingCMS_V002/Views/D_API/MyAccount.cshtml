@@ -1,0 +1,260 @@
+﻿@model ShoppingCMS_V002.Models.D_APIModels.tbl_Customer_Main
+@{
+    ViewBag.Title = "MyAccount";
+    Layout = "~/Views/Master/Design_Master.cshtml";
+}
+
+
+
+
+<div class="content-area">
+
+    <!-- PAGE -->
+    <section class="page-section color">
+        <div class="container">
+            <div class="row">
+                <div id="Log" class="col-sm-6">
+                    <h3 class="block-title"><span>ورود به حساب کاربری</span></h3>
+                    @using (Html.BeginForm("login", "D_API", FormMethod.Post))
+                    {@Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <div class="col-md-12 hello-text-wrap">
+                            <span class="hello-text text-thin">سلام ، به حساب کاربری خود خوش آمديد.</span>
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.C_Mobile, new { @class = "form-control", required = "required", type = "text", placeholder = "شماره موبایل" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.C_Password, new { @class = "form-control", required = "required", type = "password", placeholder = "رمز عبور" })
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+
+                            <label>
+                                @Html.CheckBoxFor(m => m.remember_me)
+                                مرا به خاطر بسپار
+                            </label>
+
+                        </div>
+                        <div class="col-md-12 col-lg-6 text-right-lg">
+                            <a class="forgot-password" href="#">رمز عبورتان را فراموش کرده‌اید؟</a>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-theme btn-block btn-theme-dark">ورود</button>
+
+                        </div>
+
+                    </div>
+
+                }
+                </div>
+                <div id="NewAcc" style="display:none" class="col-sm-6">
+                    <h3 class="block-title"><span> حساب کاربری جدید</span></h3>
+                    <div class="row">
+                        <div class="col-md-12 hello-text-wrap">
+                            <span class="hello-text text-thin">سلام ، به حساب کاربری خود خوش آمديد.</span>
+                        </div>
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <input id="CMobile" class="form-control" type="text" placeholder="شماره موبایل" />
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <input id="CPass1" class="form-control" type="password" placeholder="رمز عبور" />
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <input id="CPass2" class="form-control" type="password" placeholder="رمز عبور را دوباره وارد کنید" />
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+
+                        </div>
+                        <div class="col-md-6">
+                            <button id="SendCodeBtn" onclick="SendCode()" class="btn btn-theme btn-block btn-theme-dark">ارسال کد</button>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div id="CodeDiv" style="display:none" class="col-sm-6">
+                    <h3 class="block-title"><span>کد تائید</span></h3>
+                    <div class="row">
+                        <div class="col-md-12 hello-text-wrap">
+                            <span class="hello-text text-thin">لطفا کد ارسال شده را وارد کنید.</span>
+                        </div>
+                        <div style="display:none" id="Id_UUU"></div>
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <input id="C_Token" class="form-control" type="text" placeholder="کد" />
+
+                            </div>
+
+                        </div>
+                       
+                        <div class="col-md-12 col-lg-6">
+
+                        </div>
+                        <div class="col-md-6">
+                            <button onclick="CheckCode()" class="btn btn-theme btn-block btn-theme-dark">تائید</button>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="col-sm-6">
+                    <h3 class="block-title"><span>ایجاد حساب کاربری</span></h3>
+                    <form action="#" class="create-account">
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <h3 class="block-title">امروز ثبت نام کنید و از مزایای عضویت بهره مند شوید.</h3>
+                                <ul class="list-check">
+                                    <li>سفارش آنلاین</li>
+                                    <li>مشاهده ی پیشنهادات ویژه </li>
+                                    <li>لیست مورد پسند</li>
+                                    <li>دریافت اخبار منحصر به فرد و خرید سفارشی</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-block btn-theme btn-theme-dark btn-create" onclick="return NewAccount()">حساب کاربری جدید</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+    <!-- /PAGE -->
+
+
+
+</div>
+
+<script>
+
+    
+
+
+
+
+    function SendCode()
+    {
+        var MobileNum = $('#CMobile').val();
+        var Pass1 = $('#CPass1').val();
+        var pass2 = $('#CPass2').val();
+        if (MobileNum != "" && Pass1 != "" && pass2 != "") {
+            if (Pass1 == pass2) {
+                
+                $('#SendCodeBtn').attr("disabled", true);
+
+                setTimeout(function () { $('#SendCodeBtn').attr("disabled", false); }, 60000);
+
+
+                PostJson = {
+                    'MobileNum': MobileNum,
+                    'Pass': Pass1
+                };
+
+
+            $.ajax({
+                url: '/API_Functions/SmsRegister',
+                type: "post",
+                data: JSON.stringify(PostJson),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    var Token = response;
+                    if (Token.StatusCode == "smsX:200OK" || Token.StatusCode == "smsX:407") {
+                        alert("پیامک با موفقیت ارسال شد.");
+                        $('#Id_UUU').text(Token.CustomerId);
+                        $('#NewAcc').hide();
+                        $('#CodeDiv').show();
+
+                    } else {
+                        alert("در پروسه ی ارسال پیامک مشکلی ایجاد شده ، لطفا بعد از 60 ثانیه دوباره تلاش کنید ");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+            } else {
+                alert("مقدار دو رمز عبور یکسان نیست");
+            }
+        } else {
+            alert("لطفا مقدار ورودی را پر کنید");
+        }
+
+
+       
+    }
+
+    function CheckCode() {
+        var Id = $('#Id_UUU').text();
+        var Code=$('#C_Token').val();
+         PostJson = {
+            'UId': Id,
+            'Code': Code
+        };
+
+            $.ajax({
+                url: '/API_Functions/CheckCode',
+                type: "post",
+                data: JSON.stringify(PostJson),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    var Token = response;
+                    if (Token == "Success") {
+
+                        alert("ثبت نام شما با موفقیت انجام شد.");
+                        Enc(Id);
+
+
+                    } else if (Token == "Wrong Code") {
+
+                        alert("کد وارد شده اشتباه است . دوباره تلاش کنید");
+                        $('#C_Token').val("");
+                    } else {
+                        alert("مشکلی در پروسه ی ثبت نام ایجاد شده ، لطفادوباره تلاش کنید");
+                         $('#NewAcc').show();
+                        $('#CodeDiv').hide();
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+
+    }
+
+    function NewAccount() {
+        
+        $('#NewAcc').show();
+        $('#Log').hide();
+    }
+</script>

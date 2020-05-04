@@ -1,0 +1,477 @@
+﻿@model ShoppingCMS_V002.Models.CustomerDitaile
+@{
+    ViewBag.Title = "Customer_Profile";
+    Layout = "~/Views/Master/Master.cshtml";
+}
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader   kt-grid__item" id="kt_subheader">
+        <div class="kt-container  kt-container--fluid ">
+            <div class="kt-subheader__main">
+                <h3 class="kt-subheader__title">
+                    داشبورد
+                </h3>
+
+                <span class="kt-subheader__separator kt-hidden"></span>
+                <div class="kt-subheader__breadcrumbs">
+                    <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                    <span class="kt-subheader__breadcrumbs-separator"></span>
+                    <a href="" class="kt-subheader__breadcrumbs-link">
+                        کاربران
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end:: Subheader -->
+    <!-- begin:: Content -->
+    <div id="Show_user">
+
+        <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+
+            <!--Begin::App-->
+            <div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+                <!--Begin:: App Aside Mobile Toggle-->
+                <button class="kt-app__aside-close" id="kt_user_profile_aside_close">
+                    <i class="la la-close"></i>
+                </button>
+                <!--End:: App Aside Mobile Toggle-->
+                <!--Begin:: App Aside-->
+                <div class="kt-grid__item kt-app__toggle kt-app__aside" id="kt_user_profile_aside">
+                    <!--begin:: Widgets/Applications/User/Profile1-->
+                    <div class="kt-portlet ">
+                        <div class="kt-portlet__head  kt-portlet__head--noborder">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">
+                                </h3>
+                            </div>
+
+                        </div>
+                        <div class="kt-portlet__body kt-portlet__body--fit-y">
+                            <!--begin::Widget -->
+                            <div class="kt-widget kt-widget--user-profile-1">
+                                <h4>پروفایل مشتری</h4>
+                                <div class="kt-widget__body">
+                                    <div class="kt-widget__content">
+                                        <div class="kt-widget__info">
+                                            <span class="kt-widget__label">نام:</span>
+                                            <a class="kt-widget__data"> @Model.Name @Model.Familly</a>
+                                        </div>
+                                        <div class="kt-widget__info">
+                                            <span class="kt-widget__label">تاریخ ثبت نام:</span>
+                                            <a class="kt-widget__data">@Model.registerDate</a>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="kt-widget__items">
+                                        <a id="info" onclick="getdata('info')" class="kt-widget__item ">
+                                            <span class="kt-widget__section">
+                                                <span class="kt-widget__icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                                                            <path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                                            <path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" fill="#000000" fill-rule="nonzero"></path>
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                                <span class="kt-widget__desc">
+                                                    اطلاعات شخصی
+                                                </span>
+                                            </span>
+                                        </a>
+
+                                        <a id="pass" onclick="getdata('pass')" class="kt-widget__item ">
+                                            <span class="kt-widget__section">
+                                                <span class="kt-widget__icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24" height="24"></rect>
+                                                            <path d="M4,4 L11.6314229,2.5691082 C11.8750185,2.52343403 12.1249815,2.52343403 12.3685771,2.5691082 L20,4 L20,13.2830094 C20,16.2173861 18.4883464,18.9447835 16,20.5 L12.5299989,22.6687507 C12.2057287,22.8714196 11.7942713,22.8714196 11.4700011,22.6687507 L8,20.5 C5.51165358,18.9447835 4,16.2173861 4,13.2830094 L4,4 Z" fill="#000000" opacity="0.3"></path>
+                                                            <path d="M12,11 C10.8954305,11 10,10.1045695 10,9 C10,7.8954305 10.8954305,7 12,7 C13.1045695,7 14,7.8954305 14,9 C14,10.1045695 13.1045695,11 12,11 Z" fill="#000000" opacity="0.3"></path>
+                                                            <path d="M7.00036205,16.4995035 C7.21569918,13.5165724 9.36772908,12 11.9907452,12 C14.6506758,12 16.8360465,13.4332455 16.9988413,16.5 C17.0053266,16.6221713 16.9988413,17 16.5815,17 C14.5228466,17 11.463736,17 7.4041679,17 C7.26484009,17 6.98863236,16.6619875 7.00036205,16.4995035 Z" fill="#000000" opacity="0.3"></path>
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                                <span class="kt-widget__desc">
+                                                    آدرس ها
+                                                </span>
+                                            </span>
+                                        </a>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Widget -->
+                        </div>
+                    </div>
+                    <!--end:: Widgets/Applications/User/Profile1-->
+                </div>
+                <!--End:: App Aside-->
+                <!--Begin:: App Content-->
+                <div id="_info" class="kt-grid__item kt-grid__item--fluid kt-app__content " style="display:none">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="kt-portlet">
+                                <div class="kt-portlet__head">
+                                    <div class="kt-portlet__head-label">
+
+                                        <h3 class="kt-portlet__head-title">اطلاعات شخصی </h3>
+                                    </div>
+
+                                </div>
+
+                                <div class="kt-form kt-form--label-right">
+                                    <div class="kt-portlet__body">
+                                        <div class="kt-section kt-section--first">
+                                            <div class="kt-section__body">
+                                                <div class="row">
+                                                    <label class="col-xl-3"></label>
+                                                    <div class="col-lg-9 col-xl-6">
+                                                        <h3 class="kt-section__title kt-section__title-sm">اطلاعات مشتری:</h3>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">نام</label>
+                                                    <div class="col-lg-9 col-xl-6">
+                                                        <label style="text-align:right!important" id="name" class="form-control" type="text">@Model.Name</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">نام خانوادگی</label>
+                                                    <div class="col-lg-9 col-xl-6">
+                                                        <label style="text-align:right!important" id="last" class="form-control" type="text">@Model.Familly</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">توضیحات</label>
+                                                    <div class="col-lg-9 col-xl-6">
+                                                        <label style="text-align:right!important" id="name" class="form-control" type="text">@Model.Discription</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label class="col-xl-3"></label>
+                                                    <div class="col-lg-9 col-xl-6">
+                                                        <h3 class="kt-section__title kt-section__title-sm">اطلاعات تماس:</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-xl-3 col-lg-3 col-form-label">شماره تلفن</label>
+                                                    <div class="col-lg-9 col-xl-6">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                                            <label style="text-align:right!important" id="phone" type="text" class="form-control" aria-describedby="basic-addon1">@Model.PhoneNum </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="_pass" class="kt-grid__item kt-grid__item--fluid kt-app__content" style="display:none">
+                    <div class="row">
+                        <div class="kt-portlet">
+                                                <div class="kt-portlet__head">
+                                                    <div class="kt-portlet__head-label">
+                                                        <h3 class="kt-portlet__head-title">
+                                                            آدرس ها
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="kt-portlet__body">
+                                                    <div class="kt-notification kt-notification--fit">
+                                                        @foreach (var item in Model.Addresses)
+                                                        {
+                                                            <a href="#" class="kt-notification__item">
+                                                                <div class="kt-notification__item-icon">
+                                                                    <i class="flaticon-placeholder-3 kt-font-success" ></i>
+                                                                </div>
+                                                                <div class="kt-notification__item-details">
+                                                                    <div class="kt-notification__item-title">
+                                                                        @item.FullAddress
+                                                                    </div>
+                                                                    <div class="kt-notification__item-time">
+                                                                        @item.City
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        }
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                        <!--End:: App Content-->
+                    </div>
+
+
+                    <!--End::App-->
+                </div>
+                <!-- end:: Content -->
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#info").addClass("kt-widget__item--active");
+            $("#_info").show();
+            $("#pass").removeClass("kt-widget__item--active");
+            $("#_pass").hide();
+            $("#access").removeClass("kt-widget__item--active");
+            $("#_access").hide();
+        });
+
+
+        function getdata(value) {
+
+            if (value == "info") {
+                $("#pass").removeClass("kt-widget__item--active");
+                $("#_pass").hide();
+
+                $("#access").removeClass("kt-widget__item--active");
+                $("#_access").hide();
+
+
+            } else if (value == "pass") {
+
+                $("#info").removeClass("kt-widget__item--active");
+                $("#_info").hide();
+
+                $("#access").removeClass("kt-widget__item--active");
+                $("#_access").hide();
+
+
+            }
+            else if (value == "access") {
+                $("#info").removeClass("kt-widget__item--active");
+                $("#_info").hide();
+
+                $("#pass").removeClass("kt-widget__item--active");
+                $("#_pass").hide();
+
+            }
+
+
+            $("#" + value).addClass("kt-widget__item--active");
+            $("#_" + value).show();
+
+
+            access
+        }
+
+    </script>
+
+    <script>
+    function postto(value) {
+
+        if (value == "information") {
+            var name = document.getElementById("name").value;
+            var last = document.getElementById("last").value;
+            var nick = document.getElementById("nick").value;
+            var phone = document.getElementById("phone").value;
+            var mobile = document.getElementById("mobile").value;
+            var email = document.getElementById("email").value;
+            var image = document.getElementById("image").value;
+
+            if (name == "" || last == "" || phone == "" || mobile == "" || email == "") {
+                $("#ERRAlertNew").show(300);
+                return false;
+            }
+
+            $("#pass").addClass("kt-widget__item--active");
+            $("#_pass").show();
+            $("#info").removeClass("kt-widget__item--active");
+            $("#_info").hide();
+
+            $("#access").removeClass("kt-widget__item--active");
+            $("#_access").hide();
+
+
+
+        } else
+            if (value == "password") {
+
+                var pass = document.getElementById("pass_o").value;
+                var pass1 = document.getElementById("pass_n1").value;
+                var pass2 = document.getElementById("pass_n2").value;
+
+                if (pass == "" || pass1 == "" || pass2 == "") {
+                    $("#ERRAlertNew2").show(300);
+                    return false;
+                }
+                if (pass1 == pass2) {
+
+                    $("#access").addClass("kt-widget__item--active");
+                    $("#_access").show();
+                    $("#info").removeClass("kt-widget__item--active");
+                    $("#_info").hide();
+
+                    $("#pass").removeClass("kt-widget__item--active");
+                    $("#_pass").hide();
+
+
+
+                } else {
+
+                    $("#ERRAlertNew2").show(300);
+                    $("#_ERRAlertNew2").html("رمز عبور با تائید رمز عبور برابر نیست! ");
+                    return false;
+                }
+            } else if (value == "access") {
+
+                var name = document.getElementById("name").value;
+                var last = document.getElementById("last").value;
+                var nick = document.getElementById("nick").value;
+                var phone = document.getElementById("phone").value;
+                var mobile = document.getElementById("mobile").value;
+                var email = document.getElementById("email").value;
+                var image = document.getElementById("image").value;
+                var Uname = document.getElementById("pass_o").value;
+                var pass1 = document.getElementById("pass_n1").value;
+                var pass2 = document.getElementById("pass_n2").value;
+                var acc = document.getElementById("data_acc").value;
+
+                if (name == "" || last == "" || phone == "" || mobile == "" || email == "") {
+                    $("#ERRAlertNew").show(300);
+                    $("#info").addClass("kt-widget__item--active");
+                    $("#_info").show();
+
+                    $("#pass").removeClass("kt-widget__item--active");
+                    $("#_pass").hide();
+
+                    $("#access").removeClass("kt-widget__item--active");
+                    $("#_access").hide();
+
+                } else if (Uname == "" || pass1 == "" || pass2 == "") {
+                    $("#ERRAlertNew2").show(300);
+                    $("#pass").addClass("kt-widget__item--active");
+                    $("#_pass").show();
+                    $("#info").removeClass("kt-widget__item--active");
+                    $("#_info").hide();
+
+                    $("#access").removeClass("kt-widget__item--active");
+                    $("#_access").hide();
+
+                } else if (pass1 != pass2) {
+
+                    $("#ERRAlertNew2").show(300);
+                    $("#_ERRAlertNew2").html("رمز عبور با تائید رمز عبور برابر نیست! ");
+
+                    $("#pass").addClass("kt-widget__item--active");
+                    $("#_pass").show();
+                    $("#info").removeClass("kt-widget__item--active");
+                    $("#_info").hide();
+                    $("#access").removeClass("kt-widget__item--active");
+                    $("#_access").hide();
+
+                } else if (acc == '0') {
+                    $("#ERRAlertNew3").show(300);
+                } else {
+                    PostJson = {
+                        name : name,
+                        last : last,
+                        nick : nick,
+                        phone : phone,
+                        mobile : mobile,
+                        email : email,
+                        image : image,
+                        Uname : Uname,
+                        pass1 : pass1,
+                        acc : acc
+                    }
+
+
+
+                $.ajax({
+                    url: "/Admin/Save_admin",
+                    type: "post",
+                    data: JSON.stringify(PostJson),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus);
+                    }
+                });
+                return false;
+
+                }
+            }
+
+    }
+
+
+    function ChangeClick()
+    {
+        var itemSelected =document.getElementById("data_acc").value;
+        if (itemSelected != '0') {
+            var url = "@Url.Action("ModalTree","Admin",null,Request.Url.Scheme)?id=" + itemSelected;
+            $('#AccassTree').load(url);
+        }
+
+    }
+
+
+    </script>
+
+
+    <script>
+        function Uploding_uploder(data) {
+
+            var fileUpload = $("#uploderInput").get(0);
+
+            var files = fileUpload.files;
+            var fileData = new FormData();
+
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+            fileData.append('action', 'New');
+            fileData.append('data', data);
+            $.ajax({
+                url: 'up_loder',
+                data: fileData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                success: function (response) {
+                    $("#show_image").removeAttr("style");
+                    $("#show_image").attr("style", "background-image: url(" + response + ")");
+                    document.getElementById("image").value = response;
+                },
+                error: function () {
+                    alert("عدم توانایی در بارگیری فایل")
+                }
+            });
+            return false;
+        }
+
+
+    </script>

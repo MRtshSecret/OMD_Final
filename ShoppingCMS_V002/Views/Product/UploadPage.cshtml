@@ -1,0 +1,94 @@
+﻿
+@{
+
+    ViewBag.Title = "UploadPanel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+
+<input type="text" style="display: none" name="GetSelectedIds" value='[{ "picID": "1" },{ "picID": "2" },{ "picID": "3" }]' id="GetSelectedIds" />
+@*<label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
+    <span class="btn btn-primary"><i class="fa fa-pen"><span style="font-family: IRANSansWeb;">آپلود عکس</span></i></span>
+    <input style="display: none;" id="uploaderInput" onchange="Uploading_uploader();" type="file" name="profile_avatar" accept=".png, .jpg, .jpeg" multiple="">
+</label>
+<button class="btn btn-primary" id="UploadImages"><i class="fa fa-pen"><span style="font-family: IRANSansWeb;">آپلود عکس</span></i></button>
+<button class="btn btn-success" onclick="return CalcPicSelected()">مشاهده تمامی عکس های انتخاب شده</button>*@
+
+<div class="row" id="AllPickGalleryPage" style="display: none">
+    
+</div>
+<div class="row" id="UploaderPage" style="height: 622px; " style="display: none">
+    <iframe id="iframeUploadObject" src="" style="border: none; height: 621px; width: 100%;border-top-right-radius: 150px;border-bottom-left-radius: 150px;"></iframe>
+
+</div>
+
+<input style="display: none" id="URlReq" value="@Url.Action("UploaderIFRAME", "Product", null, Request.Url.Scheme)"/>
+
+
+
+
+<script>
+    $(document).ready(function() {
+        iframeUploadObject.src = $("#URlReq").val();
+        LoadGallery();
+    });
+
+
+
+    function LoadGallery() {
+        $('#AllPickGalleryPage').load("@Url.Action("loadGallery", "Product", null, Request.Url.Scheme)", function(response, status, xhr) {
+            if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
+                SelectChecked();
+            }
+        });
+    }
+
+
+
+    function SelectChecked() {
+        $(".StatusInputSelected").each(function (e) {
+            if ($(this).attr("tshpischeck") == "1") {
+                SelectPicIDs($(this).attr("tshpdatatargetid"));
+            }
+        });
+    }
+    function SelectPicIDs(idparameter) {
+        var PicPosition = $("#CheckPickSelected-" + idparameter);
+        $("gethertags").each(function (e) {
+            $(this).hide(100);
+        });
+        if ($(PicPosition).attr("tshpischeck") == "0") {
+            $("#CheckPickSelected-" + idparameter).show(200);
+            $("#ktportlet-" + idparameter).addClass("bg-success");
+            $("#GetherTagsID-" + idparameter).show(200);
+            $(PicPosition).attr("tshpischeck", "1");
+        } else {
+            $("#CheckPickSelected-" + idparameter).hide(200);
+            $("#ktportlet-" + idparameter).removeClass("bg-success");
+            $("#GetherTagsID-" + idparameter).show(200);
+            $(PicPosition).attr("tshpischeck", "0");
+        }
+    }
+    function UploadModalPage(btn, idpage) {
+        if (idpage == 0) {
+            $("#btnpageUp-1").removeClass("btn-success");
+            $("#btnpageUp-1").addClass("btn-primary");
+            $(btn).removeClass("btn-primary");
+            $(btn).addClass("btn-success");
+            iframeUploadObject.src = $("#URlReq").val();
+            $("#AllPickGalleryPage").hide(200);
+            $("#UploaderPage").show(300);
+
+        } else if (idpage == 1) {
+            LoadGallery();
+            $("#btnpageUp-0").removeClass("btn-success");
+            $("#btnpageUp-0").addClass("btn-primary");
+            $(btn).removeClass("btn-primary");
+            $(btn).addClass("btn-success");
+            $("#UploaderPage").hide(200);
+            $("#AllPickGalleryPage").show(300);
+        }
+    }
+</script>

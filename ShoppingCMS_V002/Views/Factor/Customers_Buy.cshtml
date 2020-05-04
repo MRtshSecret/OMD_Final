@@ -1,0 +1,80 @@
+﻿@using ShoppingCMS_V002.Models
+@model List<TableModel>
+@{
+    ViewBag.Title = "Customers_Buy";
+    Layout = "~/Views/Master/Master.cshtml";
+}
+
+    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+        <!-- begin:: Subheader -->
+        <div class="kt-subheader   kt-grid__item" id="kt_subheader">
+            <div class="kt-container  kt-container--fluid ">
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        داشبورد
+                    </h3>
+                    <span class="kt-subheader__separator kt-hidden"></span>
+                    <div class="kt-subheader__breadcrumbs">
+                        <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                        <span class="kt-subheader__breadcrumbs-separator"></span>
+                        <a href="#" class="kt-subheader__breadcrumbs-link">
+                            کاربران
+                        </a>
+                        <span class="kt-subheader__breadcrumbs-separator"></span>
+                        <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active"> کل مشتریان </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        لیست مشتریان بر اساس میزان خرید
+                    </h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <!--begin::widget 12-->
+                <div class="kt-widget4">
+                    @foreach (var item in Model)
+                    {
+                    <div class="kt-widget4__item">
+                        <span class="kt-widget4__icon">
+                            <i class="flaticon2-user kt-font-info"></i>
+                        </span>
+                        <a href="@Url.Action("Customer_Profile","Factor",new { Id=item.Id })" class="kt-widget4__title kt-widget4__title--light">
+                            @item.Group1
+                        </a>
+                        @if (item.Group2 == "")
+                        {
+                            <span class="kt-widget4__number kt-font-danger">- 0 -</span>
+                        }
+                        else
+                        {
+                            <span class="kt-widget4__number kt-font-info">@item.Group2+</span>
+                        }
+
+                    </div>
+                    }
+
+
+                </div>
+                <!--end::Widget 12-->
+            </div>
+        </div>
+        <!--end:: Widgets/Last Updates-->
+
+
+
+
+
+
+
+    </div>
+

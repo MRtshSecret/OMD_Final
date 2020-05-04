@@ -1,0 +1,43 @@
+﻿@model ShoppingCMS_V002.Models.D_APIModels.MiniProductModel
+
+<div class="thumbnail no-border no-padding">
+    <div class="media">
+        <a class="media-link" href="@Url.Action("Product_Detail","D_API",new {Id=Model.Id })">
+            <img style="width:270px; height:370px;" src="@Model.PicPath" alt="" />
+            <span class="icon-view">
+                <strong><i class="fa fa-eye"></i></strong>
+            </span>
+        </a>
+    </div>
+    <div class="caption text-center">
+        <h4 class="caption-title">@Model.Title</h4>
+        <div class="rating">
+            <!--  <span class="star"></span>
+                <span class="star active"></span>
+
+                <span class="star active"></span>
+
+                <span class="star active"></span>
+
+
+        <span class="star active"></span> -->
+        </div>
+        @if (Model.Price == Model.OffPrice)
+        {
+            <div class="price">@Model.OffPrice @Model.MoneyQ</div>
+        }
+        else
+        {
+            <div class="price"><ins>@Model.OffPrice @Model.MoneyQ</ins> <del>@Model.Price</del></div>
+        }
+
+        <div class="buttons">
+            <button class="btn btn-theme btn-theme-transparent btn-wish-list" onclick="return AddFavorite(@Model.Id)"><i class="fa fa-heart"></i></button>
+            <!--
+        -->
+            <a class="btn btn-theme btn-theme-transparent btn-icon-left" href="@Url.Action("Product_Detail","D_API",new {Id=Model.Id })"><i class="fa fa-shopping-cart"></i>افزودن به سبد خرید</a>
+            <!--
+        -->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,232 @@
+﻿@using ShoppingCMS_V002.Models
+@model List<CustomerModel>
+@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Master/Master.cshtml";
+}
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader   kt-grid__item" id="kt_subheader">
+        <div class="kt-container  kt-container--fluid ">
+            <div class="kt-subheader__main">
+                <h3 class="kt-subheader__title">
+                    داشبورد
+                </h3>
+                <span class="kt-subheader__separator kt-hidden"></span>
+                <div class="kt-subheader__breadcrumbs">
+                    <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                    <span class="kt-subheader__breadcrumbs-separator"></span>
+                    <a href="#" class="kt-subheader__breadcrumbs-link">
+                        کاربران
+                    </a>
+                    <span class="kt-subheader__breadcrumbs-separator"></span>
+                    <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active"> کل مشتریان </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="col-xl-12">
+        <!--begin:: Widgets/User Progress -->
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        مشتریان
+                    </h3>
+                </div>
+
+            </div>
+            <div class="kt-portlet__body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="kt_widget31_tab1_content">
+                        <div class="kt-widget31">
+                            @foreach (var item in Model)
+                            {
+                                <div class="kt-widget31__item">
+                                    <div class="kt-widget31__content">
+
+                                        <div class="kt-widget31__info">
+                                            <a href="@Url.Action("Customer_Profile","Factor",new { Id=item.Id })" class="kt-widget31__username">
+                                                @item.Name
+                                            </a>
+
+
+                                            <p class="kt-widget31__text">
+                                                @item.Discription
+                                            </p>
+
+                                            <p class="kt-widget31__text">
+                                                شماره تماس : @item.Phone
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="kt-widget31__content col-2">
+
+                                        @if (item.IsActive == 0)
+                                        {
+                                            <a href="#" class="btn-label-warning btn btn-sm btn-bold">غیرفعال</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="#" class="btn-label-success btn btn-sm btn-bold">فعال</a>
+                                        }
+
+                                        <div class="kt-widget5__stats">
+                                            <div class="dropdown dropdown-inline">
+                                                <button type="button" class="btn btn-hover-danger btn-elevate-hover btn-icon btn-sm btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="flaticon-more-1"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    @*<a class="dropdown-item" href="#"><i class="la la-info-circle"></i> نمایش جزئیات</a>*@
+
+                                                    @if (item.IsActive == 0)
+                                                    {
+                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#kt_modal_Act" onclick="return ModelLoader('Act',@item.Id)"><i class="la la-check-square"></i> فعال کردن</a>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#kt_modal_DeAct" onclick="return ModelLoader('DeAct',@item.Id)"><i class="la la-ban"></i> غیرفعال کردن</a>
+                                                    }
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--end:: Widgets/User Progress -->
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="kt_modal_DeAct" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLongTitle">غیرفعال کردن </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="Id_Modal_deAct" style="display:none"></div>
+                <p>آیا از غیرفعال کردن این مشتری مطمئن هستید ؟</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">منصرف شدم</button>
+                <button type="button" class="btn btn-warning" onclick="return Model_Click_DeAct()">بله غیرفعال کن!</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="kt_modal_Act" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="Id_Modal_act" style="display:none"></div>
+                <p>آیا از فعال کردن این مشتری مطمئن هستید ؟</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">منصرف شدم</button>
+                <button type="button" class="btn btn-success" onclick="Model_Click_Act()">بله فعال کن!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function ModelLoader(Act_, Id_) {
+
+       if (Act_ == "Act") {
+
+            $('#Id_Modal_act').text(Id_);
+        } else if (Act_ == "DeAct") {
+
+            $('#Id_Modal_deAct').text(Id_);
+        }
+
+
+    }
+
+    function Model_Click_Act() {
+        var id_ = $('#Id_Modal_act').text();
+        var PostJson = {
+            'ActToDo': 'Active',
+            'id': id_
+        };
+
+        $.ajax({
+            url: "/Factor/User_Actions",
+            type: "post",
+            data: PostJson,
+            success: function (response) {
+                if (response == "Success") {
+                    location.reload(true);
+                    $(".fade").hide();
+                    $('#kt_modal_Act').modal('toggle');
+
+                } else {
+                    alert(" شما به این قسمت دسترسی ندارید!");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    function Model_Click_DeAct() {
+        var id_ = $('#Id_Modal_deAct').text();
+        var PostJson = {
+            'ActToDo': 'DeActive',
+            'id': id_
+        };
+
+        $.ajax({
+            url: "/Factor/User_Actions",
+            type: "post",
+            data: PostJson,
+            success: function (response) {
+                if (response == "Success") {
+                    location.reload(true);
+                    $(".fade").hide();
+                    $('#kt_modal_DeAct').modal('toggle');
+                } else {
+                    alert(" شما به این قسمت دسترسی ندارید!");
+                    $(".fade").hide();
+                    $('#kt_modal_DeAct').modal('toggle');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+
+</script>
+

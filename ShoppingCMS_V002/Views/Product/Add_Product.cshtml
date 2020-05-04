@@ -1,0 +1,166 @@
+﻿@model ShoppingCMS_V002.Models.Id_ValueModel
+@{
+    ViewBag.Title = "Add_Product";
+    Layout = "~/Views/Master/Master.cshtml";
+}
+
+@Scripts.Render("~/bundles/jqueryCore.js")
+@Scripts.Render("~/bundles/AddProduct.js")
+@Scripts.Render("~/bundles/Ckeditor.js")
+@Scripts.Render("~/bundles/AddProScript.js")
+
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home" style="display: inline-flex;">
+                    <h3 class="kt-subheader__title">داشبورد</h3>
+
+                    <span class="kt-subheader__separator kt-hidden"></span>
+
+
+                    <i class="flaticon2-shelter"></i>
+                </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" id="PageName" class="kt-subheader__breadcrumbs-link"> اضافه کردن محصول جدید </a>
+
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+    <div class="kt-portlet">
+        <div class="kt-portlet__body kt-portlet__body--fit">
+            <div class="kt-grid kt-wizard-v3 kt-wizard-v3--white" id="kt_wizard_v3" data-ktwizard-state="step-first">
+                <div class="kt-grid__item">
+                    <!--begin: Form Wizard Nav -->
+                    <div class="kt-wizard-v3__nav">
+                        <!--doc: Remove "kt-wizard-v3__nav-items--clickable" class and also set 'clickableSteps: false' in the JS init to disable manually clicking step titles -->
+                        <div class="kt-wizard-v3__nav-items kt-wizard-v3__nav-items--clickable">
+                            <div class="kt-wizard-v3__nav-item" data-ktwizard-type="step" data-ktwizard-state="current">
+                                <div class="kt-wizard-v3__nav-body">
+                                    <div class="kt-wizard-v3__nav-label">
+                                        <span>1</span> اطلاعات کلی محصول
+                                    </div>
+                                    <div class="kt-wizard-v3__nav-bar"></div>
+                                </div>
+                            </div>
+                            <div class="kt-wizard-v3__nav-item" data-ktwizard-type="step">
+                                <div class="kt-wizard-v3__nav-body">
+                                    <div class="kt-wizard-v3__nav-label">
+                                        <span>2</span> دسته بندی محصول
+                                    </div>
+                                    <div class="kt-wizard-v3__nav-bar"></div>
+                                </div>
+                            </div>
+                            <div class="kt-wizard-v3__nav-item" data-ktwizard-type="step">
+                                <div class="kt-wizard-v3__nav-body">
+                                    <div class="kt-wizard-v3__nav-label">
+                                        <span>3</span> ویژگی های محصول
+                                    </div>
+                                    <div class="kt-wizard-v3__nav-bar"></div>
+                                </div>
+                            </div>
+                            <div class="kt-wizard-v3__nav-item" data-ktwizard-type="step">
+                                <div class="kt-wizard-v3__nav-body">
+                                    <div class="kt-wizard-v3__nav-label">
+                                        <span>4</span> قیمت گذاری اولیه
+                                    </div>
+                                    <div class="kt-wizard-v3__nav-bar"></div>
+                                </div>
+                            </div>
+                            <div class="kt-wizard-v3__nav-item" data-ktwizard-type="step">
+                                <div class="kt-wizard-v3__nav-body">
+                                    <div class="kt-wizard-v3__nav-label">
+                                        <span>5</span> قیمت گذاری نهایی
+                                    </div>
+                                    <div class="kt-wizard-v3__nav-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end: Form Wizard Nav -->
+                </div>
+                <div class="kt-grid__item kt-grid__item--fluid kt-wizard-v3__wrapper">
+                    <div id="ActDiv" style="display:none">@Model.Value</div>
+                    <div id="IdtDiv" style="display:none">@Model.Id</div>
+
+                    <!--begin: Form Wizard Form-->
+                    <div class="kt-form" style="width:85%!important;" id="kt_form">
+                        <!--begin: Form Wizard Step 1-->
+                        <div id="step1" class="kt-wizard-v3__content" data-ktwizard-type="step-content" data-ktwizard-state="current">
+
+                        </div>
+                        <!--end: Form Wizard Step 1-->
+                        <!--begin: Form Wizard Step 2-->
+                        <div id="step2" class="kt-wizard-v3__content" data-ktwizard-type="step-content">
+
+                        </div>
+                        <!--end: Form Wizard Step 2-->
+                        <!--begin: Form Wizard Step 3-->
+                        <div id="step3" class="kt-wizard-v3__content" data-ktwizard-type="step-content">
+
+                        </div>
+                        <!--end: Form Wizard Step 3-->
+                        <!--begin: Form Wizard Step 4-->
+                        <div id="step4" class="kt-wizard-v3__content" data-ktwizard-type="step-content">
+
+                        </div>
+                        <!--end: Form Wizard Step 4-->
+                        <!--begin: Form Wizard Step 5-->
+                        <div id="step5" class="kt-wizard-v3__content" data-ktwizard-type="step-content">
+
+                        </div>
+                        <!--end: Form Wizard Step 5-->
+                        <!--begin: Form Actions -->
+                        <div class="kt-form__actions">
+                            <button class="btn btn-secondary btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-prev">
+                                Previous
+                            </button>
+                            <button id="btn_Submit" class="btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-submit" onclick="return Submittt()">
+                                ثبت نهایی
+                            </button>
+                            <button id="btn_next" class="btn btn-brand btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-next" style="display: none;">
+                                Next Step
+                            </button>
+                        </div>
+                        <!--end: Form Actions -->
+
+                    </div>
+                    <!--end: Form Wizard Form-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    $(document).ready(function () {
+
+        
+        var cookie = getCookie("AddProCookie");
+        if (cookie == "") {
+        $('#step1').load("@Url.Action("Add_Page1","Product",null,Request.Url.Scheme)");
+
+        } else
+        {
+            $('#step1').load("@Url.Action("Add_Page1","Product",null,Request.Url.Scheme)", function () {
+                Des(cookie);
+            });
+            
+        }
+
+    });
+
+    function Submittt() {
+        alert("با موفقیت ثبت شد");
+        location.reload(true);
+    }
+</script>

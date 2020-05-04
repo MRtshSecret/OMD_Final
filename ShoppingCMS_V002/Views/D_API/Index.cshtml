@@ -1,0 +1,313 @@
+﻿@model ShoppingCMS_V002.ModelViews.D_APIModelViews.MainPage_ModelView
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Master/Design_Master.cshtml";
+}
+
+<div class="content-area">
+
+    <!-- PAGE -->
+    <section class="page-section no-padding-bottom">
+        <div class="container">
+
+
+            <div class="row main-slider-row">
+
+                <div class="col-md-9 slider">
+                    <div class="main-slider">
+                        <div class="owl-carousel" id="main-slider">
+                            
+                            <div class="item slide1">
+                                <img class="slide-img" src="~/assets/photo_2019-10-25_15-12-56.jpg" alt="عمده داران" />
+                                <div class="caption">
+                                    <div class="container">
+                                        <div class="div-table">
+                                            <div class="div-cell">
+                                                <div class="caption-content" style="font-family:iransans;">
+                                                    <h2 class="caption-title" style="font-size: 37px;">تخفیف بالا در خرید</h2>
+                                                    <h3 class="caption-subtitle" style="font-size: 51px;">کتانی ورزشی</h3>
+                                                    <p class="caption-text">
+                                                        <a class="btn btn-theme" href="#">همین الان بخرید</a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Slide 1 -->
+                            <!-- Slide 2 -->
+                            <div class="item slide2 alt">
+                                <img class="slide-img" src="~/assets/photo_2019-10-25_15-12-56.jpg" alt="عمده داران" />
+                                <div class="caption">
+                                    <div class="container">
+                                        <div class="div-table">
+                                            <div class="div-cell">
+                                                <div class="caption-content">
+                                                    <h2 class="caption-title">فروش کتانی ورزشی</h2>
+                                                    <h3 class="caption-subtitle"><span>فروش ویژه بهاره</span></h3>
+                                                    <div class="price">
+                                                        <span>ریال</span><ins>159000</ins>
+                                                        <span>ریال</span><del>180000</del>
+                                                    </div>
+                                                    <p class="caption-text">
+                                                        <a class="btn btn-theme" href="#">همین الان بخرید</a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Slide 2 -->
+                            <!-- Slide 3 -->
+                            <div class="item slide3 dark">
+                                <img class="slide-img" src="~/assets/photo_2019-10-25_15-12-56.jpg" alt="عمده داران" />
+                                <div class="caption">
+                                    <div class="container">
+                                        <div class="div-table">
+                                            <div class="div-cell">
+                                                <div class="caption-content">
+                                                    <h2 class="caption-title">فروش کتانی</h2>
+                                                    <h3 class="caption-subtitle"><span>فروش ویژه بهاره</span></h3>
+                                                    <p class="caption-text">
+                                                        <a class="btn btn-theme" href="#">خرید فوری</a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Slide 3 -->
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 sidebar">
+                    <!-- widget shop categories -->
+                    <div class="widget shop-categories">
+                        <h4 class="widget-title">دسته بندی ها</h4>
+                        <div class="widget-content">
+                            <ul>
+                                @foreach (var item in Model.Cateqories)
+                                {
+                                    <li>
+                                        <span class="arrow"><i class="fa fa-angle-down"></i></span>
+                                        <a href="#">@item.NameSub</a>
+                                        <ul class="children">
+
+                                            @foreach (var item2 in item.Subs)
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Product_List","D_API",new {Type="گروه اصلی",Id=item2.Id })">
+                                                        @item2.NameSub
+                                                        
+                                                    </a>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /widget shop categories -->
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+    <!-- /PAGE -->
+    <!-- PAGE -->
+    <section class="page-section">
+        <div class="container">
+            <div class="row">
+                <!-- right -->
+                <div class="col-md-6">
+                    <div class="thumbnail no-border no-padding thumbnail-banner size-1x3">
+                        <div class="media">
+                            <a class="media-link" href="#">
+                                <div class="img-bg" style="background-image: url('../../assetsOMD/img/preview/shop/banner-1.jpg');
+"></div>
+                                <div class="caption">
+                                    <div class="caption-wrapper div-table">
+                                        <div class="caption-inner div-cell">
+                                            <h2 class="caption-title"><span>کفش مجلسی</span></h2>
+                                            <h3 class="caption-sub-title"><span>مردانه</span></h3>
+                                            <span class="btn btn-theme btn-theme-sm">همین الان بخرید</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- right -->
+                <!-- left -->
+                <div class="col-md-6">
+                    <div class="thumbnail no-border no-padding thumbnail-banner size-1x3">
+                        <div class="media">
+                            <a class="media-link" href="#">
+                                <div class="img-bg" style="background-image: url('../../assetsOMD/img/preview/shop/banner-2.jpg')"></div>
+                                <div class="caption text-left">
+                                    <div class="caption-wrapper div-table">
+                                        <div class="caption-inner div-cell">
+                                            <h2 class="caption-title"><span>کفش مجلسی</span></h2>
+                                            <h3 class="caption-sub-title"><span>زنانه</span></h3>
+                                            <span class="btn btn-theme btn-theme-sm">همین الان بخرید</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- left -->
+            </div>
+        </div>
+    </section>
+    <!-- /PAGE -->
+    <!-- PAGE -->
+    <section class="page-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="product-list">
+                        <a class="btn btn-theme btn-title-more" href="#">مشاهده همه</a>
+                        <h4 class="block-title"><span>پر فروش ها</span></h4>
+                        @foreach (var item in Model.Sale_Products)
+                        {
+                            @Html.Partial("_ProductMini2", item);
+                        }
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="product-list">
+                        <a class="btn btn-theme btn-title-more" href="#">مشاهده همه</a>
+                        <h4 class="block-title"><span>برگزیده ها</span></h4>
+                        @foreach (var item in Model.ProductsG3)
+                        {
+                            @Html.Partial("_ProductMini2", item);
+                        }
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="product-list">
+                        <a class="btn btn-theme btn-title-more" href="#">مشاهده همه</a>
+                        <h4 class="block-title"><span>جدید ترین ها</span></h4>
+                        @foreach (var item in Model.NewProducts)
+                        {
+                            @Html.Partial("_ProductMini2", item);
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /PAGE -->
+    <!-- PAGE -->
+    <section class="page-section">
+        <div class="container">
+            <div class="message-box">
+                <div class="message-box-inner">
+                    <h2>تخفیف ویژه در خرید های بالای 30 کارتن</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /PAGE -->
+    <!-- PAGE -->
+    <section class="page-section">
+        <div class="container">
+
+            <div class="tabs">
+                <ul id="tabs" class="nav nav-justified-off">
+                    <!---->
+                    <li class=""><a href="#tab-1" data-toggle="tab">محصولات</a></li>
+                    <!--
+    <li class="active"><a href="#tab-2" data-toggle="tab">جدید ترین ها</a></li>
+
+    <li class=""><a href="#tab-3" data-toggle="tab">پر فروش ها</a></li>-->
+                </ul>
+            </div>
+
+            <div class="tab-content">
+
+                <!-- tab 1 -->
+                <div class="tab-pane fade" id="tab-1">
+                    <div class="row">
+                        @foreach (var item in Model.SelectedProducts)
+                        {
+                            <div class="col-md-3 col-sm-6">
+                                @Html.Partial("_ProductMini1", item);
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+                <!-- tab 2 
+                <div class="tab-pane fade active in" id="tab-2">
+                    <div class="row">
+
+                    </div>
+                </div>
+
+                <!-- tab 3 
+                <div class="tab-pane fade" id="tab-3">
+                    <div class="row">
+
+                    </div>
+
+                </div>
+                -->
+            </div>
+        </div>
+    </section>
+    <!-- /PAGE -->
+    <!-- PAGE -->
+    <section class="page-section">
+        <div class="container">
+            <a class="btn btn-theme btn-title-more btn-icon-left" href="#"><i class="fa fa-file-text-o"></i>مشاهده همه ی اطلاعیه ها</a>
+            <h2 class="block-title"><span>اطلاعیه های جدید</span></h2>
+            <div class="row">
+               @foreach (var item in Model.Posts)
+               {
+                   @Html.Partial("_BlogMini", item);
+               }
+            </div>
+        </div>
+    </section>
+    <!-- /PAGE -->
+    <!-- PAGE -->
+    <section class="page-section">
+        <div class="container">
+            <h2 class="section-title"><span>تولید کنندگان</span></h2>
+            <div class="partners-carousel">
+                <div class="owl-carousel" id="partners">
+
+                    @foreach (var item in Model.Company_Customers)
+                    {
+                        <div>
+                            <a href="#"><img src="@item.ImagePath" alt="@item.Name" /></a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- /PAGE -->
+
+
+</div>
+
+
+
+

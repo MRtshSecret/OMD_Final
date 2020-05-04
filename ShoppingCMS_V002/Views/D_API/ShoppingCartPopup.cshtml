@@ -1,0 +1,48 @@
+﻿@model ShoppingCMS_V002.Models.D_APIModels.FactorPopUpModel
+
+@{
+    ViewBag.Title = "ShoppingCartPopup";
+}
+
+<div class="modal-dialog">
+    <div class="container">
+        <div class="cart-items">
+            <div class="cart-items-inner">
+                <div class="media">
+
+                    @foreach (var item in Model.items)
+                    {
+                        <div class="media">
+                            <a class="pull-right" href="#"><img class="media-object item-image" src="@item.ImagePath" alt=""></a>
+                            <p class="pull-left item-price">@item.PriceOff @Model.MoneyQuantity</p>
+
+                            <div class="media-body">
+                                <h4 class="media-heading item-title"><a href="#">@item.Title - @item.number عدد</a></h4>
+                                <p class="item-desc">@item.property</p>
+                            </div>
+
+                        </div>
+                    }
+
+                    <div class="media">
+                        <p class="pull-left item-price">@Model.totality @Model.MoneyQuantity</p>
+                        <div class="media-body"><h4 class="media-heading item-title summary">جمع کل</h4></div>
+                    </div>
+
+                    <div class="media">
+                        <div class="media-body">
+                            <div>
+                                <a href="#" class="btn btn-theme btn-theme-dark" data-dismiss="modal">بستن</a>
+                                <!---->
+                                <a href="@Url.Action("ShoppingCart","D_API",new { factorId=Model.Id})" class="btn btn-theme btn-theme-transparent btn-call-checkout">پرداخت</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

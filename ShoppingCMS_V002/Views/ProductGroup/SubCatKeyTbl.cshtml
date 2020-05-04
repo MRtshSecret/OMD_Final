@@ -1,0 +1,281 @@
+﻿@using ShoppingCMS_V002.Models
+@model List<ProGroupModel>
+@{
+    ViewBag.Title = "SubCatKeyTbl";
+}
+
+<!--START : TBLS-->
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                لیست ویژگی ها محصولات
+            </h3>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <div style="display:none" id="TypeId"></div>
+        <!--begin::Section-->
+        <div class="kt-section">
+            <span class="kt-section__info">
+                لیست تمامی ویژگی های محصولات را در جدول زیر میتوانید مشاهده کنید.
+            </span>
+            <div class="kt-section__content">
+                <table class="table table-light--dark">
+                    <thead>
+                        <tr>
+                            <th style="width:5%; margin:auto;">#</th>
+                            <th style="width:15%; margin:auto;">نام سر دسته </th>
+                            <th style="width:15%; margin:auto;">نام گروه اصلی</th>
+                            <th style="width:15%; margin:auto;">نام گروه </th>
+                            <th style="width:20%; margin:auto;">نام ویژگی </th>
+                            <th style="width:10%; margin:auto;">وضعیت</th>
+                            <th style="width:20%; margin:auto;">اقدامات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <th scope="row">@item.Num</th>
+                            <td id="IdItem-@item.Id" style="display:none">@item.Id</td>
+                            <td id="TypeName-@item.Id">@item.Type</td>
+                            <td>@item.Main</td>
+                            <td>@item.Sub</td>
+                            <th id="CatName-@item.Id">@item.SubK</th>
+                            <td>
+                                @if (item.IsDeleted == 1)
+                                {
+                                    <span class="kt-badge kt-badge--inline kt-badge--danger">حذف شده</span>
+                                }
+                                else if (item.IsDisables == 1)
+                                {
+                                    <span class="kt-badge kt-badge--inline kt-badge--warning">غیر فعال</span>
+                                }
+                                else
+                                {
+                                    <span class="kt-badge kt-badge--inline kt-badge--success">فعال</span>
+                                }
+                            </td>
+
+                            <td>
+
+                                <div class="btn-group mr-2" role="group" aria-label="...">
+
+                                    @if (item.IsDeleted == 0)
+                                    {
+                                        <button style="border:none" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#kt_modal_Del" onclick="return ModelLoader('del',@item.Id)"><i class="la la-trash"></i></button>
+                                        if (item.IsDisables == 0)
+                                        {
+                                            <button style="border:none" type="button" class="btn btn-secondary" onclick="return Edit_op(@item.Id)"><i class="la la-edit"></i></button>
+                                            <button style="border:none" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#kt_modal_DeAct" onclick="return ModelLoader('DeAct',@item.Id)"><i class="fa fa-ban"></i></button>
+                                        }
+                                        else
+                                        {
+
+
+
+                                            <button style="border:none" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#kt_modal_Act" onclick="return ModelLoader('Act',@item.Id)"><i class="fa fa-redo-alt"></i></button>
+                                        }
+                                    }
+
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--end::Section-->
+    </div>
+    <!--end::Form-->
+</div>
+<!--END : TBLS-->
+<!-- remote datatable modal -->
+<!-- Modal -->
+<div class="modal fade" id="kt_modal_Del" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLongTitle">حذف کردن</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="Id_Modal_del" style="display:none"></div>
+                <p>با حذف کردن این ویژگی تمام زیرمجموعه های این ویژگی نیز حذف خواهند شد.</p>
+                <p>آیا از حذف کردن این ویژگی مطمئن هستید ؟</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">منصرف شدم</button>
+                <button type="button" class="btn btn-danger" onclick="return Model_Click_Del()">بله حذف کن!</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="kt_modal_DeAct" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLongTitle">غیرفعال کردن </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="Id_Modal_deAct" style="display:none"></div>
+                <p>با غیرفعال کردن این ویژگی تمام زیرمجموعه های این ویژگی نیز غیرفعال خواهند شد.</p>
+                <p>آیا از غیرفعال کردن این ویژگی مطمئن هستید ؟</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">منصرف شدم</button>
+                <button type="button" class="btn btn-warning" onclick="return Model_Click_DeAct()">بله غیرفعال کن!</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="kt_modal_Act" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>با فعال کردن این ویژگی تمام زیرمجموعه های این ویژگی نیز فعال خواهند شد.</p>
+                <div id="Id_Modal_act" style="display:none"></div>
+                <p>آیا از فعال کردن این ویژگی مطمئن هستید ؟</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">منصرف شدم</button>
+                <button type="button" class="btn btn-success" onclick="Model_Click_Act()">بله فعال کن!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+     function ModelLoader(Act_, Id_) {
+
+        if (Act_ == "del") {
+
+            $('#Id_Modal_del').text(Id_);
+        } else if (Act_ == "Act")
+        {
+
+            $('#Id_Modal_act').text(Id_);
+        } else if (Act_ == "DeAct")
+        {
+
+            $('#Id_Modal_deAct').text(Id_);
+        }
+
+
+    }
+
+    function Model_Click_Act()
+    {
+        var id_ = $('#Id_Modal_act').text();
+         var PostJson = {
+                    'ActToDo': 'Active',
+                    'id': id_
+                };
+
+                $.ajax({
+                    url: "/ProductGroup/SubKey_Actions",
+                    type: "post",
+                    data: PostJson,
+                    success: function (response) {
+                        if (response == "Success") {
+                            $('#MainCatTBl').load("@Url.Action("SubCatKeyTbl","ProductGroup",null,Request.Url.Scheme)");
+                            $(".fade").hide();
+                             $('#kt_modal_Act').modal('toggle');
+
+                        } else {
+                            alert(" شما به این قسمت دسترسی ندارید!");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+    }
+
+    function Model_Click_DeAct()
+    {
+        var id_ = $('#Id_Modal_deAct').text();
+        var PostJson = {
+                    'ActToDo': 'DeActive',
+                    'id': id_
+                };
+
+                $.ajax({
+                    url: "/ProductGroup/SubKey_Actions",
+                    type: "post",
+                    data: PostJson,
+                    success: function (response) {
+                        if (response == "Success") {
+                            $('#MainCatTBl').load("@Url.Action("SubCatKeyTbl","ProductGroup",null,Request.Url.Scheme)");
+                             $(".fade").hide();
+                             $('#kt_modal_DeAct').modal('toggle');
+                        } else {
+                            alert(" شما به این قسمت دسترسی ندارید!");
+                            $(".fade").hide();
+                             $('#kt_modal_DeAct').modal('toggle');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+    }
+
+    function Model_Click_Del()
+    {
+        var id_ = $('#Id_Modal_del').text();
+        var PostJson = {
+                    'ActToDo': 'Delete',
+                    'id': id_
+                };
+
+                $.ajax({
+                    url: "/ProductGroup/SubKey_Actions",
+                    type: "post",
+                    data: PostJson,
+                    success: function (response) {
+                        if (response == "Success") {
+                            $('#MainCatTBl').load("@Url.Action("SubCatKeyTbl","ProductGroup",null,Request.Url.Scheme)");
+                            $(".fade").hide();
+                             $('#kt_modal_Del').modal('toggle');
+                        } else {
+                            alert(" شما به این قسمت دسترسی ندارید!");
+                            $(".fade").hide();
+                             $('#kt_modal_Del').modal('toggle');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+    }
+
+    function Edit_op(Id__) {
+        var name = $('#CatName-' + Id__).text();
+
+        $('#MainCatName').val(name);
+        $('#Edit_btn').show();
+        $('#Sub_btn').hide();
+        $('#EditId').text(Id__);
+        $("#Select_inp").hide();
+    }
+</script>

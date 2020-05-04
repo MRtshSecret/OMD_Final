@@ -1,0 +1,21 @@
+﻿@model ShoppingCMS_V002.Models.Blog.PostModel
+
+<div class="col-md-6">
+    <div class="recent-post">
+        <div class="media">
+            <a class="pull-right media-link" href=""@Url.Action("Blog_Post", "D_API", new {IdPage=Model.Id})">
+                <img style="width:170px; height:120px;" class="media-object" src="@Model.ImagePath" alt="">
+                <i class="fa fa-plus"></i>
+            </a>
+            <div class="media-body">
+                <p class="media-category"><a href="#">@Model.Category</a></p>
+                <h4 class="media-heading"><a href=""@Url.Action("Blog_Post", "D_API", new {IdPage=Model.Id})">@Model.title</a></h4>
+                @Model.text_min
+                <div class="media-meta">
+                    @Model.date
+                    <span class="divider">/</span><a href="#"><i class="fa fa-comment"></i>@Model.Comments__</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

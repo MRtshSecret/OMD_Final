@@ -1,0 +1,478 @@
+﻿@model ShoppingCMS_V002.ModelViews.Blog_Post_insert_Model
+
+@{
+    ViewBag.Title = "EditPost";
+    Layout = "~/Views/Master/Master.cshtml";
+}
+
+@Scripts.Render("~/bundles/Ckeditor.js")
+<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader   kt-grid__item" id="kt_subheader">
+        <div class="kt-container  kt-container--fluid ">
+            <div class="kt-subheader__main">
+                <h3 class="kt-subheader__title">
+                    داشبورد
+                </h3>
+                <span class="kt-subheader__separator kt-hidden"></span>
+                <div class="kt-subheader__breadcrumbs">
+                    <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                    <span class="kt-subheader__breadcrumbs-separator"></span>
+                    <a href="@Url.Action("Index","BlogMain",null,Request.Url.Scheme)" class="kt-subheader__breadcrumbs-link">
+                        بلاگ
+                    </a>
+                    <span class="kt-subheader__breadcrumbs-separator"></span>
+                    <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">ایجاد پست</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- end:: Subheader -->
+    <!-- begin:: Content -->
+    <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+
+        <div id="Mpro_" style="display:none"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <!--begin::Portlet-->
+                <div class="kt-portlet">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <span class="kt-portlet__head-icon kt-hidden">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="kt-portlet__head-title">
+                                ویرایش پست
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body">
+                        <!--begin::Section-->
+                        <div class="kt-section">
+                            <div class="kt-section__content">
+
+                                <div class="col-lg-12 col-md-8 col-xl-12" style="padding-left: 0px;padding-right: 0px; margin-bottom:2%">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text">موضوع پست</span></div>
+                                        <input id="Title" type="text" class="form-control" placeholder="موضوع" aria-describedby="basic-addon1" value="@Model.PostData.title">
+                                    </div>
+                                    <span class="form-text text-muted">موضوع پست همان تیتر مقاله در وبسایت شما خواهد بود</span>
+                                </div>
+                                <!-- =============== Uploader :: Begins  ===========================-->
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text">عکس/عکس های سرپیج</span></div>
+                                    <button id="picss" class="btn btn-bold btn-brand  btn-sm form-control" style="width: 100%;" data-toggle="modal" data-target="#kt_modal_6" onclick="modalloader()" aria-describedby="basic-addon1"><i class="fa fa-upload text-white"><span style="font-family: IRANSansWeb;">آپلود عکس</span></i></button>
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" id="Pics_p1" class="form-control" placeholder=""  value="@Model.PostData.ImagePath"/>
+                                    <input type="hidden" id="PicsJson_p1" class="form-control" placeholder=""  value="@Model.PostData.ImagePath"/>
+                                    <input style="display: none" class="form-text text-muted" id="Pics_p2" readonly="readonly" value="@Model.PostData.ImagePath"/>
+                                </div>
+                                <div class="modal fade" id="kt_modal_6" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
+
+                                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <div class="row w-100">
+                                                    <div class="col-10">
+                                                        <button class="btn btn-success" id="btnpageUp-0" onclick="return UploadModalPage(this,0)">آپلود</button>
+                                                        <button class="btn btn-primary" id="btnpageUp-1" onclick="return UploadModalPage(this,1)">گالری</button>
+
+                                                    </div>
+                                                    <div class="col-2">
+
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-body">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input style="width: 100%; height: 50px; display: none" type="text" value="" id="modalRep1">
+                                                <input style="width: 100%; height: 50px; display: none" type="text" value="" id="modalRep2">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                                <button type="button" class="btn btn-primary" onclick="savePicss()" data-dismiss="modal">اتمام فرایند</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- =============== Uploader :: End  ===========================-->
+                                <!-- =============== UploadedImages :: Start  ===================-->
+                                <div class="col-12 row" id="ImgSelecteds">
+                                    @*@if (string.IsNullOrEmpty(Model.PostData.ImagePath))
+                                    {
+                                        <h4>هیچ عکسی انتخاب نشده است</h4>
+                                    }*@
+
+                                </div>
+                                <!-- =============== UploadedImages :: End  =====================-->
+                                <div class="form-group row" style="margin-right: 0px !important;">
+                                    <label class="col-form-label">توضیحات مختصر درباره مقاله :</label>
+
+                                    <textarea class="form-control" rows="4" placeholder="مختصر توضیحاتی درباره مقاله (این متن در قسمت جستجو یا دیدار اختصار از مقاله شما نمایش داده خواهد شد)" style="height: 121px;" id="Text_Min">@Model.PostData.text_min</textarea>
+                                </div>
+
+                                <div class="form-group row" style="margin-right: 0px !important;">
+                                    <label class="col-form-label">متن مقاله :</label>
+                                    <div class="row" style="width: 100%">
+
+                                        <textarea id="Text_Inp" name="content" class="form-control" style="width: 100%!important;">@Model.PostData.text</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-form-label col-lg-3 col-sm-12">گروه</label>
+                                    <br />
+                                    <div class=" col-lg-12 col-md-12 col-sm-12">
+                                        <select class="form-control kt-select2" id="Select2_A" style="width: 100%;">
+                                            <option selected disabled hidden value=0>انتخاب کنید</option>
+                                            @foreach (var item in Model.Groups)
+                                            {
+                                                if (item.Id.ToString() == Model.PostData.InGroup)
+                                                {
+                                                    <option value=@item.Id selected>@item.Value</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value=@item.Id>@item.Value</option>
+                                                }
+
+                                            }
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-lg-3 col-sm-12">دسته بندی</label>
+                                    <br />
+                                    <div class=" col-lg-12 col-md-12 col-sm-12">
+                                        <select onchange="return TagsFiller()" class="form-control kt-select2" id="Select2_B" style="width: 100%;">
+                                            <option selected disabled hidden value=0>انتخاب کنید</option>
+                                            @foreach (var item in Model.Category)
+                                            {
+                                                if (item.Id.ToString() == Model.PostData.Category)
+                                                {
+                                                    <option value=@item.Id selected>@item.Value</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value=@item.Id>@item.Value</option>
+                                                }
+
+                                            }
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-lg-3 col-sm-12">برچسب ها</label>
+                                    <br />
+                                    <div class=" col-lg-12 col-md-12 col-sm-12">
+                                        <select class="form-control kt-select2" id="kt_select2_multiple" name="param" multiple="multiple" style="width: 100%;">
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>ارزش جست و جو</label>
+                                    <br />
+                                    <input id="SearchGravity_p1" class="form-control" placeholder="" type="number" value="@Model.PostData.SearchGravity"/>
+                                    <span class="form-text text-muted">نتایج جست و جوی کاربران براین اساس نمایش داده خواهند شد.</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="kt-checkbox kt-checkbox--brand">
+                                        <input id="IsAd_p1" class="form-control" type="checkbox" />انتشار بعنوان پست فوری
+                                        <span></span>
+                                    </label>
+                                </div>
+
+                                <div class="kt-separator kt-separator--space-lg kt-separator--border-2x"></div>
+
+                                <!--begin::Alerts-->
+                                <div id="SuccesAlertEdit1" class="alert alert-solid-success alert-bold fade show kt-margin-t-20 kt-margin-b-40" role="alert" style="display:none">
+                                    <div class="alert-icon"><i class="fa fa-exclamation-triangle"></i></div>
+                                    <div class="alert-text">با موفقیت ثبت شد!</div>
+                                </div>
+                                <div id="ERRAlertEdit1" class="alert alert-solid-danger alert-bold fade show kt-margin-t-20 kt-margin-b-40" role="alert" style="display:none">
+                                    <div class="alert-icon"><i class="fa fa-exclamation-triangle"></i></div>
+                                    <div class="alert-text">مقدار ورودی باید پرشده باشد!</div>
+                                </div>
+                                <!--End::Alerts-->
+
+
+                                <div class="kt-widget__action">
+                                    
+                                    <button id="Edit_Btn" class="btn btn-label-warning btn-sm btn-upper" onclick="Submit('Edit')" >ویرایش</button>
+
+
+                                </div>
+                                <div id="tag" style="display:none"></div>
+
+
+                            </div>
+                        </div>
+                        <!--end::Section-->
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+
+
+        </div>
+    </div>
+    <!-- end:: Content -->
+</div>
+<script>
+    $(document).ready(function() {
+        CKEDITOR.replace("content", {
+            language: 'fa'
+        });
+        $("#Select2_A").select2();
+        $("#Select2_B").select2();
+        $("#kt_select2_multiple").select2();
+
+        GenerateSelectedImages($("#modalRep2").val(), 1);
+            $.ajax({
+                url: "/BlogMain/TagFiller",
+                type: "post",
+                data: { "CatId": $('#Select2_B').val() },
+                success: function (response) {
+                    var tags="@Model.PostData.tags";
+                    var token = response;
+                    var s = "<option disabled hidden value=0>انتخاب کنید</option>";
+                    s += "<optgroup label=" + $("#Select2_B option:selected").text() + ">";
+                    //  alert($("#Select2_C option:selected").text());
+                    for (var i = 0; i < token.length; i++) {
+                        var m_m = tags.split(',');
+
+                        if (m_m.indexOf(token[i].Id.toString()) != -1) {
+                            s += "<option value=" + token[i].Id + " selected>" + token[i].Value + "</option>";
+                        } else {
+                            s += "<option value=" + token[i].Id + ">" + token[i].Value + "</option>";
+                        }
+                    }
+                    s += "</optgroup>";
+                                            
+                    $('#kt_select2_multiple').html(s);
+                    $('#kt_select2_multiple option[value = 0 ]').prop("selected", false);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        
+        if (@Model.PostData.IsImportant.ToString() == '1') {
+            $('#IsAd_p1').prop("checked", true);
+        } else {
+            $('#IsAd_p1').prop("checked", false);
+        }
+
+    });
+
+
+    function modalloader() {
+        $('#kt_modal_6 .modal-body').load("@Url.Action("UploadPage", "Product", null, Request.Url.Scheme)");
+    }
+    function DeleteSelectedImage(IMAGEIDSELECT) {
+        $("#imageSelectedNum-" + IMAGEIDSELECT).hide(500);
+        var jsobj = JSON.parse($("#PicsJson_p1").val());
+        var indexSelected = jsobj.findIndex(x => x.imageID === IMAGEIDSELECT);
+        if (indexSelected !== undefined) jsobj.splice(indexSelected, 1);
+        var allids = "";
+        console.log("dds = " + jsobj.length);
+        for (var __I__ = 0; __I__ < jsobj.length; __I__++) {
+            allids += jsobj[__I__].imageID + ",";
+        }
+        $("#Pics_p1").val(allids);
+        $("#Pics_p2").val(allids);
+        $("#PicsJson_p1").val(JSON.stringify(jsobj));
+    }
+    function savePicss() {
+        $("#Pics_p1").val($("#modalRep1").val());
+        $("#Pics_p2").val($("#modalRep1").val());
+        $("#PicsJson_p1").val($("#modalRep2").val());
+        GenerateSelectedImages($("#modalRep2").val(), 1);
+        $('#kt_modal_6 .modal-body').html('MRM');
+    }
+    function SelectPicID(idparameter) {
+        var PicPosition = $("#CheckPickSelected-" + idparameter);
+        $("gethertags").each(function (e) {
+            $(this).hide(100);
+        });
+        if ($(PicPosition).attr("tshpischeck") == "0") {
+            $("#CheckPickSelected-" + idparameter).show(200);
+            $("#ktportlet-" + idparameter).addClass("bg-success");
+            $("#GetherTagsID-" + idparameter).show(200);
+            $(PicPosition).attr("tshpischeck", "1");
+        } else {
+            $("#CheckPickSelected-" + idparameter).hide(200);
+            $("#ktportlet-" + idparameter).removeClass("bg-success");
+            $("#GetherTagsID-" + idparameter).show(200);
+            $(PicPosition).attr("tshpischeck", "0");
+        }
+        CalcPicSelected();
+    }
+    function GenerateSelectedImages(jsonSelectedIMGs, ForID) {
+        console.log("aa : " + jsonSelectedIMGs);
+        console.log("bb : " + ForID);
+        if (ForID == 1) {
+            var imagestr = "";
+
+            var objjsonSelectedIMGs = JSON.parse(jsonSelectedIMGs);
+            for (var Ilooper = 0; Ilooper < objjsonSelectedIMGs.length; Ilooper++) {
+                imagestr+='<div class="col-lg-3" id="imageSelectedNum-'+objjsonSelectedIMGs[Ilooper].imageID+'"><div class="kt-portlet bg-success"><div class="kt-portlet__head kt-portlet__head--right kt-portlet__head--noborder  kt-ribbon kt-ribbon--clip kt-ribbon--left kt-ribbon--info" style="padding: 10px;"><div class="kt-ribbon__target StatusInputSelected" style="top: -2px; right: 20px; background-color: rgb(9, 159, 174);"><i class="flaticon2-correct" style="font-size: 20px;"></i></div><div class="kt-portlet__head-label" style="width: 100%;"><h3 class="kt-portlet__head-title" style="width: 100%;"><img src="'+objjsonSelectedIMGs[Ilooper].imgAddress+'"  style="width: 100%; border-radius: 5px;"></h3></div></div><div class="kt-portlet__body kt-portlet__body--fit-top"><div class="row"><div class="input-group"><span class="input-group-text w-100">نام عکس</span></div><input type="text" class="form-control" readonly="readonly" value="'+objjsonSelectedIMGs[Ilooper].PicSelectedIDNAme+'" style="direction: rtl;text-align: right;"></div><div class="row pt-1"><div class="col-12" style="padding: 1px 1px;"><button class="btn btn-danger w-100" type="button" onclick="return DeleteSelectedImage('+objjsonSelectedIMGs[Ilooper].imageID+
+                    ')">حذف!</button></div></div></div></div></div>';
+            }
+            if (imagestr == "") {
+                imagestr = "<h4>هیچ عکسی انتخاب نشده است</h4>";
+            }
+            console.log(imagestr);
+            $("#ImgSelecteds").html( imagestr);
+
+        } else {
+
+        }
+
+    }
+    function CalcPicSelected() {
+
+        var IDSSelectedimg = "";
+        var Allids = [];
+        $(".StatusInputSelected").each(function (e) {
+            if ($(this).attr("tshpischeck") == "1") {
+                item = {};
+                item["imageID"] = $(this).attr("tshpdatatargetid");
+                var imgadd = $("#IMGktportlet-" + item["imageID"]).attr("src");
+                if (imgadd.length > 0) {
+                    item["imgAddress"] = imgadd;
+                } else {
+                    item["imgAddress"] = "";
+                }
+                item["PicSelectedIDNAme"] = $("#PicSelectedIDNAme-" + item["imageID"]).val();
+                Allids.push(item);
+                console.log("#IMGktportlet-" + item["imageID"]);
+                console.log("imgadd " + imgadd);
+                IDSSelectedimg += item["imageID"] + ",";
+            }
+        });
+        var jsonString = JSON.stringify(Allids);
+        $("#modalRep1").val(IDSSelectedimg);
+        $("#modalRep2").val(jsonString);
+        console.log($("#modalRep2").val());
+        }
+        ///////////////////////////////
+
+
+        function TagsFiller() {
+
+
+             $('#kt_select2_multiple').prop("disabled", false);
+            $.ajax({
+                url: "/BlogMain/TagFiller",
+                type: "post",
+                data: { "CatId": $('#Select2_B').val() },
+                success: function (response) {
+
+                    var token = response;
+                    var s = "<option selected disabled hidden value=0>انتخاب کنید</option>";
+                    s += "<optgroup label=" + $("#Select2_B option:selected").text() + ">";
+                  //  alert($("#Select2_C option:selected").text());
+                    for (var i = 0; i < token.length; i++) {
+
+                        s += "<option value=" + token[i].Id + ">" + token[i].Value + "</option>";
+                    }
+                    s += "</optgroup>"
+                    document.getElementById('kt_select2_multiple').innerHTML = s;
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+
+        }
+
+        function Submit(parameters) {
+
+
+            var Title = $('#Title').val();
+            var Text_min = $('#Text_Min').val();
+            //var Text_inp = $('#Text_Inp').val();
+            var Text_inp = CKEDITOR.instances['Text_Inp'].getData();
+            var Group = $('#Select2_A').val();
+            var Cat = $('#Select2_B').val();
+            var Post_Tags = $('#kt_select2_multiple').val();
+            $('#tag').text(Post_Tags);
+            var IsImp;
+            var SearchGravity = $('#SearchGravity_p1').val();
+            var pics = $('#Pics_p1').val();
+            var TypeId=$('input[name=radio2]:checked').attr('id');
+        if (Title != "" && Text_min != "" && Text_inp != "" && Post_Tags != "" && SearchGravity != "" && Cat !="0" && Group !="0") {
+
+            if ($('#IsAd_p1').prop("checked")) {
+                IsImp = 1;
+            } else {
+                IsImp = 0;
+            }
+
+            var action__ = "update";
+            var Id__ = @Model.PostData.Id;
+            
+            
+            var PostJson = {
+                'ActTodo': action__,
+                'WrittenBy_AdminId':1,
+                'Title': Title,
+                'Text_min': Text_min,
+                'Text': Text_inp,
+                'weight': SearchGravity,
+                'Cat_Id': Cat,
+                'IsImportant': IsImp,
+                'GroupId': Group,
+                'Blog_Tags': $('#tag').text(),
+                'Pictures': pics,
+                'id_pr': Id__,
+                'TypeId':1
+            };
+
+
+            $.ajax({
+                url: '/BlogMain/Add_Edit_Post',
+                type: "post",
+                data: JSON.stringify(PostJson),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+
+                    if (response == "Success") {
+
+                        $("#ERRAlertEdit1").hide(300);
+                        $("#SuccesAlertEdit1").show(300);
+                        $('#Edit_Btn').hide();
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+
+
+
+        } else {
+            $('#ERRAlertEdit1').show();
+        }
+
+
+
+
+        }
+
+</script>
+
+
+
+

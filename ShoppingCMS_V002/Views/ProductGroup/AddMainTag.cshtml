@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewBag.Title = "AddMainTag";
+    Layout = "~/Views/Master/Master.cshtml";
+}
+
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home" style="display: inline-flex;">
+                    <h3 class="kt-subheader__title">داشبورد</h3>
+
+                    <span class="kt-subheader__separator kt-hidden"></span>
+
+
+                    <i class="flaticon2-shelter"></i>
+                </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" id="PageName" class="kt-subheader__breadcrumbs-link"> برچسب های اصلی محصولات </a>
+
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-lg-11" style="margin:auto">
+    <!--begin::Portlet-->
+    <div class="kt-portlet">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    تعریف برچسب های اصلی محصولات
+                </h3>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-11" style="margin:auto; margin-top:2%;">
+            <div style="display: none" id="EditId"></div>
+            <div class="form-group">
+                <label class="col-form-label col-lg-3 col-sm-12">نام برچسب اصلی </label>
+                <input id="MainCatName" class="form-control " placeholder="" style="width: 100%;" />
+            </div>
+        </div>
+        <div class="col-xl-6 col-11" style="margin:auto; margin-top:2%;">
+            <div style="display: none" id="EditId"></div>
+            <div class="form-group">
+                <label class="col-form-label col-lg-3 col-sm-12">توضیحات برچسب اصلی </label>
+                <textarea id="Discription" class="form-control " placeholder="" style="width: 100%;" ></textarea>
+            </div>
+        </div>
+
+
+
+        <!--begin::Alerts-->
+        <div id="SuccesAlertEdit1" class="alert alert-solid-success alert-bold fade show kt-margin-t-20 kt-margin-b-40" role="alert" style="display:none">
+            <div class="alert-icon"><i class="fa fa-exclamation-triangle"></i></div>
+            <div class="alert-text">با موفقیت ثبت شد!</div>
+        </div>
+        <div id="ERRAlertEdit1" class="alert alert-solid-danger alert-bold fade show kt-margin-t-20 kt-margin-b-40" role="alert" style="display:none">
+            <div class="alert-icon"><i class="fa fa-exclamation-triangle"></i></div>
+            <div class="alert-text">مقدار ورودی باید پرشده باشد!</div>
+        </div>
+        <!--End::Alerts-->
+        <!--end::Portlet-->
+
+        <div class="kt-form__actions">
+            <div class="col-6 offset-3" style="padding-top: 10px;">
+
+                <button id="Sub_btn" onclick="Submit('New')" class="btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" style="width: 100%; margin-bottom:5%">
+                    ثبت
+                </button>
+                <button id="Edit_btn" onclick="Submit('Edit')" class="btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" style="width: 100%; display:none; margin-bottom:5%">
+                    ثبت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="MainCatTBl"></div>
+
+
+</div>
+<script>
+
+    $(document).ready(function () {
+        $('#MainCatTBl').load("@Url.Action("MainTagsTbl","ProductGroup",null,Request.Url.Scheme)");
+    });
+
+    function Submit(Act__) {
+
+
+        if ($('#MainCatName').val() == "" || $("#Discription").val()=='' ) {
+            $("#ERRAlertEdit1").show(300);
+        } else {
+            var Name = $('#MainCatName').val();
+            var discription = $('#Discription').val();
+            var id = $('#EditId').text();
+            var PostJson;
+
+            if (Act__ == "New") {
+
+                PostJson = {
+                    'ActToDo': 'insert',
+                    'Cat_Name': Name,
+                    'Discription': discription
+                };
+
+
+            } else if (Act__ == "Edit") {
+                PostJson = {
+                    'ActToDo': 'Update',
+                    'Cat_Name': Name,
+                    'Discription': discription,
+                    'id': id,
+                };
+            }
+
+            $.ajax({
+                url: '/ProductGroup/Add_Update_MainTag',
+                type: "post",
+                data: JSON.stringify(PostJson),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+
+                    if (response == "Success") {
+                        $("#ERRAlertEdit1").hide(300);
+                        $("#SuccesAlertEdit1").show(300);
+                        $('#MainCatTBl').load("@Url.Action("MainTagsTbl","ProductGroup",null,Request.Url.Scheme)");
+                        $('#Edit_btn').hide();
+                        $('#Sub_btn').show();
+                        $('#MainCatName').val("");
+                        $('#Discription').val("");
+                        //$('#Select2_A').val('0');
+                        setTimeout(function () { $("#SuccesAlertEdit1").hide(300); }, 1000);
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+
+        }
+
+
+
+    }
+
+
+
+</script>
+
+
+
+
+

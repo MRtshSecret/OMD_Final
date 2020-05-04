@@ -1,0 +1,198 @@
+﻿@using ShoppingCMS_V002.Models
+@model List<FactorModel>
+@{
+    ViewBag.Title = "FactorTable";
+    Layout = "~/Views/Master/Master.cshtml";
+}
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader   kt-grid__item" id="kt_subheader">
+        <div class="kt-container  kt-container--fluid ">
+            <div class="kt-subheader__main">
+                <h3 class="kt-subheader__title">
+                    داشبورد
+                </h3>
+                <span class="kt-subheader__separator kt-hidden"></span>
+                <div class="kt-subheader__breadcrumbs">
+                    <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                    <span class="kt-subheader__breadcrumbs-separator"></span>
+                    <a href="#" class="kt-subheader__breadcrumbs-link">
+                        فاکتور
+                    </a>
+                    <span class="kt-subheader__breadcrumbs-separator"></span>
+                    <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">نمایش همه ی فاکتور ها </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="col-12">
+        <!--begin:: Widgets/Best Sellers-->
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        فاکتور ها
+                    </h3>
+                </div>
+                <div class="kt-portlet__head-toolbar">
+                    <ul class="nav nav-pills nav-pills-sm nav-pills-label nav-pills-bold" role="tablist">
+                    </ul>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div class="tab-content">
+                    @foreach (var item in Model)
+                    {
+                        <div class="tab-pane active" id="kt_widget5_tab1_content" aria-expanded="true">
+                            <div class="kt-widget5">
+                                <div class="kt-widget5__item">
+                                    <div class="kt-widget5__content col-6"  onclick="return Click_Factor(@item.Id)">
+                                        <div class="kt-widget5__section">
+                                            <a href="#" class="kt-widget5__title">
+                                                نام خریدار : @item.CustomerName
+                                            </a>
+                                            <p class="kt-widget5__desc">
+                                                تعداد کالا : @item.ItmNumbers
+                                            </p>
+                                            <div class="kt-widget5__info">
+                                                <span>صادر شده در:</span>
+                                                <span class="kt-font-info">@item.Date</span>
+                                            </div>
+                                            <div class="kt-widget5__info">
+                                                @*<span>نوشته شده توسط:</span>
+                    <span class="kt-font-info">@item.</span>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="kt-widget5__content"  onclick="return Click_Factor(@item.Id)">
+                                        <div class="kt-widget5__section">
+                                            <p class="kt-widget5__title">
+                                                مبلغ کل : @item.totality @item.priceQuantity
+                                            </p>
+                                            
+                                            <p class="kt-widget5__title">
+                                                مبلغ پرداختی : @item.deposit @item.priceQuantity
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="kt-widget5__content">
+                                        <div class="kt-widget5__stats"  onclick="return Click_Factor(@item.Id)">
+                                            @if (item.IsDeleted == 1)
+                                            {
+                                                <a href="#" class="btn btn-sm btn-label-danger btn-bold">حذف</a>
+                                            }
+                                        </div>
+                                        <div class="kt-widget5__stats" onclick="return Click_Factor(@item.Id)">
+                                            @if (item.status == 1)
+                                            {
+                                                <a href="#" class="btn btn-sm btn-label-success btn-bold">تکمیل شده</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="#" class="btn btn-sm btn-label-warning btn-bold">درحال پرداخت</a>
+                                            }
+                                        </div>
+                                        <div class="kt-widget5__stats">
+                                            
+
+
+                                                @if (item.status == 0 && item.IsDeleted == 0)
+                                                {
+                                                    
+                                                        <button style="border:none" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#kt_modal_Del" onclick="return ModelLoader('del',@item.Id)"><i class="la la-trash"></i></button>
+                                                    
+                                                }
+
+
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <!--end:: Widgets/Best Sellers-->
+
+
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="kt_modal_Del" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLongTitle">حذف کردن</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="Id_Modal_del" style="display:none"></div>
+                <p>آیا از حذف کردن این فاکتور مطمئن هستید ؟</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">منصرف شدم</button>
+                <button type="button" class="btn btn-danger" onclick="return Model_Click_Del()">بله حذف کن!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+     function ModelLoader(Act_, Id_) {
+
+        if (Act_ == "del") {
+
+            $('#Id_Modal_del').text(Id_);
+        } 
+
+    }
+
+
+    function Model_Click_Del()
+    {
+        var id_ = $('#Id_Modal_del').text();
+        var PostJson = {
+                    'ActToDo': 'Delete',
+                    'id': id_
+                };
+
+                $.ajax({
+                    url: "/Factor/Factor_Actions",
+                    type: "post",
+                    data: PostJson,
+                    success: function (response) {
+                        if (response == "Success") {
+                             location.reload(true);
+                            $(".fade").hide();
+                             $('#kt_modal_Del').modal('toggle');
+                        } else {
+                            alert(" شما به این قسمت دسترسی ندارید!");
+                            $(".fade").hide();
+                             $('#kt_modal_Del').modal('toggle');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+    }
+
+    function Click_Factor(Id)
+    {
+        var url = "@Url.Action("FactorView","Factor",null,Request.Url.Scheme)?Id=" + Id;
+        window.location.href = url;
+    }
+
+</script>
+
