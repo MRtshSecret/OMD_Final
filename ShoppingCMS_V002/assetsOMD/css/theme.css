@@ -4404,16 +4404,16 @@ input[type=checkbox] {
 .product-single .buttons .quantity .btn:hover {
     color: #ffffff;
 }
-.product-single .buttons .quantity .qty {
-    margin-top: 10px;
-    float: right;
-    margin-left: 1px;
-    width: 40px;
-    height: 60px;
-    background-color: #232323;
-    border-color: #232323;
-    color: #ffffff;
-}
+    .product-single .buttons .quantity .qty {
+        margin-top: 10px;
+        float: right;
+        margin-left: 1px;
+        width: 70px;
+        height: 60px;
+        background-color: #232323;
+        border-color: #232323;
+        color: #ffffff;
+    }
 .product-single .buttons .btn-cart {
     float: right;
     margin-top: 10px;

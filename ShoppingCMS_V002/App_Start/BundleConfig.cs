@@ -110,7 +110,8 @@ namespace ShoppingCMS_V002
                 "~/assetsOMD/plugins/owl-carousel2/assets/owl.theme.default.min.css",
                 "~/assetsOMD/plugins/animate/animate.min.css",
                 "~/assetsOMD/css/theme.css",
-                "~/assetsOMD/css/theme-blue-1.css"));
+                "~/assetsOMD/css/theme-blue-1.css",
+                "~/assetsOMD/css/custome.css"));
 
 
         }
