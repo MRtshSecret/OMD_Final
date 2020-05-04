@@ -7347,6 +7347,7 @@
     <Content Include="SQL\FAR99\30\PandaSQL.sql" />
     <Content Include="SQL\FAR99\7\PandaScript.sql" />
     <Content Include="SQL\ORD99\11\PandaSQL.sql" />
+    <Content Include="SQL\ORD99\15\PandaSQL.sql" />
     <Content Include="SQL\ORD99\1\PandaSQL.sql" />
     <Content Include="SQL\ORD99\FinalSQL_5\PandaSQL.sql" />
     <Content Include="SQL\ORD99\FinalSQL_5\PandaSQL_Data.sql" />
