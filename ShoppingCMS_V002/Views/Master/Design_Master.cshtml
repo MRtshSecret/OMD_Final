@@ -21,7 +21,7 @@
 
     <!-- CSS Global -->
     @Styles.Render("~/Content/omd/css")
-    @Scripts.Render("~/bundles/omd/jquery")
+
 
     <!-- Head Libs -->
     <!--[if lt IE 9]>
@@ -97,7 +97,6 @@
                             <li>
                                 <a href="#">محصولات</a>
                                 <ul id="Master_CategoryL">
-                                    
                                 </ul>
                             </li>
                             <li>
@@ -105,7 +104,7 @@
                             </li>
                             <li>
                                 <a href="@Url.Action("Terms","D_API")">قوانین و مقررات</a>
-                                
+
                             </li>
                             <li><a href="@Url.Action("AboutUs","D_API")">درباره ما</a></li>
                             <li><a href="contact.html">تماس با ما</a></li>
@@ -172,7 +171,6 @@
                             <div class="widget widget-tag-cloud">
                                 <h4 class="widget-title">برچسب ها</h4>
                                 <ul id="MastertagList">
-                                   
                                 </ul>
                             </div>
                         </div>
@@ -200,13 +198,7 @@
     </div>
     <!-- /WRAPPER -->
     <!-- JS Global -->
-
-
-
-</body>
-
-</html>
-
+@Scripts.Render("~/bundles/omd/jquery")
 <script>
     $(document).ready(function () {
          const url='@Url.Action("ShoppingCartPopup","D_API",null,Request.Url.Scheme)?factorId=1';
@@ -220,13 +212,13 @@
 
                     var token = response;
                     var s = "";
-                    
+
                   //  alert($("#Select2_C option:selected").text());
                     for (var i = 0; i < token.length; i++) {
                         var url1 = "@Url.Action("Product_List","D_API")?Type=برچسب&Id=" + token[i].Id;
                         s += '<li><a href="' + url1 + '">' + token[i].Value + '</a></li>';
                     }
-                    
+
                     document.getElementById('MastertagList').innerHTML = s;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -264,7 +256,7 @@
             });
 
 
-       
+
     });
 
 
@@ -278,5 +270,11 @@
     }
 
 </script>
+
+
+</body>
+</html>
+
+
 
 
