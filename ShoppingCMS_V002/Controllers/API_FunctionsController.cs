@@ -110,10 +110,34 @@ namespace ShoppingCMS_V002.Controllers
             parss.Add(par);
             int UserId = Convert.ToInt32(db.Script("INSERT INTO [tbl_Customer_Main] OUTPUT inserted.id_Customer VALUES(GETDATE(),@Mobile,N'',N'',N'',0,0,NULL,@PassWord)", parss));
             Random generator = new Random();
-            string r = generator.Next(0, 999999).ToString("D6");
-
+            string GeneratedCode = generator.Next(0, 999999).ToString("D6");
+             parss = new List<ExcParameters>();
+             par = new ExcParameters()
+            {
+                _KEY = "@id_Customer",
+                _VALUE = UserId
+             };
+            parss.Add(par);
+            par = new ExcParameters()
+            {
+                _KEY = "@sms_irKeyType",
+                _VALUE = 2
+            };
+            parss.Add(par);
+            par = new ExcParameters()
+            {
+                _KEY = "@sms_irSentKey",
+                _VALUE = GeneratedCode
+            };
+            parss.Add(par);
+            par = new ExcParameters()
+            {
+                _KEY = "@sms_irIsKeyAlive",
+                _VALUE = 1
+            };
+            parss.Add(par);
+            string result = db.Script("INSERT INTO [dbo].[tbl_sms_ir_CustomerKeys]([id_Customer],[sms_irKeyType],[sms_irSentKey],[sms_irKeyGeneratedDate],[sms_irIsKeyAlive]) VALUES(@id_Customer ,@sms_irKeyType ,@sms_irSentKey ,GETDATE(),@sms_irIsKeyAlive)", parss);
             SMS_ir sms = new SMS_ir();
-            
 
             return Json(sms.SendVerificationCodeWithTemplate(UserId, "VelvetRegister", 2));
         }
@@ -123,7 +147,7 @@ namespace ShoppingCMS_V002.Controllers
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
 
-            DataTable dt = db.Select("SELECT [C_ActivationToken] FROM [tbl_Customer_Main] where id_Customer=SELECT [C_ActivationToken] FROM [tbl_Customer_Main] where id_Customer=SELECT [C_ActivationToken] FROM [tbl_Customer_Main] where id_Customer=" + UId);
+            DataTable dt = db.Select("SELECT [C_ActivationToken] FROM [tbl_Customer_Main] where id_Customer = " + UId);
             if(dt.Rows.Count!=0)
             {
                 string token = dt.Rows[0][0].ToString();
@@ -144,7 +168,7 @@ namespace ShoppingCMS_V002.Controllers
         public ActionResult EncryptOMD(string Token)
         {
             Encryption ENC = new Encryption();
-            string s = "{'CustomerId':" + Token + ",'Status':'Active'}";
+            string s = "{\"CustomerId\":" + Token + ",\"Status\":\"Active\"}";
             return Content(ENC.EncryptText(s, "OMD_Token"));
 
         }

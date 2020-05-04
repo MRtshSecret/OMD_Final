@@ -43,7 +43,7 @@ namespace ShoppingCMS_V002.SMS_Module
                             double RemainingDate =
                                 (DateTime.Now - DateTime.Parse(dtUser.Rows[0]["sms_irKeyGeneratedDate"].ToString()))
                                 .TotalSeconds;
-                            if (RemainingDate > 60)
+                            if (RemainingDate < 60)
                             {
                                 parss = new List<ExcParameters>();
                                 par = new ExcParameters()
@@ -67,6 +67,7 @@ namespace ShoppingCMS_V002.SMS_Module
                                         {
                                             if (dtTemplateToken.Rows.Count > 0)
                                             {
+                                                string ssdd = long.Parse(UserStructure.Rows[0]["C_Mobile"].ToString()).ToString();
                                                 string UserFullName = $"{UserStructure.Rows[0]["C_FirstName"].ToString()} {UserStructure.Rows[0]["C_LastNAme"].ToString()}";
                                                 var ultraFastSend = new UltraFastSend()
                                                 {
@@ -93,7 +94,7 @@ namespace ShoppingCMS_V002.SMS_Module
                                                     par = new ExcParameters()
                                                     {
                                                         _KEY = "@C_ActivationToken",
-                                                        _VALUE = TemplateToken
+                                                        _VALUE = dtUser.Rows[0]["sms_irSentKey"].ToString()
                                                     };
                                                     parss.Add(par);
                                                     par = new ExcParameters()
