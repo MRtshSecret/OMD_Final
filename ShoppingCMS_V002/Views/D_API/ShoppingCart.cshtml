@@ -25,6 +25,8 @@
             <h3 class="block-title alt"><i class="fa fa-angle-down color"></i>لیست سفارشات</h3>
             <div class="row orders">
                 <div class="col-md-12">
+                    <div id="CustomerId" style="display:none">@Model.FactorModel.CustomerId</div>
+                    <div id="FactorId" style="display:none">@Model.FactorModel.Id</div>
                     <table class="table">
                         <thead>
                             <tr>
@@ -41,32 +43,32 @@
                         <tbody>
                             @foreach (var item in Model.FactorModel.items)
                             {
-                            <tr>
-                                <td style="display:none" id="Id">@item.Id</td>
-                                <td class="quantity">@item.Num</td>
-                                <td class="image" ><a  class="media-link" href="#"><i class="fa fa-plus"></i><img style="width:50%; height:auto" src="@item.ImagePath" alt="" /></a></td>
-                                <td class="description">
-                                    <h4><a href="#">@item.Title</a></h4>
-                                    @item.property
-                                </td>
-                                <td class="total">@item.PricePerQ @Model.FactorModel.MoneyQuantity </td>
-                                <td class="total">@item.Quantity</td>
-                                @if (item.PriceXQ == item.PriceOff)
-                                {
-                                    <td class="total">@item.PriceOff @Model.FactorModel.MoneyQuantity</td>
-                                }
-                                else
-                                {
-                                    <td class="total">
-                                        <p><del> @item.PriceXQ @Model.FactorModel.MoneyQuantity</del></p>
-                                        <p><ins> @item.PriceOff @Model.FactorModel.MoneyQuantity</ins></p>
+                                <tr>
+                                    <td style="display:none" id="Id">@item.Id</td>
+                                    <td class="quantity">@item.Num</td>
+                                    <td class="image"><a class="media-link" href="#"><i class="fa fa-plus"></i><img style="width:50%; height:auto" src="@item.ImagePath" alt="" /></a></td>
+                                    <td class="description">
+                                        <h4><a href="#">@item.Title</a></h4>
+                                        @item.property
                                     </td>
-                                }
-                                <td class="quantity">
-                                    <input class="form-control qty ; col-md-5" type="number" step="1" min="1" name="quantity" value="@item.number" title="Qty">
-                                </td>
-                                <td class="total">@item.total @Model.FactorModel.MoneyQuantity <a href="#"><i class="fa fa-close"></i></a></td>
-                            </tr>
+                                    <td class="total">@item.PricePerQ @Model.FactorModel.MoneyQuantity </td>
+                                    <td class="total">@item.Quantity</td>
+                                    @if (item.PriceXQ == item.PriceOff)
+                                    {
+                                        <td class="total">@item.PriceOff @Model.FactorModel.MoneyQuantity</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="total">
+                                            <p><del> @item.PriceXQ @Model.FactorModel.MoneyQuantity</del></p>
+                                            <p><ins> @item.PriceOff @Model.FactorModel.MoneyQuantity</ins></p>
+                                        </td>
+                                    }
+                                    <td class="quantity">
+                                        <input class="form-control qty ; col-md-5" type="number" step="1" min="1" name="quantity" value="@item.number" title="Qty">
+                                    </td>
+                                    <td class="total">@item.total @Model.FactorModel.MoneyQuantity <button onclick="return deleteItem(@item.Id)"><i class="fa fa-close"></i></button></td>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -84,8 +86,8 @@
                         <div class="form-group"><input id="Family_inp" class="form-control" type="text" placeholder="نام خانوادگی"></div>
                     </div>
                     @*<div class="col-md-4">
-                        <div class="form-group">< input class="form-control" type="text" placeholder="کد ملی"></div>
-                    </div>*@
+                            <div class="form-group">< input class="form-control" type="text" placeholder="کد ملی"></div>
+                        </div>*@
                     <div class="col-md-3">
                         <div class="form-group selectpicker-wrapper">
                             <select id="OstanSelect" class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select" onchange="CityChange()">
@@ -142,22 +144,22 @@
                                 <tfoot>
                                     <tr>
                                         <td><strong>جمع کل:</strong></td>
-                                        <td id="deposit">@Model.FactorModel.Deposit @Model.FactorModel.MoneyQuantity</td>
+                                        <td><div id="deposit">@Model.FactorModel.Deposit</div> @Model.FactorModel.MoneyQuantity</td>
                                     </tr>
                                 </tfoot>
                             </table>
                             @*<div>
-                                <div class="col-md-2">
-                                    <input class="form-control qty" type="text" placeholder="کد تخفیف" />
-                                </div>
-                                <div class="col-md-1"><button class="btn btn-theme btn-theme-dark btn-block">ثبت</button></div>
-                            </div>*@
+                                    <div class="col-md-2">
+                                        <input class="form-control qty" type="text" placeholder="کد تخفیف" />
+                                    </div>
+                                    <div class="col-md-1"><button class="btn btn-theme btn-theme-dark btn-block">ثبت</button></div>
+                                </div>*@
                             <br><br>
 
 
                         </div>
                     </div>
-                    <button class="btn btn-theme btn-theme-dark btn-block">پرداخت</button>
+                    <button class="btn btn-theme btn-theme-dark btn-block" onclick="return FinishFactor()">پرداخت</button>
 
 
                 </div>
@@ -175,7 +177,7 @@
 
 </div>
 <!-- /CONTENT AREA -->
-
+@Scripts.Render("~/bundles/omd/jquery2");
 <script>
     $(document).ready(function () {
 
@@ -183,16 +185,15 @@
     });
 
 
-    function CityChange()
-    {
+    function CityChange() {
         var Ost = $('#OstanSelect').val();
         alert(Ost);
         $('#CitySelect').prop("disabled", false);
 
 
-          PostJson = {
-              'Cat': 'City',
-              'Id': Ost
+        PostJson = {
+            'Cat': 'City',
+            'Id': Ost
         };
 
         $.ajax({
@@ -220,8 +221,8 @@
                     $("#NoAcc").show(300);
                     $("#hasAcc").hide(300);
                 }
-            
-                
+
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus);
@@ -231,5 +232,100 @@
 
     }
 
+
+    function deleteItem(Id) {
+    PostJson1 = {
+        'itemId': Id
+    };
+
+    $.ajax({
+        url: '/API_Functions/deleteItem',
+        type: "post",
+        data: JSON.stringify(PostJson1),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+            if (response == "Success") {
+
+                location.reload(true);
+            } else {
+                console.log(response)
+            }
+
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus);
+            return "";
+        }
+    });
+
+
+}
+
+
+function FinishFactor() {
+    var CustomerId = $('#CustomerId').text();
+    var FactorId = $('#FactorId').text();
+    var Name_inp = $('#Name_inp').val();
+    var Family_inp = $('#Family_inp').val();
+    var CitySelect = $('#CitySelect').val();
+    var Address_inp = $('#Address_inp').val();
+    var Address_hint_inp = $('#Address_hint_inp').val();
+    var Phone_inp = $('#Phone_inp').val();
+    var Email_inp = $('#Email_inp').val();
+    var deposit = $('#deposit').text();
+    var PaymentToken = "";
+    var PaymentSerial = "";
+
+    if (Name_inp != "" && Family_inp != "" && CitySelect != "0" && Address_inp != "" && Phone_inp != "" && Address_hint_inp != "") {
+
+        PostJson1 = {
+            'Name': Name_inp,
+            'familly': Family_inp,
+            'cityId': CitySelect,
+            'factorId': FactorId,
+            'Address': Address_inp,
+            'Email': Email_inp,
+            'Phonenum': Phone_inp,
+            'CodePosti': Address_hint_inp,
+            'PaymentToken': PaymentToken,
+            'PaymentSerial': PaymentSerial,
+            'CustomerId': CustomerId,
+            'depositMoney': deposit
+        };
+
+        $.ajax({
+            url: '/API_Functions/AddFactor',
+            type: "post",
+            data: JSON.stringify(PostJson1),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (response == "Success") {
+
+                    alert("خرید شما با موفقیت انجام شد");
+                    var url ="@Url.Action("Index", "D_API", null, Request.Url.Scheme)";
+                    location.href = url;
+
+                    deleteCookie("OMD_Factor");
+                } else {
+                    console.log(response)
+                }
+
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+                return "";
+            }
+        });
+
+
+    } else {
+        alert("لطفا همه ی مقادر ورودی را پر کنید");
+    }
+
+    return false;
+
+}
 
 </script>

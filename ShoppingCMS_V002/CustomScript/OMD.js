@@ -199,16 +199,20 @@ function SendCode() {
                 data: JSON.stringify(PostJson),
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
-                    var Token = response;
-                    if (Token.StatusCode == "smsX:200OK") {
-                        alert("پیامک با موفقیت ارسال شد.");
-                        $('#Id_UUU').text(Token.CustomerId);
-                        $('#NewAcc').hide();
-                        $('#CodeDiv').show();
-
+                    if (response == "Reapited Num") {
+                        alert("حساب کاربری با این شماره موجود است.")
                     } else {
-                        alert("در پروسه ی ارسال پیامک مشکلی ایجاد شده ، لطفا بعد از 60 ثانیه دوباره تلاش کنید ");
-                        console.log(Token);
+                        var Token = response;
+                        if (Token.StatusCode == "smsX:200OK") {
+                            alert("پیامک با موفقیت ارسال شد.");
+                            $('#Id_UUU').text(Token.CustomerId);
+                            $('#NewAcc').hide();
+                            $('#CodeDiv').show();
+
+                        } else {
+                            alert("در پروسه ی ارسال پیامک مشکلی ایجاد شده ، لطفا بعد از 60 ثانیه دوباره تلاش کنید ");
+                            console.log(Token);
+                        }
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -497,7 +501,5 @@ function login() {
     } else {
         alert("لطفا مقدار ورودی را پر کنید");
     }
-
-
-
 }
+

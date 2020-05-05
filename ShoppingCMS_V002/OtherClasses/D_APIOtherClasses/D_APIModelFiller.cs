@@ -663,7 +663,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 items.Add(model);
             }
 
-            DataTable Factor = db.Select("SELECT [Factor_Id],[AddressId],[date],[Off_Code],[toality],[deposit_price],[IsDeleted],[Done],[PaymentSerial],[PaymentToken],(SELECT top 1 [MoneyTypeName] FROM [tbl_Product_MoneyType] as D inner join [tlb_Product_MainProductConnector]as E on D.MoneyId=E.[PriceModule] inner join [tbl_FACTOR_Items] as F on E.id_MPC=F.Pro_Id WHERE F.FactorId=[Factor_Id])AS priceQuantity FROM [tbl_FACTOR_Main] where Factor_Id=" + id);
+            DataTable Factor = db.Select("SELECT [Factor_Id],[AddressId],[date],[Off_Code],[toality],[deposit_price],[IsDeleted],[Done],[PaymentSerial],[PaymentToken],[Customer_Id],(SELECT top 1 [MoneyTypeName] FROM [tbl_Product_MoneyType] as D inner join [tlb_Product_MainProductConnector]as E on D.MoneyId=E.[PriceModule] inner join [tbl_FACTOR_Items] as F on E.id_MPC=F.Pro_Id WHERE F.FactorId=[Factor_Id])AS priceQuantity FROM [tbl_FACTOR_Main] where Factor_Id=" + id);
             var res = new FactorPopUpModel();
             if (Factor.Rows.Count != 0)
             {
@@ -679,6 +679,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
 
 
                 res.Id = Convert.ToInt32(Factor.Rows[0]["Factor_Id"]);
+                res.CustomerId = Convert.ToInt32(Factor.Rows[0]["Customer_Id"]);
                 res.Date = DateReturner(Factor.Rows[0]["date"].ToString(), DateType);
                 res.PaymentSerial = Factor.Rows[0]["PaymentSerial"].ToString();
                 res.PaymentToken = Factor.Rows[0]["PaymentToken"].ToString();

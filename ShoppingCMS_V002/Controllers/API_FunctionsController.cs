@@ -95,52 +95,61 @@ namespace ShoppingCMS_V002.Controllers
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
 
-            Encryption ENC = new Encryption();
-            List<ExcParameters> parss = new List<ExcParameters>();
-            ExcParameters par = new ExcParameters()
+            
+            if(Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_Customer_Main] WHERE C_Mobile LIKE N'"+MobileNum+"'").Rows[0][0])==0)
             {
-                _KEY = "@Mobile",
-                _VALUE = MobileNum
-            };
-            parss.Add(par);
-            par = new ExcParameters()
-            {
-                _KEY = "@PassWord",
-                _VALUE = ENC.MD5Hash(Pass)
-            };
-            parss.Add(par);
-            int UserId = Convert.ToInt32(db.Script("INSERT INTO [tbl_Customer_Main] OUTPUT inserted.id_Customer VALUES(GETDATE(),@Mobile,N'',N'',N'',0,0,NULL,@PassWord)", parss));
-            Random generator = new Random();
-            string GeneratedCode = generator.Next(100000, 999999).ToString("D6");
-             parss = new List<ExcParameters>();
-             par = new ExcParameters()
-            {
-                _KEY = "@id_Customer",
-                _VALUE = UserId
-             };
-            parss.Add(par);
-            par = new ExcParameters()
-            {
-                _KEY = "@sms_irKeyType",
-                _VALUE = 2
-            };
-            parss.Add(par);
-            par = new ExcParameters()
-            {
-                _KEY = "@sms_irSentKey",
-                _VALUE = GeneratedCode
-            };
-            parss.Add(par);
-            par = new ExcParameters()
-            {
-                _KEY = "@sms_irIsKeyAlive",
-                _VALUE = 1
-            };
-            parss.Add(par);
-            string result = db.Script("INSERT INTO [dbo].[tbl_sms_ir_CustomerKeys]([id_Customer],[sms_irKeyType],[sms_irSentKey],[sms_irKeyGeneratedDate],[sms_irIsKeyAlive]) VALUES(@id_Customer ,@sms_irKeyType ,@sms_irSentKey ,GETDATE(),@sms_irIsKeyAlive)", parss);
-            SMS_ir sms = new SMS_ir();
+                Encryption ENC = new Encryption();
+                List<ExcParameters> parss = new List<ExcParameters>();
+                ExcParameters par = new ExcParameters()
+                {
+                    _KEY = "@Mobile",
+                    _VALUE = MobileNum
+                };
+                parss.Add(par);
+                par = new ExcParameters()
+                {
+                    _KEY = "@PassWord",
+                    _VALUE = ENC.MD5Hash(Pass)
+                };
+                parss.Add(par);
+                int UserId = Convert.ToInt32(db.Script("INSERT INTO [tbl_Customer_Main] OUTPUT inserted.id_Customer VALUES(GETDATE(),@Mobile,N'',N'',N'',0,0,NULL,@PassWord)", parss));
+                Random generator = new Random();
+                string GeneratedCode = generator.Next(100000, 999999).ToString("D6");
+                parss = new List<ExcParameters>();
+                par = new ExcParameters()
+                {
+                    _KEY = "@id_Customer",
+                    _VALUE = UserId
+                };
+                parss.Add(par);
+                par = new ExcParameters()
+                {
+                    _KEY = "@sms_irKeyType",
+                    _VALUE = 2
+                };
+                parss.Add(par);
+                par = new ExcParameters()
+                {
+                    _KEY = "@sms_irSentKey",
+                    _VALUE = GeneratedCode
+                };
+                parss.Add(par);
+                par = new ExcParameters()
+                {
+                    _KEY = "@sms_irIsKeyAlive",
+                    _VALUE = 1
+                };
+                parss.Add(par);
+                string result = db.Script("INSERT INTO [dbo].[tbl_sms_ir_CustomerKeys]([id_Customer],[sms_irKeyType],[sms_irSentKey],[sms_irKeyGeneratedDate],[sms_irIsKeyAlive]) VALUES(@id_Customer ,@sms_irKeyType ,@sms_irSentKey ,GETDATE(),@sms_irIsKeyAlive)", parss);
+                SMS_ir sms = new SMS_ir();
 
-            return Json(sms.SendVerificationCodeWithTemplate(UserId, "VelvetRegister", 2));
+                return Json(sms.SendVerificationCodeWithTemplate(UserId, "VelvetRegister", 2));
+            }else
+            {
+                return Content("Reapited Num");
+            }
+
+            
         }
 
         public ActionResult CheckCode(int UId,string Code) 
@@ -238,7 +247,7 @@ namespace ShoppingCMS_V002.Controllers
                 };
                 parss.Add(par);
 
-                var FactorId_ =Convert.ToInt32( db.Script("INSERT INTO [tbl_FACTOR_Main] output inserted.Factor_Id VALUES(@CustomerId,0,GetDate(),'',NULL,NULL,0,0,0,0,0,0,'','')",parss));
+                var FactorId_ =Convert.ToInt32( db.Script("INSERT INTO [tbl_FACTOR_Main] output inserted.Factor_Id VALUES(@CustomerId,0,GetDate(),'',NULL,0,0,0,0,0,0,0,'','')",parss));
 
                 par = new ExcParameters()
                 {
@@ -552,6 +561,28 @@ namespace ShoppingCMS_V002.Controllers
             db.Script("UPDATE [tbl_FACTOR_Main] SET[AddressId] = @AddresId,[date] = GetDate(),[deposit_price] = @depositMoney,[Done] = 1,[PaymentSerial] = @PaymentSerial ,[PaymentToken] =@PaymentToken WHERE Factor_Id=@factorId", parss);
 
             return Content("Success");
+        }
+
+        public ActionResult deleteItem(int itemId)
+        {
+            PDBC db = new PDBC("PandaMarketCMS", true);
+            db.Connect();
+            DataTable dt = db.Select("SELECT (A.PriceOff*B.number) AS totality ,B.FactorId FROM [tbl_Product_PastProductHistory] AS A INNER JOIN [tbl_FACTOR_Items] AS B ON A.id_PPH=B.PriceDateId where B.ItemId=" + itemId);
+            if(dt.Rows.Count!=0)
+            {
+                long totality_item = long.Parse(dt.Rows[0]["totality"].ToString());
+                string FactorId = dt.Rows[0]["FactorId"].ToString();
+               long totality = long.Parse(db.Select("SELECT [toality] FROM [tbl_FACTOR_Main] WHERE Factor_Id=" +FactorId ).Rows[0]["toality"].ToString());
+
+                db.Script("UPDATE [tbl_FACTOR_Main]SET [toality] ="+(totality-totality_item)+" WHERE Factor_Id=" + FactorId);
+                db.Script("DELETE FROM [tbl_FACTOR_Items] WHERE ItemId=" + itemId);
+
+                return Content("Success");
+            }else
+            {
+                return Content("There Isnt any row with this item");
+            }
+
         }
     }
 }

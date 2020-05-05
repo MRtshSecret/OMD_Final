@@ -19,6 +19,7 @@ namespace ShoppingCMS_V002.Models.D_APIModels
         public string PaymentSerial { get; set; }
         public string PaymentToken { get; set; }
         public AddressModel Address { get; set; }
+        public int CustomerId { get; set; }
         public string Date { get; set; }
         public string Off_Code { get; set; }
     }

@@ -178,7 +178,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="product-list">
-                        <a class="btn btn-theme btn-title-more" href="#">مشاهده همه</a>
+                        <a class="btn btn-theme btn-title-more" href="@Url.Action("Product_List","D_API",new {Type="پرفروش ها"})">مشاهده همه</a>
                         <h4 class="block-title"><span>پر فروش ها</span></h4>
                         @foreach (var item in Model.Sale_Products)
                         {
@@ -188,8 +188,8 @@
                 </div>
                 <div class="col-md-4">
                     <div class="product-list">
-                        <a class="btn btn-theme btn-title-more" href="#">مشاهده همه</a>
-                        <h4 class="block-title"><span>برگزیده ها</span></h4>
+                        <a class="btn btn-theme btn-title-more" href="@Url.Action("Product_List","D_API",new {Type="فروش ویژه"})">مشاهده همه</a>
+                        <h4 class="block-title"><span>فروش ویژه</span></h4>
                         @foreach (var item in Model.ProductsG3)
                         {
                             @Html.Partial("_ProductMini2", item);
@@ -198,7 +198,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="product-list">
-                        <a class="btn btn-theme btn-title-more" href="#">مشاهده همه</a>
+                        <a class="btn btn-theme btn-title-more" href="@Url.Action("Product_List","D_API",new {Type="جدیدترین"})">مشاهده همه</a>
                         <h4 class="block-title"><span>جدید ترین ها</span></h4>
                         @foreach (var item in Model.NewProducts)
                         {

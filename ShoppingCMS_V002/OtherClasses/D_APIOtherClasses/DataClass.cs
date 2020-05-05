@@ -18,14 +18,14 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             List<tbl_BLOG> List_BLG = new List<tbl_BLOG>();
             string query = "";
 
-            query = " SELECT [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id], [Title],[Text_min],[Date]  ,[name] as'Cat_Id'";
-            query += " ,(SELECT [ad_firstname]FROM [PandaMarketCMS].[dbo].[tbl_ADMIN_main] where[id_Admin]=[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[WrittenBy_AdminId]) as'firstname'  ";
-            query += " ,(SELECT [ad_lastname]FROM [PandaMarketCMS].[dbo].[tbl_ADMIN_main] where[id_Admin]=[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[WrittenBy_AdminId]) as'lastname'  ";
-            query += " ,(SELECT count([Id])FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Comment]where [PostId] =[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id] )as'Comments' ";
-            query += " FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Post] ";
-            query += " inner join [PandaMarketCMS].[dbo].[tbl_BLOG_Categories] on [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Cat_Id] = [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Id] ";
-            query += " where [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Disabled] like 0 ";
-            query += " And [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Disabled] like 0 ";
+            query = " SELECT [tbl_BLOG_Post].[Id], [Title],[Text_min],[Date]  ,[name] as'Cat_Id'";
+            query += " ,(SELECT [ad_firstname]FROM  [tbl_ADMIN_main] where[id_Admin]= [tbl_BLOG_Post].[WrittenBy_AdminId]) as'firstname'  ";
+            query += " ,(SELECT [ad_lastname]FROM  [tbl_ADMIN_main] where[id_Admin]= [tbl_BLOG_Post].[WrittenBy_AdminId]) as'lastname'  ";
+            query += " ,(SELECT count([Id])FROM  [tbl_BLOG_Comment]where [PostId] = [tbl_BLOG_Post].[Id] )as'Comments' ";
+            query += " FROM  [tbl_BLOG_Post] ";
+            query += " inner join  [tbl_BLOG_Categories] on  [tbl_BLOG_Post].[Cat_Id] =  [tbl_BLOG_Categories].[Id] ";
+            query += " where  [tbl_BLOG_Post].[Is_Deleted]  like 0 AND   [tbl_BLOG_Post].[Is_Disabled] like 0 ";
+            query += " And  [tbl_BLOG_Categories].[Is_Deleted]  like 0 AND   [tbl_BLOG_Categories].[Is_Disabled] like 0 ";
 
 
 
@@ -41,7 +41,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             }
             else if (NamePage == "Search")
             {
-                query += $"And [PandaMarketCMS].[dbo].[tbl_BLOG_Post].Title like N'%{Valuepage}%' OR [PandaMarketCMS].[dbo].[tbl_BLOG_Post].Text like N'%{Valuepage}%' order by([PandaMarketCMS].[dbo].[tbl_BLOG_Post].weight) DESC,[Date] DESC";
+                query += $"And [tbl_BLOG_Post].Title like N'%{Valuepage}%' OR [tbl_BLOG_Post].Text like N'%{Valuepage}%' order by([tbl_BLOG_Post].weight) DESC,[Date] DESC";
             }
             else if (NamePage == "tag")
             {
@@ -79,9 +79,9 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
 
-            string query = "SELECT [PostId],[PicSizeType],[PicAddress],[PicThumbnailAddress]";
-            query += "FROM [PandaMarketCMS].[dbo].[tbl_ADMIN_UploadStructure_ImageAddress]inner join [PandaMarketCMS].[dbo].[tbl_BLOG_Pic_Connector]";
-            query += " on [PandaMarketCMS].[dbo].[tbl_BLOG_Pic_Connector].PicId =[PandaMarketCMS].[dbo].[tbl_ADMIN_UploadStructure_ImageAddress].PicID ";
+            string query = "SELECT distinct [PostId],[PicSizeType],[PicAddress],[PicThumbnailAddress]";
+            query += "FROM [tbl_ADMIN_UploadStructure_ImageAddress]inner join [tbl_BLOG_Pic_Connector]";
+            query += " on [tbl_BLOG_Pic_Connector].PicId =[tbl_ADMIN_UploadStructure_ImageAddress].PicID ";
             query += $" where PostId ={id}";
 
 
@@ -112,12 +112,12 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             {
                 /**/
 
-                query = "  SELECT top 3 [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id], [Title],[Text_min],[Date],[name] as'Cat_Id' ";
-                query += ",(SELECT count([Id])FROM[PandaMarketCMS].[dbo].[tbl_BLOG_Comment]where[PostId] =[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id] )as'Comments'  ";
-                query += " FROM[PandaMarketCMS].[dbo].[tbl_BLOG_Post]  ";
-                query += " inner join[PandaMarketCMS].[dbo].[tbl_BLOG_Categories] on[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Cat_Id] = [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Id]  ";
-                query += " where[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Deleted]  like 0 AND[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Disabled] like 0  ";
-                query += " And[PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Deleted]  like 0 AND[PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Disabled] like 0  ";
+                query = "  SELECT top 3 [tbl_BLOG_Post].[Id], [Title],[Text_min],[Date],[name] as'Cat_Id' ";
+                query += ",(SELECT count([Id])FROM[tbl_BLOG_Comment]where[PostId] =[tbl_BLOG_Post].[Id] )as'Comments'  ";
+                query += " FROM [tbl_BLOG_Post]  ";
+                query += " inner join [tbl_BLOG_Categories] on [tbl_BLOG_Post].[Cat_Id] = [tbl_BLOG_Categories].[Id]  ";
+                query += " where [tbl_BLOG_Post].[Is_Deleted]  like 0 AND [tbl_BLOG_Post].[Is_Disabled] like 0  ";
+                query += " And [tbl_BLOG_Categories].[Is_Deleted]  like 0 AND [tbl_BLOG_Categories].[Is_Disabled] like 0  ";
                 query += " And[name] = N'" + Valuepage + "'order by[Date] desc";
 
                 using (DataTable dt = db.Select(query))
@@ -145,8 +145,8 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             else
             {
                 query = " SELECT  [name] ,( SELECT count(Id)";
-                query += " FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Post]where [Cat_Id] =[PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Id])as 'count'";
-                query += " FROM  [PandaMarketCMS].[dbo].[tbl_BLOG_Categories]";
+                query += " FROM  [tbl_BLOG_Post]where [Cat_Id] = [tbl_BLOG_Categories].[Id])as 'count'";
+                query += " FROM  [tbl_BLOG_Categories]";
                 query += " where [Is_Deleted]  like 0 AND  [Is_Disabled] like 0 order by id desc ";
 
                 using (DataTable dt = db.Select(query))
@@ -175,18 +175,18 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
 
             if (IsVal)
             {
-                query = "  SELECT [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id], [Title],[Text_min],[Date] ,[PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[name] as'Cat_Id'";
-                query += "  ,(SELECT [ad_firstname]FROM [PandaMarketCMS].[dbo].[tbl_ADMIN_main] where[id_Admin]=[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[WrittenBy_AdminId]) as'firstname'";
-                query += "  ,(SELECT [ad_lastname]FROM [PandaMarketCMS].[dbo].[tbl_ADMIN_main] where[id_Admin]=[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[WrittenBy_AdminId]) as'lastname' ";
-                query += "  ,(SELECT count([Id])FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Comment]where [PostId] =[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id] )as'Comments' ";
-                query += "  FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Post] ";
-                query += "  inner join [PandaMarketCMS].[dbo].[tbl_BLOG_TagConnector] on [PandaMarketCMS].[dbo].[tbl_BLOG_TagConnector].[Tag_Id] = [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id]";
-                query += "  inner join [PandaMarketCMS].[dbo].[tbl_BLOG_Tags] on [PandaMarketCMS].[dbo].[tbl_BLOG_TagConnector].[Tag_Id] = [PandaMarketCMS].[dbo].[tbl_BLOG_Tags].[Id]";
-                query += "  inner join [PandaMarketCMS].[dbo].[tbl_BLOG_Categories] on [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Cat_Id] = [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Id] ";
-                query += "  where [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Disabled] like 0 ";
-                query += "  And [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Disabled] like 0 ";
-                query += "  And  [PandaMarketCMS].[dbo].[tbl_BLOG_Tags].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Tags].[Is_Disabled] like 0";
-                query += $" And  [PandaMarketCMS].[dbo].[tbl_BLOG_Tags].[name] = N'{Valuepage}' order by [Date] desc ";
+                query = "  SELECT [tbl_BLOG_Post].[Id], [Title],[Text_min],[Date] , [tbl_BLOG_Categories].[name] as'Cat_Id'";
+                query += "  ,(SELECT [ad_firstname]FROM [tbl_ADMIN_main] where[id_Admin]=[tbl_BLOG_Post].[WrittenBy_AdminId]) as'firstname'";
+                query += "  ,(SELECT [ad_lastname]FROM  [tbl_ADMIN_main] where[id_Admin]= [tbl_BLOG_Post].[WrittenBy_AdminId]) as'lastname' ";
+                query += "  ,(SELECT count([Id])FROM  [tbl_BLOG_Comment]where [PostId] = [tbl_BLOG_Post].[Id] )as'Comments' ";
+                query += "  FROM  [tbl_BLOG_Post] ";
+                query += "  inner join  [tbl_BLOG_TagConnector] on  [tbl_BLOG_TagConnector].[Tag_Id] =  [tbl_BLOG_Post].[Id]";
+                query += "  inner join  [tbl_BLOG_Tags] on  [tbl_BLOG_TagConnector].[Tag_Id] =  [tbl_BLOG_Tags].[Id]";
+                query += "  inner join  [tbl_BLOG_Categories] on  [tbl_BLOG_Post].[Cat_Id] =  [tbl_BLOG_Categories].[Id] ";
+                query += "  where  [tbl_BLOG_Post].[Is_Deleted]  like 0 AND   [tbl_BLOG_Post].[Is_Disabled] like 0 ";
+                query += "  And  [tbl_BLOG_Categories].[Is_Deleted]  like 0 AND   [tbl_BLOG_Categories].[Is_Disabled] like 0 ";
+                query += "  And   [tbl_BLOG_Tags].[Is_Deleted]  like 0 AND   [tbl_BLOG_Tags].[Is_Disabled] like 0";
+                query += $" And   [tbl_BLOG_Tags].[name] = N'{Valuepage}' order by [Date] desc ";
 
 
 
@@ -201,7 +201,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 if (Valuepage == "مشاهده همه")
                 {
                     query = " SELECT [Name] ";
-                    query += " FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Tags] ";
+                    query += " FROM  [tbl_BLOG_Tags] ";
                     query += " where [Is_Deleted]  like 0 AND  [Is_Disabled] like 0 order by id desc ";
                     using (DataTable dt = db.Select(query))
                     {
@@ -220,7 +220,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 {
 
                     query = " SELECT top 10 [Name] ";
-                    query += " FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Tags] ";
+                    query += " FROM  [tbl_BLOG_Tags] ";
                     query += " where [Is_Deleted]  like 0 AND  [Is_Disabled] like 0 order by id desc ";
                     using (DataTable dt = db.Select(query))
                     {
@@ -248,22 +248,22 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             string query = "";
             if (Value == "new")
             {
-                query = " SELECT top 5 [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id], [Title],[Date],[name]";
-                query += " ,(SELECT count([Id])FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Comment]where [PostId] =[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id] )as'Comments' ";
-                query += " FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Post]";
-                query += " inner join [PandaMarketCMS].[dbo].[tbl_BLOG_Categories] on [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Cat_Id] = [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Id]";
-                query += " where [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Disabled] like 0";
-                query += " And [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Disabled] like 0 order by Date desc ";
+                query = " SELECT top 5  [tbl_BLOG_Post].[Id], [Title],[Date],[name]";
+                query += " ,(SELECT count([Id])FROM  [tbl_BLOG_Comment]where [PostId] = [tbl_BLOG_Post].[Id] )as'Comments' ";
+                query += " FROM  [tbl_BLOG_Post]";
+                query += " inner join  [tbl_BLOG_Categories] on  [tbl_BLOG_Post].[Cat_Id] =  [tbl_BLOG_Categories].[Id]";
+                query += " where  [tbl_BLOG_Post].[Is_Deleted]  like 0 AND   [tbl_BLOG_Post].[Is_Disabled] like 0";
+                query += " And  [tbl_BLOG_Categories].[Is_Deleted]  like 0 AND   [tbl_BLOG_Categories].[Is_Disabled] like 0 order by Date desc ";
             }
             else if (Value == "like")
             {
-                query = " SELECT top 5 [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id], [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Title],[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Date],[PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[name] ";
-                query += " ,(SELECT count([Id])FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Comment]where [PostId] =[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id] )as'Comments' ";
-                query += "  FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Post] ";
-                query += "  inner join [PandaMarketCMS].[dbo].[tbl_BLOG_Comment]   on [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id] = [PandaMarketCMS].[dbo].[tbl_BLOG_Comment].[PostId]";
-                query += "  inner join [PandaMarketCMS].[dbo].[tbl_BLOG_Categories] on [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Cat_Id] = [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Id]";
-                query += "  where [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Disabled] like 0 ";
-                query += "  And [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Disabled] like 0 ";
+                query = " SELECT top 5  [tbl_BLOG_Post].[Id],  [tbl_BLOG_Post].[Title], [tbl_BLOG_Post].[Date], [tbl_BLOG_Categories].[name] ";
+                query += " ,(SELECT count([Id])FROM  [tbl_BLOG_Comment]where [PostId] = [tbl_BLOG_Post].[Id] )as'Comments' ";
+                query += "  FROM  [tbl_BLOG_Post] ";
+                query += "  inner join  [tbl_BLOG_Comment]   on  [tbl_BLOG_Post].[Id] =  [tbl_BLOG_Comment].[PostId]";
+                query += "  inner join  [tbl_BLOG_Categories] on  [tbl_BLOG_Post].[Cat_Id] =  [tbl_BLOG_Categories].[Id]";
+                query += "  where  [tbl_BLOG_Post].[Is_Deleted]  like 0 AND   [tbl_BLOG_Post].[Is_Disabled] like 0 ";
+                query += "  And  [tbl_BLOG_Categories].[Is_Deleted]  like 0 AND   [tbl_BLOG_Categories].[Is_Disabled] like 0 ";
                 query += "  And [tbl_BLOG_Comment].[PostId] = [tbl_BLOG_Post].[Id]";
                 query += "  GROUP BY [tbl_BLOG_Post].[Id] , [tbl_BLOG_Post].[Title], [tbl_BLOG_Post].[Date],[tbl_BLOG_Categories].[name] ";
                 query += "  HAVING COUNT([PostId]) > 5 order by count([PostId]) desc";
@@ -303,15 +303,15 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             db.Connect();
 
             string query = "";
-            query += " SELECT [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id], [Title],[Text_min],[Text],[Date]  ,[name] as'Cat_Id' ";
-            query += " ,(SELECT [ad_firstname]FROM [PandaMarketCMS].[dbo].[tbl_ADMIN_main] where[id_Admin]=[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[WrittenBy_AdminId]) as'firstname'";
-            query += " ,(SELECT [ad_lastname]FROM [PandaMarketCMS].[dbo].[tbl_ADMIN_main] where[id_Admin]=[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[WrittenBy_AdminId]) as'lastname'";
-            query += " ,(SELECT count([Id])FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Comment]where [PostId] =[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id] )as'Comments'";
-            query += " FROM [PandaMarketCMS].[dbo].[tbl_BLOG_Post]";
-            query += " inner join [PandaMarketCMS].[dbo].[tbl_BLOG_Categories] on [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Cat_Id] = [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Id] ";
-            query += " where [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Is_Disabled] like 0";
-            query += " And [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Deleted]  like 0 AND  [PandaMarketCMS].[dbo].[tbl_BLOG_Categories].[Is_Disabled] like 0";
-            query += " And[PandaMarketCMS].[dbo].[tbl_BLOG_Post].[Id]=" + id;
+            query += " SELECT  [tbl_BLOG_Post].[Id], [Title],[Text_min],[Text],[Date]  ,[name] as'Cat_Id' ";
+            query += " ,(SELECT [ad_firstname]FROM  [tbl_ADMIN_main] where[id_Admin]= [tbl_BLOG_Post].[WrittenBy_AdminId]) as'firstname'";
+            query += " ,(SELECT [ad_lastname]FROM  [tbl_ADMIN_main] where[id_Admin]= [tbl_BLOG_Post].[WrittenBy_AdminId]) as'lastname'";
+            query += " ,(SELECT count([Id])FROM  [tbl_BLOG_Comment]where [PostId] = [tbl_BLOG_Post].[Id] )as'Comments'";
+            query += " FROM  [tbl_BLOG_Post]";
+            query += " inner join  [tbl_BLOG_Categories] on  [tbl_BLOG_Post].[Cat_Id] =  [tbl_BLOG_Categories].[Id] ";
+            query += " where  [tbl_BLOG_Post].[Is_Deleted]  like 0 AND   [tbl_BLOG_Post].[Is_Disabled] like 0";
+            query += " And  [tbl_BLOG_Categories].[Is_Deleted]  like 0 AND   [tbl_BLOG_Categories].[Is_Disabled] like 0";
+            query += " And [tbl_BLOG_Post].[Id]=" + id;
 
             /*
                  
@@ -343,7 +343,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
 
             List<tbl_BLOG> List_BLG = new List<tbl_BLOG>();
             string query = "SELECT [Id],[message],[Name],[PostId],[ImagePath],[Date]";
-            query += "FROM[PandaMarketCMS].[dbo].[tbl_BLOG_Comment] where[PostId] = " + id + "order by Id desc";
+            query += "FROM [tbl_BLOG_Comment] where[PostId] = " + id + "order by Id desc";
 
 
             DataTable dt = db.Select(query);
