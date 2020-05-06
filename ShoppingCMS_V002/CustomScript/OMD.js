@@ -373,7 +373,12 @@ function AddToShoppingCart() {
             result = "";
         }
     });
-
+    MsterFactor();
+    setTimeout(function () {
+        var factorId = $('#Master_miniFactorId').text();
+        const url = $("#URLFactor").val() + factorId;
+        $('#popup-cart').load(url);
+    }, 200);
     return false;
 }
 
@@ -385,7 +390,6 @@ function MsterFactor() {
         PostJson1 = {
             'str': Cookie
         };
-
         $.ajax({
             url: '/API_Functions/DecryptFactor',
             type: "post",

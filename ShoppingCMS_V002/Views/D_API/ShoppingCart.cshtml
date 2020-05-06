@@ -98,11 +98,14 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group selectpicker-wrapper">
-                            <select id="CitySelect" class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select">
-                                <option>شهر</option>
-                                <option>شهر</option>
-                                <option>شهر</option>
-                            </select>
+                            <Omd id="NoAcc">
+                                <select id="CitySelect1" class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select">
+                                    <option value="-1">نا مشخص</option>
+                                </select>
+                            </Omd>
+                            <Omd id="hasAcc">
+
+                            </Omd>
                         </div>
                     </div>
                     <div class="col-md-7">
@@ -200,16 +203,25 @@
             success: function (response) {
 
                 var token = response;
-                var s = "";
+                if (token.length > 0) {
+                    $("#hasAcc").hide(300);
+                    var s =
+                        '<select id="CitySelect" class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select">';
+                    for (var i = 0; i < token.length; i++) {
 
-                
-                for (var i = 0; i < token.length; i++) {
-
-                    s += ' <option value="' + token[i].Id + '">' + token[i].Value + '</option>';
+                        s += ' <option value="' + token[i].Id + '">' + token[i].Value + '</option>';
+                    }
+                    s += '</select>';
+                    $("#hasAcc").html(s);
+                    $("#NoAcc").hide(300);
+                    $("#hasAcc").show(300);
+                    $('#CitySelect').selectpicker();
+                } else {
+                    $("#NoAcc").show(300);
+                    $("#hasAcc").hide(300);
                 }
-
-                //document.getElementById('CitySelect').innerHTML = s;
-                $('#CitySelect').html(s);
+            
+                
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus);

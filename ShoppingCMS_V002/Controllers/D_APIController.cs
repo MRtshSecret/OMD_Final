@@ -12,6 +12,8 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
+using ShoppingCMS_V002.OtherClasses.MasterChi_Fu;
 
 namespace ShoppingCMS_V002.Controllers
 {
@@ -20,6 +22,36 @@ namespace ShoppingCMS_V002.Controllers
        
         public ActionResult Index()
         {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
+
+
             D_APIModelFiller DMF = new D_APIModelFiller(4);
             Blog_ModelFiller BMF = new Blog_ModelFiller(4);
 
@@ -38,17 +70,101 @@ namespace ShoppingCMS_V002.Controllers
 
         public ActionResult AboutUs()
         {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
             D_APIModelFiller DMF = new D_APIModelFiller();
             return View(DMF.TeamMembers());
         }
 
         public ActionResult Terms()
         {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
             return View();
         }
 
         public ActionResult ContactUs()
         {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
             return View();
         }
 
@@ -70,6 +186,35 @@ namespace ShoppingCMS_V002.Controllers
 
         public ActionResult Product_Detail(int Id)
         {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
+
             D_APIModelFiller DMF = new D_APIModelFiller();
             var model = new ProductDetail_ModelView()
             {
@@ -82,6 +227,34 @@ namespace ShoppingCMS_V002.Controllers
 
         public ActionResult Product_List(string Type,int Id=0,int Page=1,string Search="",int CustomerId=0)
         {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
             D_APIModelFiller DMF = new D_APIModelFiller(4);
             D_APIModelFiller DMF2 = new D_APIModelFiller();
             var model = new D_ProductList_ModelView()
@@ -211,6 +384,34 @@ namespace ShoppingCMS_V002.Controllers
         ////url = MS/blog?NamePage=Categories&Valuepage=اخبار پاندایی&page=1
         public ActionResult Blog(int page, string NamePage, string Valuepage)
         {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
             int recordsPerPage;
             string Pvp = "";
             DataClass tbt = new DataClass();
@@ -276,7 +477,34 @@ namespace ShoppingCMS_V002.Controllers
         ////url = MS/blog_post?IdPage=1
         public ActionResult Blog_Post(string IdPage)
         {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
 
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
             DataClass tbt = new DataClass();
 
             var _blogclass = new blogclass()

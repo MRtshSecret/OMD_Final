@@ -173,6 +173,7 @@
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\D_APIModels\blogclass.cs" />
     <Compile Include="Models\D_APIModels\Company_Customers_Model.cs" />
+    <Compile Include="Models\D_APIModels\FactorMasterModel.cs" />
     <Compile Include="Models\D_APIModels\MiniFactorModel.cs" />
     <Compile Include="Models\D_APIModels\MiniProductModel.cs" />
     <Compile Include="Models\D_APIModels\FactorPopUpModel.cs" />

@@ -7,6 +7,6 @@ namespace ShoppingCMS_V002.OtherClasses.MasterChi_Fu
 {
     public static class StaticLicense
     {
-        public static string LicName = "-VelVetTextiel";
+        public static string LicName = "OMD_";
     }
 }
