@@ -124,11 +124,27 @@
                                     {
                                         if (item.Id == Model.pricingModel.OffType)
                                         {
-                                            <option selected value="@item.Id">@item.Value</option>
+                                            if (item.Id != 1)
+                                            {
+                                                <option selected disabled value="@item.Id">@item.Value</option>
+                                            }
+                                            else
+                                            {
+                                                <option selected value="@item.Id">@item.Value</option>
+                                            }
+
                                         }
                                         else
                                         {
-                                            <option value="@item.Id">@item.Value</option>
+                                            if (item.Id != 1)
+                                            {
+                                                <option disabled value="@item.Id">@item.Value</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.Value</option>
+                                            }
+
                                         }
                                     }
                                 </select>

@@ -289,13 +289,13 @@
                 console.log(obj.JsonProperty);
                 $('#Prop_div').text(obj.Properties);
                 $('#MPC_Id').text(obj.Id);
-                $('#Price_div').text();
-
-                if (obj.PriceXQ != obj.PriceOff) {
-                    $('#off_price_div').text(obj.PriceXQ);
-                } else {
-                    $('#off_price_div').text("");
-                }
+                $('#Price_div').text(obj.PricePerQ);
+                $('#off_price_div').text("");
+                //if (obj.PriceXQ != obj.PriceOff) {
+                //    $('#off_price_div').text(obj.PriceXQ);
+                //} else {
+                //    $('#off_price_div').text("");
+                //}
                
             }
             

@@ -22,14 +22,15 @@
 
         <span class="star active"></span> -->
         </div>
-        @if (Model.Price == Model.OffPrice)
+        @*@if (Model.Price == Model.OffPrice)
         {
             <div class="price">@Model.OffPrice @Model.MoneyQ</div>
         }
         else
         {
             <div class="price"><ins>@Model.OffPrice @Model.MoneyQ</ins> <del>@Model.Price</del></div>
-        }
+        }*@
+        <div class="price">@Model.PricePerQ @Model.MoneyQ</div>
 
         <div class="buttons">
             <button class="btn btn-theme btn-theme-transparent btn-wish-list" onclick="return AddFavorite(@Model.Id)"><i class="fa fa-heart"></i></button>
