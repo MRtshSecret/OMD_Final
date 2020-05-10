@@ -36,13 +36,10 @@ namespace ShoppingCMS_V002.OtherClasses
 
         public List<ProductModel> productModels_List(string Query)
         {
-            PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
-
-            DataTable dt = db.Select(Query);
-            
+              PDBC db = new PDBC("PandaMarketCMS", true);
             List<ProductModel> list = new List<ProductModel>();
-
+            db.Connect();
+            DataTable dt = db.Select(Query);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 DateTime date = Convert.ToDateTime(dt.Rows[i]["DateCreated"]);
@@ -58,19 +55,17 @@ namespace ShoppingCMS_V002.OtherClasses
                     Category = dt.Rows[i]["SubCat"].ToString() + "_" + dt.Rows[i]["MainCat"].ToString() + "_" + dt.Rows[i]["type"].ToString(),
                     Date = persianDateTime.ToString(),
                     PicPath = AppendServername(dt.Rows[i]["pic"].ToString()),
-                    SubId=Convert.ToInt32(dt.Rows[i]["id_SubCategory"])
+                    SubId = Convert.ToInt32(dt.Rows[i]["id_SubCategory"])
                 };
                 DataTable dt2 = db.Select("SELECT [PicThumbnailAddress] FROM [tbl_ADMIN_UploadStructure_ImageAddress] as A inner Join [tbl_Product_PicConnector] as B ON A.PicID=B.PicID where B.id_MProduct=" + model.Id);
-                if(dt2.Rows.Count==0)
+                if (dt2.Rows.Count == 0)
                 {
                     model.PicPath = AppendServername("/assets/NoImg.png");
                 }
-                else {
+                else
+                {
                     model.PicPath = AppendServername(dt2.Rows[0]["PicThumbnailAddress"].ToString());
                 }
-
-                
-
                 if (dt.Rows[i]["IS_AVAILABEL"].ToString() == "1")
                 {
                     model.disabled = false;
@@ -90,7 +85,7 @@ namespace ShoppingCMS_V002.OtherClasses
                 }
                 list.Add(model);
             }
-
+            db.DC();
             return list;
         }
 
@@ -114,7 +109,7 @@ namespace ShoppingCMS_V002.OtherClasses
             return queryBuilder.ToString();
         }
 
-        public List<Id_ValueModel> DropFiller(string drop , int id=0)
+        public List<Id_ValueModel> DropFiller(string drop, int id = 0)
         {
             string query = "";
             if (drop == "Type")
@@ -155,9 +150,8 @@ namespace ShoppingCMS_V002.OtherClasses
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
                 db.Connect();
-
                 DataTable dt = db.Select(query);
-
+                db.DC();
 
 
                 for (int i = 0; i < dt.Rows.Count; i++)
@@ -183,16 +177,16 @@ namespace ShoppingCMS_V002.OtherClasses
             var result = new List<AddPro_Options>();
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
-            DataTable dt = db.Select("SELECT [id_Op],[KeyName],[Value]FROM[tbl_Product_tblOptions] WHERE id_MProduct="+id);
-
+            DataTable dt = db.Select("SELECT [id_Op],[KeyName],[Value]FROM[tbl_Product_tblOptions] WHERE id_MProduct=" + id);
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                var model = new AddPro_Options() 
+                var model = new AddPro_Options()
                 {
-                    Id=Convert.ToInt32(dt.Rows[i]["id_Op"]),
-                    Num=i+1,
-                    Key=dt.Rows[i]["KeyName"].ToString(),
-                    Value= dt.Rows[i]["Value"].ToString()
+                    Id = Convert.ToInt32(dt.Rows[i]["id_Op"]),
+                    Num = i + 1,
+                    Key = dt.Rows[i]["KeyName"].ToString(),
+                    Value = dt.Rows[i]["Value"].ToString()
 
                 };
 
@@ -201,12 +195,11 @@ namespace ShoppingCMS_V002.OtherClasses
             return result;
         }
 
-        public string MainProduct_Actions(string action,int id_MProduct,int Quantity,int QuantityModule, int PriceXquantity, int PricePerquantity, int PriceOff, int offTypeValue, int OffType, int id_MainStarTag, int PriceModule, int PriceShow,string describtion=" ")
+        public string MainProduct_Actions(string action, int id_MProduct, int Quantity, int QuantityModule, int PriceXquantity, int PricePerquantity, int PriceOff, int offTypeValue, int OffType, int id_MainStarTag, int PriceModule, int PriceShow, string describtion = " ")
         {
 
             List<ExcParameters> paramss = new List<ExcParameters>();
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
             var parameters = new ExcParameters()
             {
                 _KEY = "@id_MProduct",
@@ -293,7 +286,7 @@ namespace ShoppingCMS_V002.OtherClasses
 
             string query = "";
 
-            if(action=="insert")
+            if (action == "insert")
             {
                 query = "INSERT INTO[tlb_Product_MainProductConnector] Output Inserted.id_MPC VALUES(@id_MProduct, @Quantity, @PriceXquantity, @PricePerquantity, @PriceOff, @offTypeValue, @OffType, @id_MainStarTag , 0 , 0 ,  @QuantityModule ,GetDate(), @PriceModule, @PriceShow,@describtion)";
             }
@@ -302,13 +295,14 @@ namespace ShoppingCMS_V002.OtherClasses
                 query = "UPDATE [tlb_Product_MainProductConnector]SET [Quantity] =  @Quantity ,[PriceXquantity] = @PriceXquantity,[PricePerquantity] =@PricePerquantity ,[PriceOff] =@PriceOff ,[offTypeValue] = @offTypeValue ,[OffType] = @PriceOff,[id_MainStarTag] = @id_MainStarTag ,[id_PQT] = @QuantityModule,[PriceModule] = @PriceModule ,[PriceShow] = @PriceShow  WHERE id_MPC=@id_MProduct";
 
             }
-            else if(action=="delete")
+            else if (action == "delete")
             {
 
             }
 
             if (query != "")
             {
+                db.Connect();
                 string res = db.Script(query, paramss);
                 if (action == "insert")
                 {
@@ -318,19 +312,18 @@ namespace ShoppingCMS_V002.OtherClasses
                 {
                     db.Script("INSERT INTO [tbl_Product_PastProductHistory]VALUES(@id_MProduct,@PriceXquantity,@PricePerquantity,@PriceOff,@OffType,@id_MainStarTag,GETDATE(),@offTypeValue)", paramss);
                 }
-
-                    return res;
+                db.DC();
+                return res;
             }
             else
                 return "0";
 
         }
 
-       public string Product_Action_Step1(string Action,string id_CreatedByAdmin, string Title, string Description, string SEO_keyword, string SEO_description, string SearchGravity, int IsAd,int id_pr=0)
+        public string Product_Action_Step1(string Action, string id_CreatedByAdmin, string Title, string Description, string SEO_keyword, string SEO_description, string SearchGravity, int IsAd, int id_pr = 0)
         {
             List<ExcParameters> paramss = new List<ExcParameters>();
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
             var parameters = new ExcParameters()
             {
                 _KEY = "@id_CreatedByAdmin",
@@ -399,7 +392,10 @@ namespace ShoppingCMS_V002.OtherClasses
 
             if (query != "")
             {
-                return db.Script(query, paramss);
+                db.Connect();
+                string result =  db.Script(query, paramss);
+                db.DC();
+                return result;
             }
             else
                 return "0";
@@ -409,7 +405,7 @@ namespace ShoppingCMS_V002.OtherClasses
         {
             List<ExcParameters> paramss = new List<ExcParameters>();
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
+            
             var parameters = new ExcParameters()
             {
                 _KEY = "@id_Type",
@@ -439,14 +435,15 @@ namespace ShoppingCMS_V002.OtherClasses
             paramss.Add(parameters);
 
             string query = "UPDATE [tbl_Product]SET [id_Type] =@id_Type ,[id_MainCategory] =@id_MainCategory ,[id_SubCategory] =@id_SubCategory WHERE [id_MProduct]=@id_MProduct";
-
+            db.Connect();
             var subk = SubKey.Split(',');
             for (int i = 0; i < subk.Length; i++)
             {
                 db.Script("INSERT INTO [tbl_Product_ConnectorSCOK_Product]([id_MProduct],[id_SCOK])VALUES(" + id + "," + subk[i] + ")");
             }
-
-            return db.Script(query, paramss);
+            string results = db.Script(query, paramss);
+            db.DC();
+            return results;
         }
 
         public List<Id_ValueModel> TagsModel_Filler(int id)
@@ -454,15 +451,15 @@ namespace ShoppingCMS_V002.OtherClasses
             var result = new List<Id_ValueModel>();
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
-            
-            DataTable dt = db.Select("SELECT [id_TE],[TE_name]FROM [tbl_Product_TagEnums] WHERE SubCatId="+id);
 
+            DataTable dt = db.Select("SELECT [id_TE],[TE_name]FROM [tbl_Product_TagEnums] WHERE SubCatId=" + id);
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new Id_ValueModel()
                 {
-                    Id=Convert.ToInt32(dt.Rows[i]["id_TE"]),
-                    Value=dt.Rows[i]["TE_name"].ToString()
+                    Id = Convert.ToInt32(dt.Rows[i]["id_TE"]),
+                    Value = dt.Rows[i]["TE_name"].ToString()
                 };
 
                 result.Add(model);
@@ -478,7 +475,7 @@ namespace ShoppingCMS_V002.OtherClasses
             db.Connect();
 
             DataTable dt = db.Select("SELECT [id_MainStarTag],[MST_Name] FROM [tbl_Product_MainStarTags]");
-
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new Id_ValueModel()
@@ -500,7 +497,7 @@ namespace ShoppingCMS_V002.OtherClasses
             db.Connect();
 
             DataTable dt = db.Select("SELECT [OffType],[OffType_Symbol]FROM .[tbl_Product_OffType]");
-
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new Id_ValueModel()
@@ -522,7 +519,7 @@ namespace ShoppingCMS_V002.OtherClasses
             db.Connect();
 
             DataTable dt = db.Select("SELECT[id_PQT],[PQT_Demansion] FROM[tbl_Product_ProductQuantityType] order by([PQT_Demansion])");
-
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new Id_ValueModel()
@@ -543,8 +540,8 @@ namespace ShoppingCMS_V002.OtherClasses
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
 
-            DataTable dt = db.Select("SELECT [MoneyId],[MoneyTypeName] FROM [tbl_Product_MoneyType]" );
-
+            DataTable dt = db.Select("SELECT [MoneyId],[MoneyTypeName] FROM [tbl_Product_MoneyType]");
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new Id_ValueModel()
@@ -564,9 +561,8 @@ namespace ShoppingCMS_V002.OtherClasses
             var result = new List<Id_ValueModel>();
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
-
             DataTable dt = db.Select("SELECT [PriceShowId],[PriceShowformat] FROM [tbl_Product_PriceShow]");
-
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new Id_ValueModel()
@@ -588,25 +584,24 @@ namespace ShoppingCMS_V002.OtherClasses
             db.Connect();
 
             DataTable dt = db.Select("SELECT [id_MPC],[Quantity],[PriceXquantity],[PricePerquantity],[PriceOff],[offTypeValue],[OffType],[id_MainStarTag],[ISDELETE],[id_PQT],[PriceModule],[PriceShow],[describtion]FROM[tlb_Product_MainProductConnector] Where [id_MProduct]=" + id);
-           
+
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new PricingModel()
                 {
-                    Id=Convert.ToInt32(dt.Rows[i]["id_MPC"]),
-                    MainTagId= Convert.ToInt32(dt.Rows[i]["id_MainStarTag"]),
-                    OffType= Convert.ToInt32(dt.Rows[i]["OffType"]),
-                    OffVal=long.Parse(dt.Rows[i]["offTypeValue"].ToString()),
+                    Id = Convert.ToInt32(dt.Rows[i]["id_MPC"]),
+                    MainTagId = Convert.ToInt32(dt.Rows[i]["id_MainStarTag"]),
+                    OffType = Convert.ToInt32(dt.Rows[i]["OffType"]),
+                    OffVal = long.Parse(dt.Rows[i]["offTypeValue"].ToString()),
                     PerQuantity = long.Parse(dt.Rows[i]["PricePerquantity"].ToString()),
                     PriceOff = long.Parse(dt.Rows[i]["PriceOff"].ToString()),
                     PriceModule = Convert.ToInt32(dt.Rows[i]["PriceModule"]),
                     PriceShow = Convert.ToInt32(dt.Rows[i]["PriceShow"]),
                     Quantity = Convert.ToInt32(dt.Rows[i]["Quantity"]),
                     QuantityType = Convert.ToInt32(dt.Rows[i]["id_PQT"])
-                    
-                };
 
-                if(dt.Rows[i]["ISDELETE"].ToString()=="1")
+                };
+                if (dt.Rows[i]["ISDELETE"].ToString() == "1")
                 {
                     model.IsDeleted = true;
                 }
@@ -614,11 +609,10 @@ namespace ShoppingCMS_V002.OtherClasses
                 {
                     model.IsDeleted = false;
                 }
-
                 List<string> attr = new List<string>();
                 string s = "";
-                DataTable dt1 = db.Select("SELECT B.SCOVValueName FROM [tbl_Product_connectorToMPC_SCOV] as A inner join [tbl_Product_SubCategoryOptionValue] as B On A.id_SCOV=B.id_SCOV WHERE A.id_MPC="+model.Id+" Group By(B.SCOVValueName)");
-                if(dt1.Rows.Count>0)
+                DataTable dt1 = db.Select("SELECT B.SCOVValueName FROM [tbl_Product_connectorToMPC_SCOV] as A inner join [tbl_Product_SubCategoryOptionValue] as B On A.id_SCOV=B.id_SCOV WHERE A.id_MPC=" + model.Id + " Group By(B.SCOVValueName)");
+                if (dt1.Rows.Count > 0)
                 {
                     for (int j = 0; j < dt1.Rows.Count; j++)
                     {
@@ -630,10 +624,10 @@ namespace ShoppingCMS_V002.OtherClasses
                 {
                     attr.Add("ندارد");
                 }
-                
+
                 model.Attributes = attr;
                 model.Description = s;
-                
+
                 List<int> tags = new List<int>();
 
                 DataTable dt2 = db.Select("SELECT [id_TE] FROM [tbl_Product_tagConnector] WHERE id_MPC=" + model.Id);
@@ -646,7 +640,7 @@ namespace ShoppingCMS_V002.OtherClasses
                         tags.Add(Convert.ToInt32(dt2.Rows[j]["id_TE"]));
 
                     }
-                
+
                 }
                 else
                 {
@@ -656,7 +650,7 @@ namespace ShoppingCMS_V002.OtherClasses
 
                 result.Add(model);
             }
-
+            db.DC();
             return result;
 
         }
@@ -667,23 +661,23 @@ namespace ShoppingCMS_V002.OtherClasses
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
             DataTable dt;
-            if (id==0)
+            if (id == 0)
             {
-                 dt = db.Select("SELECT A.id_SCOV, A.SCOVValueName , B.SCOKName FROM [tbl_Product_SubCategoryOptionValue]as A inner join [tbl_Product_SubCategoryOptionKey] as B On A.id_SCOK=B.id_SCOK Where B.ISDelete=0 AND B.ISDESABLED=0");
+                dt = db.Select("SELECT A.id_SCOV, A.SCOVValueName , B.SCOKName FROM [tbl_Product_SubCategoryOptionValue]as A inner join [tbl_Product_SubCategoryOptionKey] as B On A.id_SCOK=B.id_SCOK Where B.ISDelete=0 AND B.ISDESABLED=0");
 
             }
             else
             {
                 dt = db.Select("SELECT A.id_SCOV, A.SCOVValueName , B.SCOKName FROM [tbl_Product_SubCategoryOptionValue]as A inner join [tbl_Product_SubCategoryOptionKey] as B On A.id_SCOK=B.id_SCOK Where B.ISDelete=0 AND B.ISDESABLED=0 AND A.id_SCOK=" + id);
             }
-
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new TableModel()
                 {
-                    Num=i+1,
-                    Id=Convert.ToInt32( dt.Rows[i]["id_SCOV"]),
-                    Group1=dt.Rows[i]["SCOVValueName"].ToString(),
+                    Num = i + 1,
+                    Id = Convert.ToInt32(dt.Rows[i]["id_SCOV"]),
+                    Group1 = dt.Rows[i]["SCOVValueName"].ToString(),
                     Group2 = dt.Rows[i]["SCOKName"].ToString()
                 };
 
@@ -707,7 +701,7 @@ namespace ShoppingCMS_V002.OtherClasses
             {
                 dt = db.Select("SELECT [id_TE],[TE_name],B.SCName FROM [tbl_Product_TagEnums] as A inner join [tbl_Product_SubCategory] as B On A.SubCatId=B.id_SC WHERE B.ISDelete=0 AND B.ISDESABLED=0 AND A.SubCatId=" + SubId);
             }
-
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new TableModel()
@@ -728,9 +722,9 @@ namespace ShoppingCMS_V002.OtherClasses
             var result = new List<TableModel>();
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
-           
-              DataTable  dt = db.Select("SELECT [id_MainStarTag],[MST_Description],[MST_Name] FROM [tbl_Product_MainStarTags]");
 
+            DataTable dt = db.Select("SELECT [id_MainStarTag],[MST_Description],[MST_Name] FROM [tbl_Product_MainStarTags]");
+            db.DC();
 
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -752,18 +746,16 @@ namespace ShoppingCMS_V002.OtherClasses
             var result = new List<TreeModel>();
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
-
             DataTable Type = db.Select("SELECT [id_PT],[PTname],[ISDESABLED]FROM[tbl_Product_Type] where ISDelete=0");
-
-            for (int i = 0; i < Type.Rows.Count ; i++)
+            for (int i = 0; i < Type.Rows.Count; i++)
             {
                 var MainCat = new List<TreeModel>();
                 DataTable Mains = db.Select("SELECT [id_MC],[MCName],[ISDESABLED]FROM [tbl_Product_MainCategory] WHERE ISDelete=0 AND id_PT=" + Type.Rows[i]["id_PT"]);
-                for (int j = 0; j < Mains.Rows.Count ; j++)
+                for (int j = 0; j < Mains.Rows.Count; j++)
                 {
                     var SubCat = new List<TreeModel>();
                     DataTable Subs = db.Select("SELECT [id_SC],[SCName],[ISDESABLED] FROM [tbl_Product_SubCategory] WHERE ISDelete=0 AND id_MC=" + Mains.Rows[j]["id_MC"]);
-                    for (int k= 0; k < Subs.Rows.Count; k++)
+                    for (int k = 0; k < Subs.Rows.Count; k++)
                     {
                         var SubCatKey = new List<TreeModel>();
                         DataTable SubsK = db.Select("SELECT [id_SCOK],[SCOKName],[ISDESABLED] FROM [tbl_Product_SubCategoryOptionKey] where ISDelete=0 AND id_SC=" + Subs.Rows[k]["id_SC"]);
@@ -772,12 +764,12 @@ namespace ShoppingCMS_V002.OtherClasses
                             var SubCatKeyVal = new List<TreeModel>();
                             DataTable SubsKV = db.Select("SELECT [id_SCOV],[SCOVValueName] FROM [tbl_Product_SubCategoryOptionValue] where id_SCOK=" + SubsK.Rows[k1]["id_SCOK"]);
                             for (int k2 = 0; k2 < SubsKV.Rows.Count; k2++)
-                            { 
+                            {
                                 var M5 = new TreeModel()
                                 {
                                     Id = Convert.ToInt32(SubsKV.Rows[k2]["id_SCOV"]),
                                     NameSub = SubsKV.Rows[k2]["SCOVValueName"].ToString(),
-                                   IsActive=true
+                                    IsActive = true
                                 };
                                 SubCatKeyVal.Add(M5);
                             }
@@ -785,7 +777,7 @@ namespace ShoppingCMS_V002.OtherClasses
                             {
                                 Id = Convert.ToInt32(SubsK.Rows[k1]["id_SCOK"]),
                                 NameSub = SubsK.Rows[k1]["SCOKName"].ToString(),
-                                Subs=SubCatKeyVal
+                                Subs = SubCatKeyVal
                             };
                             if (SubsK.Rows[k1]["ISDESABLED"].ToString() == "1")
                             {
@@ -801,7 +793,7 @@ namespace ShoppingCMS_V002.OtherClasses
                         {
                             Id = Convert.ToInt32(Subs.Rows[k]["id_SC"]),
                             NameSub = Subs.Rows[k]["SCName"].ToString(),
-                            Subs= SubCatKey
+                            Subs = SubCatKey
                         };
                         if (Subs.Rows[k]["ISDESABLED"].ToString() == "1")
                         {
@@ -833,9 +825,9 @@ namespace ShoppingCMS_V002.OtherClasses
                 }
                 var M1 = new TreeModel()
                 {
-                    Id=Convert.ToInt32(Type.Rows[i]["id_PT"]),
-                    NameSub= Type.Rows[i]["PTname"].ToString(),
-                    Subs=MainCat
+                    Id = Convert.ToInt32(Type.Rows[i]["id_PT"]),
+                    NameSub = Type.Rows[i]["PTname"].ToString(),
+                    Subs = MainCat
                 };
                 if (Type.Rows[i]["ISDESABLED"].ToString() == "1")
                 {
@@ -847,31 +839,28 @@ namespace ShoppingCMS_V002.OtherClasses
                 }
                 result.Add(M1);
             }
-
+            db.DC();
             return result;
         }
 
         public UpdateProModel UpdateProFiller(int id)
         {
-            
+
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
             DataTable dt = db.Select("SELECT [id_MProduct],[Description],[Title],[Seo_Description],[Seo_KeyWords],[IS_AD],[Search_Gravity] FROM [tbl_Product] where id_MProduct=" + id);
-
-            var res = new UpdateProModel() 
+            var res = new UpdateProModel()
             {
-                Id=Convert.ToInt32(dt.Rows[0]["id_MProduct"]),
-                Title=dt.Rows[0]["Title"].ToString(),
-                Description=dt.Rows[0]["Description"].ToString(),
-                SEO_keyword= dt.Rows[0]["Seo_KeyWords"].ToString(),
-                SEO_Description= dt.Rows[0]["Seo_Description"].ToString(),
-                SearchGravity=Convert.ToInt32(dt.Rows[0]["Search_Gravity"]),
-                IsAd= dt.Rows[0]["IS_AD"].ToString()
+                Id = Convert.ToInt32(dt.Rows[0]["id_MProduct"]),
+                Title = dt.Rows[0]["Title"].ToString(),
+                Description = dt.Rows[0]["Description"].ToString(),
+                SEO_keyword = dt.Rows[0]["Seo_KeyWords"].ToString(),
+                SEO_Description = dt.Rows[0]["Seo_Description"].ToString(),
+                SearchGravity = Convert.ToInt32(dt.Rows[0]["Search_Gravity"]),
+                IsAd = dt.Rows[0]["IS_AD"].ToString()
             };
-
-            
-
-            DataTable dt2 = db.Select("SELECT [PicID] FROM [tbl_Product_PicConnector] where id_MProduct="+id);
+            DataTable dt2 = db.Select("SELECT [PicID] FROM [tbl_Product_PicConnector] where id_MProduct=" + id);
+            db.DC();
             string s = "";
             for (int i = 0; i < dt2.Rows.Count; i++)
             {
@@ -904,16 +893,16 @@ namespace ShoppingCMS_V002.OtherClasses
                     MList.Add(model);
                 }
 
-                var modelRes = new AdminTypeRoutesModel() 
+                var modelRes = new AdminTypeRoutesModel()
                 {
-                    CatId=Convert.ToInt32(dt.Rows[i]["CatId"]),
-                    CatName=dt.Rows[i]["R_CatName"].ToString(),
-                    RouteList=MList
+                    CatId = Convert.ToInt32(dt.Rows[i]["CatId"]),
+                    CatName = dt.Rows[i]["R_CatName"].ToString(),
+                    RouteList = MList
                 };
 
                 result.Add(modelRes);
             }
-
+            db.DC();
 
             return result;
         }
@@ -924,7 +913,6 @@ namespace ShoppingCMS_V002.OtherClasses
 
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
-
             DataTable dt = db.Select("SELECT [CatId],[R_CatName] FROM [tbl_ADMIN_ruleRoutes_Category]");
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -947,13 +935,13 @@ namespace ShoppingCMS_V002.OtherClasses
                     CatName = dt.Rows[i]["R_CatName"].ToString(),
                     RouteList = MList
                 };
-                if(MList.Count!=0)
+                if (MList.Count != 0)
                 {
                     res.Add(modelRes);
                 }
-                
-            }
 
+            }
+            db.DC();
             return res;
         }
 
@@ -968,50 +956,53 @@ namespace ShoppingCMS_V002.OtherClasses
             for (int i = 0; i < dt1.Rows.Count; i++)
             {
                 DataTable dt2 = db.Select("SELECT [rulerouteID]FROM [tbl_ADMIN_types_ruleRoute_Connection] where HasAccess=1 and [ad_typeID]=" + dt1.Rows[i]["ad_typeID"]);
-                StringBuilder s= new StringBuilder();
+                StringBuilder s = new StringBuilder();
                 for (int j = 0; j < dt2.Rows.Count; j++)
                 {
                     s.Append(dt2.Rows[j]["rulerouteID"]);
                     s.Append(",");
                 }
 
-                var model = new AdminTypeTbl_Model() {
+                var model = new AdminTypeTbl_Model()
+                {
                     TypeId = Convert.ToInt32(dt1.Rows[i]["ad_typeID"]),
-                    AT_Name= dt1.Rows[i]["ad_type_name"].ToString(),
-                    EditString=s.ToString(),
-                    Num=i+1
+                    AT_Name = dt1.Rows[i]["ad_type_name"].ToString(),
+                    EditString = s.ToString(),
+                    Num = i + 1
                 };
                 res.Add(model);
             }
 
-
+            db.DC();
             return res;
         }
-    
+
         public string Add_Update_AdType_(string ActToDo, string Ad_Name, string Routes, int id = 0)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
 
-            if(ActToDo=="insert")
+            if (ActToDo == "insert")
             {
-                string Ad_id_ = db.Script("INSERT INTO [tbl_ADMIN_types] output inserted.ad_typeID VALUES(N'"+Ad_Name+"')");
+                string Ad_id_ = db.Script("INSERT INTO [tbl_ADMIN_types] output inserted.ad_typeID VALUES(N'" + Ad_Name + "')");
                 var ids = Routes.Split(',');
                 for (int i = 0; i < ids.Length; i++)
                 {
-                    db.Script("INSERT INTO [tbl_ADMIN_types_ruleRoute_Connection] VALUES("+ Ad_id_ + ","+ids[i]+",1)");
+                    db.Script("INSERT INTO [tbl_ADMIN_types_ruleRoute_Connection] VALUES(" + Ad_id_ + "," + ids[i] + ",1)");
                 }
+                db.DC();
 
             }
-            else if(ActToDo== "update")
+            else if (ActToDo == "update")
             {
-                db.Script("UPDATE[tbl_ADMIN_types] SET [ad_type_name] =N'" + Ad_Name + "' WHERE ad_typeID="+id);
+                db.Script("UPDATE[tbl_ADMIN_types] SET [ad_type_name] =N'" + Ad_Name + "' WHERE ad_typeID=" + id);
                 db.Script("DELETE FROM [tbl_ADMIN_types_ruleRoute_Connection] WHERE ad_typeID=" + id);
                 var ids = Routes.Split(',');
                 for (int i = 0; i < ids.Length; i++)
                 {
                     db.Script("INSERT INTO [tbl_ADMIN_types_ruleRoute_Connection] VALUES(" + id + "," + ids[i] + ",1)");
                 }
+                db.DC();
             }
             return "success";
         }
@@ -1023,11 +1014,12 @@ namespace ShoppingCMS_V002.OtherClasses
             db.Connect();
 
             DataTable dt = db.Select("SELECT [ad_typeID],[ad_type_name] FROM [tbl_ADMIN_types]");
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new Id_ValueModel()
                 {
-                    Id= Convert.ToInt32(dt.Rows[i]["ad_typeID"]),
+                    Id = Convert.ToInt32(dt.Rows[i]["ad_typeID"]),
                     Value = dt.Rows[i]["ad_type_name"].ToString()
                 };
                 res.Add(model);
@@ -1037,29 +1029,28 @@ namespace ShoppingCMS_V002.OtherClasses
         }
 
         public List<AdminModel> Admins()
-        { 
+        {
             var res = new List<AdminModel>();
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
-
             DataTable dt = db.Select("SELECT [id_Admin] ,(SELECT top 1 [ad_type_name] FROM [tbl_ADMIN_types] where ad_typeID=[ad_typeID]) as AdType ,[ad_firstname]+' '+[ad_lastname] as [name],[ad_avatarprofile],[ad_email],[ad_mobile],[ad_isActive],[ad_isDelete],[ad_lastseen] FROM [tbl_ADMIN_main]");
-
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                
+
                 var model = new AdminModel()
                 {
-                    Id=Convert.ToInt32(dt.Rows[i]["id_Admin"]),
-                    AdminType= dt.Rows[i]["AdType"].ToString(),
-                    Email= dt.Rows[i]["ad_email"].ToString(),
-                    IsActive= Convert.ToInt32(dt.Rows[i]["ad_isActive"]),
-                    IsDeleted= Convert.ToInt32(dt.Rows[i]["ad_isDelete"]),
-                    Name= dt.Rows[i]["name"].ToString(),
-                    Phone= dt.Rows[i]["ad_mobile"].ToString(),
-                    Pic= AppendServername(dt.Rows[i]["ad_avatarprofile"].ToString())
+                    Id = Convert.ToInt32(dt.Rows[i]["id_Admin"]),
+                    AdminType = dt.Rows[i]["AdType"].ToString(),
+                    Email = dt.Rows[i]["ad_email"].ToString(),
+                    IsActive = Convert.ToInt32(dt.Rows[i]["ad_isActive"]),
+                    IsDeleted = Convert.ToInt32(dt.Rows[i]["ad_isDelete"]),
+                    Name = dt.Rows[i]["name"].ToString(),
+                    Phone = dt.Rows[i]["ad_mobile"].ToString(),
+                    Pic = AppendServername(dt.Rows[i]["ad_avatarprofile"].ToString())
                 };
 
-                if(dt.Rows[i]["ad_lastseen"].ToString()!="")
+                if (dt.Rows[i]["ad_lastseen"].ToString() != "")
                 {
                     DateTime date = Convert.ToDateTime(dt.Rows[i]["ad_lastseen"]);
                     PersianDateTime persianDateTime = new PersianDateTime(date);
@@ -1083,7 +1074,8 @@ namespace ShoppingCMS_V002.OtherClasses
                         model.LastSeen = dateTest.Days.ToString();
                         model.LastSeenQuantity = 3;
                     }
-                }else
+                }
+                else
                 {
                     model.LastSeen = "";
                     model.LastSeenQuantity = 0;
@@ -1100,10 +1092,11 @@ namespace ShoppingCMS_V002.OtherClasses
             var res = new List<FactorModel>();
             PDBC db = new PDBC("PandaMarketCMS", true);
             string query = "";
-            if(act=="all")
+            if (act == "all")
             {
                 query = "SELECT [Factor_Id],(SELECT [C_FirstName]+' '+[C_LastNAme] FROM [tbl_Customer_Main] WHERE id_Customer=[Customer_Id])as CustomerName ,[date],[toality],[deposit_price],(SELECT COUNT(*) FROM [tbl_FACTOR_Items] WHERE FactorId=[Factor_Id])as number,(SELECT top 1 [MoneyTypeName] FROM [tbl_Product_MoneyType] as A inner join [tlb_Product_MainProductConnector]as B on A.MoneyId=B.[PriceModule] inner join [tbl_FACTOR_Items] as C on B.id_MPC=C.Pro_Id WHERE C.FactorId=[Factor_Id])AS priceQuantity ,[Done] ,[IsDeleted]  FROM [tbl_FACTOR_Main]";
-            }else if(act=="!Done")
+            }
+            else if (act == "!Done")
             {
                 query = "SELECT [Factor_Id],(SELECT [C_FirstName]+' '+[C_LastNAme] FROM [tbl_Customer_Main] WHERE id_Customer=[Customer_Id])as CustomerName ,[date],[toality],[deposit_price],(SELECT COUNT(*) FROM [tbl_FACTOR_Items] WHERE FactorId=[Factor_Id])as number,(SELECT top 1 [MoneyTypeName] FROM [tbl_Product_MoneyType] as A inner join [tlb_Product_MainProductConnector]as B on A.MoneyId=B.[PriceModule] inner join [tbl_FACTOR_Items] as C on B.id_MPC=C.Pro_Id WHERE C.FactorId=[Factor_Id])AS priceQuantity ,[Done] ,[IsDeleted]  FROM [tbl_FACTOR_Main] where [Done]=0 ";
             }
@@ -1112,22 +1105,22 @@ namespace ShoppingCMS_V002.OtherClasses
             db.Connect();
 
             DataTable dt = db.Select(query);
-
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 DateTime date = Convert.ToDateTime(dt.Rows[i]["date"]);
                 PersianDateTime persianDateTime = new PersianDateTime(date);
                 var model = new FactorModel()
                 {
-                    Id=Convert.ToInt32(dt.Rows[i]["Factor_Id"]),
-                    totality=dt.Rows[i]["toality"].ToString(),
-                    CustomerName= dt.Rows[i]["CustomerName"].ToString(),
-                    deposit= dt.Rows[i]["deposit_price"].ToString(),
-                    ItmNumbers=Convert.ToInt32(dt.Rows[i]["number"]),
-                    priceQuantity= dt.Rows[i]["priceQuantity"].ToString(),
-                    Date=persianDateTime.ToShortDateTimeString(),
-                    status= Convert.ToInt32(dt.Rows[i]["Done"]),
-                    IsDeleted= Convert.ToInt32(dt.Rows[i]["IsDeleted"])
+                    Id = Convert.ToInt32(dt.Rows[i]["Factor_Id"]),
+                    totality = dt.Rows[i]["toality"].ToString(),
+                    CustomerName = dt.Rows[i]["CustomerName"].ToString(),
+                    deposit = dt.Rows[i]["deposit_price"].ToString(),
+                    ItmNumbers = Convert.ToInt32(dt.Rows[i]["number"]),
+                    priceQuantity = dt.Rows[i]["priceQuantity"].ToString(),
+                    Date = persianDateTime.ToShortDateTimeString(),
+                    status = Convert.ToInt32(dt.Rows[i]["Done"]),
+                    IsDeleted = Convert.ToInt32(dt.Rows[i]["IsDeleted"])
                 };
 
                 res.Add(model);
@@ -1138,7 +1131,7 @@ namespace ShoppingCMS_V002.OtherClasses
 
         public FactorDetailModel FactorDetailePage(int id)
         {
-           
+
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
 
@@ -1150,35 +1143,36 @@ namespace ShoppingCMS_V002.OtherClasses
             {
                 var model = new FactorItemModel()
                 {
-                    Id=Convert.ToInt32(ItemsDt.Rows[i]["ItemId"]),
-                    Num=i+1,
-                    offType=Convert.ToInt32(ItemsDt.Rows[i]["OffType"]),
-                   perPrice=long.Parse(ItemsDt.Rows[i]["PriceXquantity"].ToString()),
-                   Numbers=Convert.ToInt32(ItemsDt.Rows[i]["number"]),
-                   OffValue=long.Parse(ItemsDt.Rows[i]["OffTypeValue"].ToString()),
-                   Title= ItemsDt.Rows[i]["ProTitle"].ToString(),
-                   perPrice_off=long.Parse(ItemsDt.Rows[i]["PriceOff"].ToString())
+                    Id = Convert.ToInt32(ItemsDt.Rows[i]["ItemId"]),
+                    Num = i + 1,
+                    offType = Convert.ToInt32(ItemsDt.Rows[i]["OffType"]),
+                    perPrice = long.Parse(ItemsDt.Rows[i]["PriceXquantity"].ToString()),
+                    Numbers = Convert.ToInt32(ItemsDt.Rows[i]["number"]),
+                    OffValue = long.Parse(ItemsDt.Rows[i]["OffTypeValue"].ToString()),
+                    Title = ItemsDt.Rows[i]["ProTitle"].ToString(),
+                    perPrice_off = long.Parse(ItemsDt.Rows[i]["PriceOff"].ToString())
                 };
 
                 model.allPrice = model.Numbers * model.perPrice;
                 model.allPrice_Off = model.Numbers * model.perPrice_off;
 
-                DataTable dt2 = db.Select("SELECT B.SCOVValueName FROM [tbl_Product_connectorToMPC_SCOV] as A inner join [tbl_Product_SubCategoryOptionValue] as B on A.id_SCOV=B.id_SCOV WHERE A.id_MPC="+ItemsDt.Rows[i]["Pro_Id"]);
+                DataTable dt2 = db.Select("SELECT B.SCOVValueName FROM [tbl_Product_connectorToMPC_SCOV] as A inner join [tbl_Product_SubCategoryOptionValue] as B on A.id_SCOV=B.id_SCOV WHERE A.id_MPC=" + ItemsDt.Rows[i]["Pro_Id"]);
                 string s = "";
                 for (int j = 0; j < dt2.Rows.Count; j++)
                 {
                     s += dt2.Rows[j]["SCOVValueName"];
-                    if(j!=dt2.Rows.Count-1)
+                    if (j != dt2.Rows.Count - 1)
                     {
                         s += ",";
                     }
                 }
                 model.Discription = s;
-                
+
                 items.Add(model);
             }
+            db.DC();
             FactorDetailModel res;
-            if(dt.Rows.Count!=0)
+            if (dt.Rows.Count != 0)
             {
                 DateTime date = Convert.ToDateTime(dt.Rows[0]["date"]);
                 PersianDateTime persianDateTime = new PersianDateTime(date);
@@ -1189,26 +1183,27 @@ namespace ShoppingCMS_V002.OtherClasses
                     CustomerName = dt.Rows[0]["C_Name"].ToString(),
                     CustomerPhoneNumber = dt.Rows[0]["C_Mobile"].ToString(),
                     deposit = long.Parse(dt.Rows[0]["deposit_price"].ToString()),
-                    OffCode= dt.Rows[0]["Off_Code"].ToString(),
-                    priceQuantity= dt.Rows[0]["priceQuantity"].ToString(),
-                    ProductItems=items,
-                    totality=long.Parse(dt.Rows[0]["toality"].ToString()),
-                    Date=persianDateTime.ToShortDateString()
+                    OffCode = dt.Rows[0]["Off_Code"].ToString(),
+                    priceQuantity = dt.Rows[0]["priceQuantity"].ToString(),
+                    ProductItems = items,
+                    totality = long.Parse(dt.Rows[0]["toality"].ToString()),
+                    Date = persianDateTime.ToShortDateString()
                 };
 
-            }else
+            }
+            else
             {
                 res = new FactorDetailModel();
             }
             return res;
         }
 
-        public List<TableModel> Pro_SaleList(string GP,int Id)
+        public List<TableModel> Pro_SaleList(string GP, int Id)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
             var res = new List<TableModel>();
-            if (GP=="همه")
+            if (GP == "همه")
             {
                 DataTable dt = db.Select("SELECT (SELECT Top 1 SUM((SELECT Top 1 SUM((SELECT top 1 [PriceOff] FROM [tbl_Product_PastProductHistory] where id_MPC=[Pro_Id])* number) Over(Order by Done) FROM [tbl_FACTOR_Items] as A inner join [tbl_FACTOR_Main] as B on A.FactorId=B.Factor_Id where B.Done=1 AND A.Pro_Id= D.id_MPC))over (Order by D.id_MPC) as [All] FROM [tbl_Product] as C inner join [tlb_Product_MainProductConnector] as D on C.id_MProduct=D.id_MProduct where C.id_MProduct=main.[id_MProduct] order by ([All])DESC) as [All],[Title],[Description],[id_MProduct] FROM [tbl_Product] As main order by ([All])DESC");
 
@@ -1216,26 +1211,27 @@ namespace ShoppingCMS_V002.OtherClasses
                 {
                     var model = new TableModel()
                     {
-                        Id=Convert.ToInt32(dt.Rows[i]["id_MProduct"]),
-                        Group3=dt.Rows[i]["All"].ToString(),
-                        Group1=dt.Rows[i]["Title"].ToString(),
+                        Id = Convert.ToInt32(dt.Rows[i]["id_MProduct"]),
+                        Group3 = dt.Rows[i]["All"].ToString(),
+                        Group1 = dt.Rows[i]["Title"].ToString(),
                         Group2 = dt.Rows[i]["Description"].ToString(),
-                        Num=1
+                        Num = 1
                     };
                     res.Add(model);
                 }
 
 
 
-            }else
+            }
+            else
             {
-                DataTable dt = db.Select("SELECT id_MPC, (SELECT Top 1 SUM((SELECT top 1 [PriceOff] FROM [tbl_Product_PastProductHistory] where id_MPC=[Pro_Id])* number) Over(Order by Done) FROM [tbl_FACTOR_Items] as A inner join [tbl_FACTOR_Main] as B on A.FactorId=B.Factor_Id where B.Done=1 AND A.Pro_Id= id_MPC) as [All] FROM [tlb_Product_MainProductConnector] where id_MProduct="+Id+" order by ([All])DESC");
+                DataTable dt = db.Select("SELECT id_MPC, (SELECT Top 1 SUM((SELECT top 1 [PriceOff] FROM [tbl_Product_PastProductHistory] where id_MPC=[Pro_Id])* number) Over(Order by Done) FROM [tbl_FACTOR_Items] as A inner join [tbl_FACTOR_Main] as B on A.FactorId=B.Factor_Id where B.Done=1 AND A.Pro_Id= id_MPC) as [All] FROM [tlb_Product_MainProductConnector] where id_MProduct=" + Id + " order by ([All])DESC");
 
                 DataTable dt3 = db.Select("SELECT [Title] FROM [tbl_Product] WHERE [id_MProduct]=" + Id);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataTable dt2 = db.Select("SELECT B.SCOVValueName FROM [tbl_Product_connectorToMPC_SCOV] as A inner join [tbl_Product_SubCategoryOptionValue] as B on A.id_SCOV=B.id_SCOV WHERE A.id_MPC=" + dt.Rows[i]["id_MPC"]);
-                   
+
                     string s = "";
                     for (int j = 0; j < dt2.Rows.Count; j++)
                     {
@@ -1251,32 +1247,33 @@ namespace ShoppingCMS_V002.OtherClasses
                         Id = Convert.ToInt32(dt.Rows[i]["id_MPC"]),
                         Group3 = dt.Rows[i]["All"].ToString(),
                         Group1 = dt3.Rows[0]["Title"].ToString(),
-                        Group2=s
+                        Group2 = s
                     };
                     res.Add(model);
                 }
 
             }
-
+            db.DC();
             return res;
         }
 
         public List<CustomerModel> Customers()
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
             var res = new List<CustomerModel>();
 
+            db.Connect();
             DataTable dt = db.Select("SELECT [id_Customer],[C_Mobile],[C_FirstName] +' '+[C_LastNAme] as C_Name,[C_Description],[C_ISActivate] FROM [tbl_Customer_Main]");
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new CustomerModel()
                 {
-                    Id=Convert.ToInt32(dt.Rows[i]["id_Customer"]),
-                    Name=dt.Rows[i]["C_Name"].ToString(),
-                    Discription=dt.Rows[i]["C_Description"].ToString(),
-                    Phone= dt.Rows[i]["C_Mobile"].ToString(),
-                    IsActive=Convert.ToInt32(dt.Rows[i]["C_ISActivate"])
+                    Id = Convert.ToInt32(dt.Rows[i]["id_Customer"]),
+                    Name = dt.Rows[i]["C_Name"].ToString(),
+                    Discription = dt.Rows[i]["C_Description"].ToString(),
+                    Phone = dt.Rows[i]["C_Mobile"].ToString(),
+                    IsActive = Convert.ToInt32(dt.Rows[i]["C_ISActivate"])
                 };
                 res.Add(model);
             }
@@ -1287,25 +1284,27 @@ namespace ShoppingCMS_V002.OtherClasses
         public CustomerDitaile customerDitail(int id)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
             var AddresList = new List<AddressModel>();
-            DataTable dt1 = db.Select("SELECT DISTINCT  B.Ostan_name +' , '+B.Shahr_Name as city ,[C_AddressHint],[C_FullAddress] FROM [tbl_Customer_Address] as A inner join [tbl_Enum_Shahr] as B on A.ID_Shahr=B.ID_Shahr where A.id_Customer="+id);
+            db.Connect();
+            DataTable dt1 = db.Select("SELECT DISTINCT  B.Ostan_name +' , '+B.Shahr_Name as city ,[C_AddressHint],[C_FullAddress] FROM [tbl_Customer_Address] as A inner join [tbl_Enum_Shahr] as B on A.ID_Shahr=B.ID_Shahr where A.id_Customer=" + id);
+
             for (int i = 0; i < dt1.Rows.Count; i++)
             {
                 var model = new AddressModel()
                 {
-                    
-                    City=dt1.Rows[i]["city"].ToString(),
-                    FullAddress= dt1.Rows[i]["C_FullAddress"].ToString(),
-                    HintAddress= dt1.Rows[i]["C_AddressHint"].ToString()
+
+                    City = dt1.Rows[i]["city"].ToString(),
+                    FullAddress = dt1.Rows[i]["C_FullAddress"].ToString(),
+                    HintAddress = dt1.Rows[i]["C_AddressHint"].ToString()
                 };
                 AddresList.Add(model);
             }
 
-            DataTable dt = db.Select("SELECT [id_Customer],[C_regDate],[C_Mobile],[C_FirstName],[C_LastNAme],[C_Description] FROM [tbl_Customer_Main]where id_Customer="+id);
+            DataTable dt = db.Select("SELECT [id_Customer],[C_regDate],[C_Mobile],[C_FirstName],[C_LastNAme],[C_Description] FROM [tbl_Customer_Main]where id_Customer=" + id);
+            db.DC();
             var res = new CustomerDitaile();
 
-            if(dt.Rows.Count!=0)
+            if (dt.Rows.Count != 0)
             {
                 DateTime date = Convert.ToDateTime(dt.Rows[0]["C_regDate"]);
                 PersianDateTime persianDateTime = new PersianDateTime(date);
@@ -1317,7 +1316,7 @@ namespace ShoppingCMS_V002.OtherClasses
                 res.registerDate = persianDateTime.ToShortDateString();
                 res.Addresses = AddresList;
             }
-           
+
 
             return res;
         }
@@ -1325,18 +1324,18 @@ namespace ShoppingCMS_V002.OtherClasses
         public List<TableModel> Customer_Buy()
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
             var res = new List<TableModel>();
 
+            db.Connect();
             DataTable dt = db.Select("SELECT DISTINCT Customer_Id,(SELECT [C_FirstName]+' '+[C_LastNAme] FROM [tbl_Customer_Main] where id_Customer=[Customer_Id]) as C_Name ,SUM([deposit_price]) OVER (PARTITION BY [Customer_Id]) as Price FROM [tbl_FACTOR_Main] where Done=1 order by(Price)DESC");
-
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var model = new TableModel()
                 {
-                    Id=Convert.ToInt32(dt.Rows[i]["Customer_Id"]),
-                    Group1= dt.Rows[i]["C_Name"].ToString(),
-                    Group2= dt.Rows[i]["Price"].ToString()
+                    Id = Convert.ToInt32(dt.Rows[i]["Customer_Id"]),
+                    Group1 = dt.Rows[i]["C_Name"].ToString(),
+                    Group2 = dt.Rows[i]["Price"].ToString()
                 };
 
                 res.Add(model);

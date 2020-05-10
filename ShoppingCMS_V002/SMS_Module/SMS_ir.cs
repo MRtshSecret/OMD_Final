@@ -108,7 +108,7 @@ namespace ShoppingCMS_V002.SMS_Module
                                                         parss);
                                                     if (RESult == "1")
                                                     {
-
+                                                        db.DC();
                                                         return new SMS_ir_Status()
                                                         {
                                                             StatusCode = "smsX:200OK",
@@ -119,6 +119,7 @@ namespace ShoppingCMS_V002.SMS_Module
                                                     }
                                                     else
                                                     {
+                                                        db.DC();
                                                         return new SMS_ir_Status()
                                                         {
                                                             StatusCode = "smsX:407",
@@ -130,6 +131,7 @@ namespace ShoppingCMS_V002.SMS_Module
                                                 }
                                                 else
                                                 {
+                                                    db.DC();
                                                     return new SMS_ir_Status()
                                                     {
                                                         StatusCode = "smsX:406",
@@ -142,6 +144,7 @@ namespace ShoppingCMS_V002.SMS_Module
                                             }
                                             else
                                             {
+                                                db.DC();
                                                 return new SMS_ir_Status()
                                                 {
                                                     StatusCode = "smsX:405",
@@ -155,6 +158,7 @@ namespace ShoppingCMS_V002.SMS_Module
                                     }
                                     else
                                     {
+                                        db.DC();
                                         return new SMS_ir_Status()
                                         {
                                             StatusCode = "smsX:404",
@@ -167,6 +171,7 @@ namespace ShoppingCMS_V002.SMS_Module
                             }
                             else
                             {
+                                db.DC();
                                 return new SMS_ir_Status()
                                 {
                                     StatusCode = "smsX:403",
@@ -178,6 +183,7 @@ namespace ShoppingCMS_V002.SMS_Module
                         }
                         else
                         {
+                            db.DC();
                             return new SMS_ir_Status()
                             {
                                 StatusCode = "smsX:402",
@@ -190,6 +196,7 @@ namespace ShoppingCMS_V002.SMS_Module
                 }
                 else
                 {
+                    db.DC();
                     return new SMS_ir_Status()
                     {
                         StatusCode = "smsX:401",

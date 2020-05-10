@@ -13,7 +13,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
         public List<tbl_BLOG> BLOG(string NamePage, string Valuepage)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
+
 
             List<tbl_BLOG> List_BLG = new List<tbl_BLOG>();
             string query = "";
@@ -48,10 +48,10 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 query = BLOG_Tags(Valuepage, true)[0].name;
             }
 
-
+            db.Connect();
             using (DataTable dt = db.Select(query))
             {
-
+                db.DC();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
 
@@ -77,17 +77,17 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
         {
             List<tbl_BLOG> List_BLG = new List<tbl_BLOG>();
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
 
             string query = "SELECT distinct [PostId],[PicSizeType],[PicAddress],[PicThumbnailAddress]";
             query += "FROM [tbl_ADMIN_UploadStructure_ImageAddress]inner join [tbl_BLOG_Pic_Connector]";
             query += " on [tbl_BLOG_Pic_Connector].PicId =[tbl_ADMIN_UploadStructure_ImageAddress].PicID ";
             query += $" where PostId ={id}";
 
+            db.Connect();
 
             using (DataTable dt = db.Select(query))
             {
-
+                db.DC();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     tbl_BLOG BLG = new tbl_BLOG();
@@ -105,7 +105,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
         {
             List<tbl_BLOG> List_BLG = new List<tbl_BLOG>();
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
+
             string query;
 
             if (IsVal)
@@ -119,10 +119,10 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 query += " where [tbl_BLOG_Post].[Is_Deleted]  like 0 AND [tbl_BLOG_Post].[Is_Disabled] like 0  ";
                 query += " And [tbl_BLOG_Categories].[Is_Deleted]  like 0 AND [tbl_BLOG_Categories].[Is_Disabled] like 0  ";
                 query += " And[name] = N'" + Valuepage + "'order by[Date] desc";
-
+                db.Connect();
                 using (DataTable dt = db.Select(query))
                 {
-
+                    db.DC();
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         tbl_BLOG BLG = new tbl_BLOG();
@@ -148,10 +148,10 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 query += " FROM  [tbl_BLOG_Post]where [Cat_Id] = [tbl_BLOG_Categories].[Id])as 'count'";
                 query += " FROM  [tbl_BLOG_Categories]";
                 query += " where [Is_Deleted]  like 0 AND  [Is_Disabled] like 0 order by id desc ";
-
+                db.Connect();
                 using (DataTable dt = db.Select(query))
                 {
-
+                    db.DC();
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         tbl_BLOG BLG = new tbl_BLOG();
@@ -169,7 +169,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
         {
             List<tbl_BLOG> List_BLG = new List<tbl_BLOG>();
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
+
             string query;
 
 
@@ -203,9 +203,10 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                     query = " SELECT [Name] ";
                     query += " FROM  [tbl_BLOG_Tags] ";
                     query += " where [Is_Deleted]  like 0 AND  [Is_Disabled] like 0 order by id desc ";
+                    db.Connect();
                     using (DataTable dt = db.Select(query))
                     {
-
+                        db.DC();
                         for (int i = 0; i < dt.Rows.Count; i++)
                         {
                             tbl_BLOG BLG = new tbl_BLOG();
@@ -222,9 +223,10 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                     query = " SELECT top 10 [Name] ";
                     query += " FROM  [tbl_BLOG_Tags] ";
                     query += " where [Is_Deleted]  like 0 AND  [Is_Disabled] like 0 order by id desc ";
+                    db.Connect();
                     using (DataTable dt = db.Select(query))
                     {
-
+                        db.DC();
                         for (int i = 0; i < dt.Rows.Count; i++)
                         {
                             tbl_BLOG BLG = new tbl_BLOG();
@@ -242,7 +244,7 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
         public List<tbl_BLOG> TabS(string Value)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
+
 
             List<tbl_BLOG> List_BLG = new List<tbl_BLOG>();
             string query = "";
@@ -269,10 +271,10 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 query += "  HAVING COUNT([PostId]) > 5 order by count([PostId]) desc";
             }
 
-
+            db.Connect();
             using (DataTable dt = db.Select(query))
             {
-
+                db.DC();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
 
@@ -300,8 +302,6 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
         public tbl_BLOG BLOGPOST(string id)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
-
             string query = "";
             query += " SELECT  [tbl_BLOG_Post].[Id], [Title],[Text_min],[Text],[Date]  ,[name] as'Cat_Id' ";
             query += " ,(SELECT [ad_firstname]FROM  [tbl_ADMIN_main] where[id_Admin]= [tbl_BLOG_Post].[WrittenBy_AdminId]) as'firstname'";
@@ -313,12 +313,9 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
             query += " And  [tbl_BLOG_Categories].[Is_Deleted]  like 0 AND   [tbl_BLOG_Categories].[Is_Disabled] like 0";
             query += " And [tbl_BLOG_Post].[Id]=" + id;
 
-            /*
-                 
-              
-             */
+            db.Connect();
             DataTable dt = db.Select(query);
-
+            db.DC();
             var tbg = new tbl_BLOG
             {
                 Id = Convert.ToInt32(dt.Rows[0]["Id"]),
@@ -339,15 +336,15 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
         private List<tbl_BLOG> list_comm(string id)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
+            
 
             List<tbl_BLOG> List_BLG = new List<tbl_BLOG>();
             string query = "SELECT [Id],[message],[Name],[PostId],[ImagePath],[Date]";
             query += "FROM [tbl_BLOG_Comment] where[PostId] = " + id + "order by Id desc";
 
-
+db.Connect();
             DataTable dt = db.Select(query);
-
+            db.DC();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
 

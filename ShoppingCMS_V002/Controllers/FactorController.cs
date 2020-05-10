@@ -40,7 +40,7 @@ namespace ShoppingCMS_V002.Controllers
                 ///userType --> 1=Admin  ,0=user
                     db.Script("UPDATE [dbo].[tbl_FACTOR_Main] SET [IsDeleted] = 1 ,[delete_by_Id] = 1 ,[delete_UserType] = 2 WHERE Factor_Id=" + id);
                 }
-                
+                db.DC();
                 return Content("Success");
             }
             else
@@ -107,7 +107,8 @@ namespace ShoppingCMS_V002.Controllers
             {
                 db.Script("UPDATE [tbl_Customer_Main] SET [C_ISActivate] = 0 WHERE id_Customer=" + id);
             }
-            return Content("Success");
+            db.DC();
+                return Content("Success");
             }
             else
                 return Content("NotAccess");

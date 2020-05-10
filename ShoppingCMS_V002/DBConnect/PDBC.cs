@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
+using System.IO;
+using MD.PersianDateTime;
 
 
 namespace ShoppingCMS_V002.DBConnect
@@ -27,6 +30,41 @@ namespace ShoppingCMS_V002.DBConnect
                 connection.Open();
                 _IsConnectionOpen = true;
             }
+            catch(Exception ex)
+            {
+                PublishError(ex, "Connect");
+            }
+        }
+
+        private void PublishError(Exception ex,string FromWhere)
+        {
+            try
+            {
+                if (Directory.Exists(System.Web.HttpContext.Current.Server.MapPath("~/ErrorLogs")))
+                {
+                    if (Directory.Exists(System.Web.HttpContext.Current.Server.MapPath("~/ErrorLogs/DatabaseExceptions")))
+                    {
+                        string excep = $"Exception : {ex.ToString()}/nConnectionString : {_ConnectionString}";
+
+                        File.WriteAllText(System.Web.HttpContext.Current.Server.MapPath($"~/ErrorLogs/DatabaseExceptions/ErrorOn({FromWhere})-{PersianDateTime.Now.Year}-{PersianDateTime.Now.Month}-{PersianDateTime.Now.Day}-({PersianDateTime.Now.Hour} {PersianDateTime.Now.Minute} {PersianDateTime.Now.Second}).Panda"), excep);
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/ErrorLogs/DatabaseExceptions"));
+                        string excep = $"Exception : {ex.ToString()}/nConnectionString : {_ConnectionString}";
+
+                        File.WriteAllText(System.Web.HttpContext.Current.Server.MapPath($"~/ErrorLogs/DatabaseExceptions/ErrorOn({FromWhere})-{PersianDateTime.Now.Year}-{PersianDateTime.Now.Month}-{PersianDateTime.Now.Day}-{PersianDateTime.Now.Hour} {PersianDateTime.Now.Minute} {PersianDateTime.Now.Second}.Panda"), excep);
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/ErrorLogs"));
+                    Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath("~/ErrorLogs/DatabaseExceptions"));
+                    string excep = $"Exception : {ex.ToString()}/nConnectionString : {_ConnectionString}";
+
+                    File.WriteAllText(System.Web.HttpContext.Current.Server.MapPath($"~/ErrorLogs/DatabaseExceptions/ErrorOn({FromWhere})-{PersianDateTime.Now.Year}-{PersianDateTime.Now.Month}-{PersianDateTime.Now.Day}-{PersianDateTime.Now.Hour} {PersianDateTime.Now.Minute} {PersianDateTime.Now.Second}.Panda"), excep);
+                }
+            }
             catch { }
         }
         public void DC()
@@ -36,7 +74,10 @@ namespace ShoppingCMS_V002.DBConnect
                 connection.Close();
                 _IsConnectionOpen = false;
             }
-            catch { }
+            catch (Exception ex)
+            {
+                PublishError(ex, "DC");
+            }
         }
         /// <summary>
         /// Exception Object To show What Happened !
@@ -91,6 +132,12 @@ namespace ShoppingCMS_V002.DBConnect
         /// <returns></returns>
         public string Script(string Query, List<ExcParameters> SafeParameterInsert = null)
         {
+            bool ConnectionChanged = false;
+            if (!_IsConnectionOpen)
+            {
+                Connect();
+                ConnectionChanged = true;
+            }
             if (_IsConnectionOpen)
             {
                 try
@@ -105,30 +152,65 @@ namespace ShoppingCMS_V002.DBConnect
                         }
                         object result = cmd.ExecuteScalar();
                         if (result == null)
+                        {
+                            if (ConnectionChanged)
+                            {
+                                DC();
+                            }
                             return "1";
+                        }
                         else
+                        {
+                            if (ConnectionChanged)
+                            {
+                                DC();
+                            }
                             return result.ToString();
+                        }
                     }
                     else
                     {
                         object result = cmd.ExecuteScalar();
                         if (result == null)
+                        {
+                            if (ConnectionChanged)
+                            {
+                                DC();
+                            }
                             return "1";
+                        }
                         else
+                        {
+                            if (ConnectionChanged)
+                            {
+                                DC();
+                            }
                             return result.ToString();
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     _EXCReporter = ex;
+                    if (ConnectionChanged)
+                    {
+                        DC();
+                    }
                     return ex.Message;
                 }
             }
+
             return "0";
         }
 
         public DataTable Select(string Query, List<ExcParameters> SafeParameterInsert = null)
         {
+            bool ConnectionChanged = false;
+            if (!_IsConnectionOpen)
+            {
+                Connect();
+                ConnectionChanged = true;
+            }
             if (_IsConnectionOpen)
             {
                 DataTable dt = new DataTable();
@@ -153,9 +235,16 @@ namespace ShoppingCMS_V002.DBConnect
                 {
                     _EXCReporter = ex;
                 }
+                if (ConnectionChanged)
+                {
+                    DC();
+                }
                 return dt;
             }
-
+            if (ConnectionChanged)
+            {
+                DC();
+            }
             return new DataTable();
         }
 

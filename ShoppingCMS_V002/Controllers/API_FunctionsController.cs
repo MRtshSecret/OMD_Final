@@ -19,14 +19,14 @@ namespace ShoppingCMS_V002.Controllers
         public ActionResult MasterTags()
         {
             D_APIModelFiller DMF = new D_APIModelFiller();
-            return Json(DMF.ProductTags("min",0));
+            return Json(DMF.ProductTags("min", 0));
         }
 
         [HttpPost]
-        public ActionResult Category(string Cat,int Id=0)
+        public ActionResult Category(string Cat, int Id = 0)
         {
             D_APIModelFiller DMF = new D_APIModelFiller();
-            return Json(DMF.Categories(Cat,Id));
+            return Json(DMF.Categories(Cat, Id));
 
         }
 
@@ -34,14 +34,14 @@ namespace ShoppingCMS_V002.Controllers
         public ActionResult City(string Cat, int Id = 0)
         {
             D_APIModelFiller DMF = new D_APIModelFiller();
-            if(Cat=="City")
+            if (Cat == "City")
             {
                 return Json(DMF.City(Id));
             }
             else
             {
                 return Json(DMF.Ostanha());
-            }  
+            }
 
         }
 
@@ -50,18 +50,17 @@ namespace ShoppingCMS_V002.Controllers
         public ActionResult TagsFiller()
         {
             D_APIModelFiller DMF = new D_APIModelFiller();
-            
-                return Json(DMF.ProductTags("tag",0));
-            
+
+            return Json(DMF.ProductTags("tag", 0));
+
 
         }
 
         [HttpPost]
-        public ActionResult AddToFavorite(int Id,int CustomerId)
+        public ActionResult AddToFavorite(int Id, int CustomerId)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
-
             Encryption ENC = new Encryption();
             List<ExcParameters> parss = new List<ExcParameters>();
             ExcParameters par = new ExcParameters()
@@ -76,27 +75,26 @@ namespace ShoppingCMS_V002.Controllers
                 _VALUE = Id
             };
             parss.Add(par);
-
-            if(db.Select("SELECT [CustomerId],[ProductId] FROM [tbl_Customer_Favorites] where [CustomerId]=@UId AND ProductId=@ProId", parss).Rows.Count==0)
+            if (db.Select("SELECT [CustomerId],[ProductId] FROM [tbl_Customer_Favorites] where [CustomerId]=@UId AND ProductId=@ProId", parss).Rows.Count == 0)
             {
                 db.Script("INSERT INTO [tbl_Customer_Favorites]([CustomerId],[ProductId])VALUES(@UId,@ProId)", parss);
+                db.DC();
                 return Content("1");
             }
             else
             {
                 db.Script("DELETE FROM [tbl_Customer_Favorites]WHERE CustomerId=@UId AND ProductId=@ProId", parss);
+                db.DC();
                 return Content("0");
             }
         }
 
         [HttpPost]
-        public ActionResult SmsRegister(string MobileNum,string Pass)
+        public ActionResult SmsRegister(string MobileNum, string Pass)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
-
-            
-            if(Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_Customer_Main] WHERE C_Mobile LIKE N'"+MobileNum+"'").Rows[0][0])==0)
+            if (Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_Customer_Main] WHERE C_Mobile LIKE N'" + MobileNum + "'").Rows[0][0]) == 0)
             {
                 Encryption ENC = new Encryption();
                 List<ExcParameters> parss = new List<ExcParameters>();
@@ -142,35 +140,41 @@ namespace ShoppingCMS_V002.Controllers
                 parss.Add(par);
                 string result = db.Script("INSERT INTO [dbo].[tbl_sms_ir_CustomerKeys]([id_Customer],[sms_irKeyType],[sms_irSentKey],[sms_irKeyGeneratedDate],[sms_irIsKeyAlive]) VALUES(@id_Customer ,@sms_irKeyType ,@sms_irSentKey ,GETDATE(),@sms_irIsKeyAlive)", parss);
                 SMS_ir sms = new SMS_ir();
-
+                db.DC();
                 return Json(sms.SendVerificationCodeWithTemplate(UserId, "VelvetRegister", 2));
-            }else
+            }
+            else
             {
+                db.DC();
                 return Content("Reapited Num");
             }
 
-            
+
         }
 
-        public ActionResult CheckCode(int UId,string Code) 
+        public ActionResult CheckCode(int UId, string Code)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
 
             DataTable dt = db.Select("SELECT [C_ActivationToken] FROM [tbl_Customer_Main] where id_Customer = " + UId);
-            if(dt.Rows.Count!=0)
+            if (dt.Rows.Count != 0)
             {
                 string token = dt.Rows[0][0].ToString();
-                if(token==Code)
+                if (token == Code)
                 {
+                    db.DC();
                     return Content("Success");
                 }
                 else
                 {
+                    db.DC();
                     return Content("Wrong Code");
                 }
-            }else
+            }
+            else
             {
+                db.DC();
                 return Content("User Not Found");
             }
         }
@@ -191,13 +195,12 @@ namespace ShoppingCMS_V002.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddComment_Product(int ProId,string Email,string Name,string Message)
+        public ActionResult AddComment_Product(int ProId, string Email, string Name, string Message)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
 
             List<ExcParameters> parss = new List<ExcParameters>();
-            
+
             ExcParameters par = new ExcParameters()
             {
                 _KEY = "@ProId",
@@ -221,8 +224,18 @@ namespace ShoppingCMS_V002.Controllers
             };
             parss.Add(par);
 
-            db.Script("INSERT INTO [tbl_Product_Comment]VALUES(@Email,@Name,N'',@Message,@ProId,GETDATE())", parss);
-            return Content("Success");
+            db.Connect();
+            string result = db.Script("INSERT INTO [tbl_Product_Comment]VALUES(@Email,@Name,N'',@Message,@ProId,GETDATE())", parss);
+            db.DC();
+            if (result == "1")
+            {
+
+                return Content("Success");
+            }
+            else
+            {
+                return Content("NOSuccess");
+            }
         }
 
         [HttpPost]
@@ -232,12 +245,11 @@ namespace ShoppingCMS_V002.Controllers
             return Json(DMF.MPCs(id));
         }
 
-        public ActionResult Add_ShoppingCart(int proId,int CustomerId,int number,int FactorId)
+        public ActionResult Add_ShoppingCart(int proId, int CustomerId, int number, int FactorId)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
             Encryption ENC = new Encryption();
-            if (FactorId==0)
+            if (FactorId == 0)
             {
                 List<ExcParameters> parss = new List<ExcParameters>();
                 ExcParameters par = new ExcParameters()
@@ -247,33 +259,30 @@ namespace ShoppingCMS_V002.Controllers
                 };
                 parss.Add(par);
 
-                var FactorId_ =Convert.ToInt32( db.Script("INSERT INTO [tbl_FACTOR_Main] output inserted.Factor_Id VALUES(@CustomerId,0,GetDate(),'',NULL,0,0,0,0,0,0,0,'','')",parss));
-
+                db.Connect();
+                var FactorId_ = Convert.ToInt32(db.Script("INSERT INTO [tbl_FACTOR_Main] output inserted.Factor_Id VALUES(@CustomerId,0,GetDate(),'',NULL,0,0,0,0,0,0,0,'','')", parss));
                 par = new ExcParameters()
                 {
                     _KEY = "@Number",
                     _VALUE = number
                 };
                 parss.Add(par);
-
                 par = new ExcParameters()
                 {
                     _KEY = "@FactorId",
                     _VALUE = FactorId_
                 };
                 parss.Add(par);
-
                 par = new ExcParameters()
                 {
                     _KEY = "@ProId",
                     _VALUE = proId
                 };
                 parss.Add(par);
-
                 DataTable dt = db.Select("SELECT top 1 [id_PPH] ,PriceOff FROM [tbl_Product_PastProductHistory] where id_MPC=@ProId order by([ChangedDate])DESC", parss);
                 int DateId = 0;
                 long price = 0;
-                if(dt.Rows.Count!=0)
+                if (dt.Rows.Count != 0)
                 {
                     DateId = Convert.ToInt32(dt.Rows[0]["id_PPH"]);
                     price = long.Parse(dt.Rows[0]["PriceOff"].ToString());
@@ -298,7 +307,7 @@ namespace ShoppingCMS_V002.Controllers
                 par = new ExcParameters()
                 {
                     _KEY = "@price",
-                    _VALUE = price*number
+                    _VALUE = price * number
                 };
                 parss.Add(par);
 
@@ -309,15 +318,15 @@ namespace ShoppingCMS_V002.Controllers
                 };
                 parss.Add(par);
 
-                if (price!=0)
+                if (price != 0)
                 {
                     db.Script("UPDATE [tbl_FACTOR_Main] SET [toality] =@price  WHERE Factor_Id=@FactorId", parss);
                 }
 
                 Factor.Items = Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_FACTOR_Items] where FactorId=@FactorId", parss).Rows[0][0]);
                 Factor.totality = price;
-                
-                return Content(ENC.EncryptText(Newtonsoft.Json.JsonConvert.SerializeObject(Factor),"OMD_FACTOR"));
+                db.DC();
+                return Content(ENC.EncryptText(Newtonsoft.Json.JsonConvert.SerializeObject(Factor), "OMD_FACTOR"));
             }
             else
             {
@@ -349,7 +358,7 @@ namespace ShoppingCMS_V002.Controllers
                     _VALUE = proId
                 };
                 parss.Add(par);
-
+                db.Connect();
                 DataTable dt = db.Select("SELECT top 1 [id_PPH] ,PriceOff FROM [tbl_Product_PastProductHistory] where id_MPC=@ProId order by([ChangedDate])DESC", parss);
                 int DateId = 0;
                 long price = 0;
@@ -384,31 +393,29 @@ namespace ShoppingCMS_V002.Controllers
 
                 DataTable Price = db.Select("SELECT [toality] FROM [tbl_FACTOR_Main]where Factor_Id=@FactorId", parss);
                 long totality = 0;
-                if(Price.Rows.Count!=0)
+                if (Price.Rows.Count != 0)
                 {
                     totality = long.Parse(Price.Rows[0][0].ToString());
                 }
-                
+
                 if (price != 0)
                 {
-                    
+
                     par = new ExcParameters()
                     {
                         _KEY = "@price",
-                        _VALUE =(price * number)+totality
+                        _VALUE = (price * number) + totality
                     };
                     parss.Add(par);
-                    
+
                     db.Script("UPDATE [tbl_FACTOR_Main] SET [toality] =@price  WHERE Factor_Id=@FactorId", parss);
                 }
 
                 Factor.Items = Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_FACTOR_Items] where FactorId=@FactorId", parss).Rows[0][0]);
                 Factor.totality = ((price * number) + totality);
-
+                db.DC();
                 return Content(ENC.EncryptText(Newtonsoft.Json.JsonConvert.SerializeObject(Factor), "OMD_FACTOR"));
             }
-
-            
         }
 
 
@@ -418,11 +425,9 @@ namespace ShoppingCMS_V002.Controllers
             return Content(ENC.DecryptText(str, "OMD_FACTOR"));
         }
 
-        public ActionResult ContactUsMessage(string Name,string Email,string Subject,string Message)
+        public ActionResult ContactUsMessage(string Name, string Email, string Subject, string Message)
         {
-            PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
-
+           // PDBC db = new PDBC("PandaMarketCMS", true);
             List<ExcParameters> parss = new List<ExcParameters>();
             ExcParameters par = new ExcParameters()
             {
@@ -455,10 +460,10 @@ namespace ShoppingCMS_V002.Controllers
             return Content("Success");
         }
 
-        public ActionResult AddFactor(string Name,string familly,int cityId,int factorId,string Address,string Email,string Phonenum,string CodePosti,string PaymentToken,string PaymentSerial,int CustomerId, string depositMoney)
+        public ActionResult AddFactor(string Name, string familly, int cityId, int factorId, string Address, string Email, string Phonenum, string CodePosti, string PaymentToken, string PaymentSerial, int CustomerId, string depositMoney)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
+           
             List<ExcParameters> parss = new List<ExcParameters>();
             ExcParameters par = new ExcParameters()
             {
@@ -487,8 +492,8 @@ namespace ShoppingCMS_V002.Controllers
                 _VALUE = Phonenum
             };
             parss.Add(par);
-
-            db.Script("UPDATE [tbl_Customer_Main]SET [C_Mobile] = @Phonenum,[C_FirstName] =@Name ,[C_LastNAme] =@familly ,[C_ISActivate] = 1 WHERE id_Customer=@CustomerId",parss);
+ db.Connect();
+            db.Script("UPDATE [tbl_Customer_Main]SET [C_Mobile] = @Phonenum,[C_FirstName] =@Name ,[C_LastNAme] =@familly ,[C_ISActivate] = 1 WHERE id_Customer=@CustomerId", parss);
 
             parss = new List<ExcParameters>();
             par = new ExcParameters()
@@ -518,9 +523,7 @@ namespace ShoppingCMS_V002.Controllers
                 _VALUE = CustomerId
             };
             parss.Add(par);
-           string AddresId= db.Script("INSERT INTO [tbl_Customer_Address] output inserted.id_CAddress VALUES( @CustomerId ,@cityId ,@CodePosti,@Address)", parss);
-
-
+            string AddresId = db.Script("INSERT INTO [tbl_Customer_Address] output inserted.id_CAddress VALUES( @CustomerId ,@cityId ,@CodePosti,@Address)", parss);
             parss = new List<ExcParameters>();
             par = new ExcParameters()
             {
@@ -528,29 +531,24 @@ namespace ShoppingCMS_V002.Controllers
                 _VALUE = AddresId
             };
             parss.Add(par);
-
             par = new ExcParameters()
             {
                 _KEY = "@factorId",
                 _VALUE = factorId
             };
             parss.Add(par);
-
             par = new ExcParameters()
             {
                 _KEY = "@PaymentToken",
                 _VALUE = PaymentToken
             };
             parss.Add(par);
-
             par = new ExcParameters()
             {
                 _KEY = "@PaymentSerial",
                 _VALUE = PaymentSerial
             };
             parss.Add(par);
-
-            
             par = new ExcParameters()
             {
                 _KEY = "@depositMoney",
@@ -559,7 +557,7 @@ namespace ShoppingCMS_V002.Controllers
             parss.Add(par);
 
             db.Script("UPDATE [tbl_FACTOR_Main] SET[AddressId] = @AddresId,[date] = GetDate(),[deposit_price] = @depositMoney,[Done] = 1,[PaymentSerial] = @PaymentSerial ,[PaymentToken] =@PaymentToken WHERE Factor_Id=@factorId", parss);
-
+            db.DC();
             return Content("Success");
         }
 
@@ -568,18 +566,20 @@ namespace ShoppingCMS_V002.Controllers
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
             DataTable dt = db.Select("SELECT (A.PriceOff*B.number) AS totality ,B.FactorId FROM [tbl_Product_PastProductHistory] AS A INNER JOIN [tbl_FACTOR_Items] AS B ON A.id_PPH=B.PriceDateId where B.ItemId=" + itemId);
-            if(dt.Rows.Count!=0)
+            if (dt.Rows.Count != 0)
             {
                 long totality_item = long.Parse(dt.Rows[0]["totality"].ToString());
                 string FactorId = dt.Rows[0]["FactorId"].ToString();
-               long totality = long.Parse(db.Select("SELECT [toality] FROM [tbl_FACTOR_Main] WHERE Factor_Id=" +FactorId ).Rows[0]["toality"].ToString());
+                long totality = long.Parse(db.Select("SELECT [toality] FROM [tbl_FACTOR_Main] WHERE Factor_Id=" + FactorId).Rows[0]["toality"].ToString());
 
-                db.Script("UPDATE [tbl_FACTOR_Main]SET [toality] ="+(totality-totality_item)+" WHERE Factor_Id=" + FactorId);
+                db.Script("UPDATE [tbl_FACTOR_Main]SET [toality] =" + (totality - totality_item) + " WHERE Factor_Id=" + FactorId);
                 db.Script("DELETE FROM [tbl_FACTOR_Items] WHERE ItemId=" + itemId);
-
+                db.DC();
                 return Content("Success");
-            }else
+            }
+            else
             {
+                db.DC();
                 return Content("There Isnt any row with this item");
             }
 

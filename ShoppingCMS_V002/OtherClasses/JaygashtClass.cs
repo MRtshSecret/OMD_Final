@@ -56,7 +56,7 @@ namespace ShoppingCMS_V002.OtherClasses
                 }
                 result.Add(m);
             }
-            
+            db.DC();
             return result;
         }
 

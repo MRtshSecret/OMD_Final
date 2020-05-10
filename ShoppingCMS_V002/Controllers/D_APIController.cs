@@ -19,7 +19,7 @@ namespace ShoppingCMS_V002.Controllers
 {
     public class D_APIController : Controller
     {
-       
+      
         public ActionResult Index()
         {
             if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
@@ -531,7 +531,7 @@ namespace ShoppingCMS_V002.Controllers
 
 
             PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
+
 
             List<ExcParameters> paramss = new List<ExcParameters>();
             ExcParameters parameters = new ExcParameters();
@@ -562,9 +562,9 @@ namespace ShoppingCMS_V002.Controllers
                 _VALUE = tbl.Id
             };
             paramss.Add(parameters);
-
+            db.Connect();
             res = db.Script(query_new, paramss);
-
+            db.DC();
 
 
             return Redirect("blog_post?IdPage=" + tbl.Id);

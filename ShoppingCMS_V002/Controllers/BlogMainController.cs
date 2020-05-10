@@ -193,6 +193,7 @@ namespace ShoppingCMS_V002.Controllers
                     db.Script("UPDATE [tbl_BLOG_Categories] SET[Is_Disabled] = 1 WHERE Id=" + id);
                     db.Script("UPDATE [tbl_BLOG_Tags] SET [Is_Disabled] = 1 WHERE CtegoryId=" + id);
                 }
+                db.DC();
                 return Content("Success");
             }
             else
@@ -230,6 +231,7 @@ namespace ShoppingCMS_V002.Controllers
                 {
                     db.Script("UPDATE [tbl_BLOG_Groups] SET[Is_Disabled] = 1 WHERE G_Id=" + id);
                 }
+                db.DC();
                 return Content("Success");
             }
             else
@@ -267,6 +269,7 @@ namespace ShoppingCMS_V002.Controllers
                 {
                     db.Script("UPDATE [tbl_BLOG_Tags] SET[Is_Disabled] = 1 WHERE Id=" + id);
                 }
+                db.DC();
                 return Content("Success");
             }
             else
@@ -306,12 +309,12 @@ namespace ShoppingCMS_V002.Controllers
                 {
                     db.Script("UPDATE [tbl_BLOG_Post] SET[Is_Disabled] = 1 WHERE Id=" + id);
                 }
+                db.DC();
                 return Content("Success");
             }
             else
                 return RedirectToAction("NotAccess", "MS");
         }
-
 
         public ActionResult EditPost(int Post_id)
         {

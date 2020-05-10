@@ -139,10 +139,10 @@ namespace ShoppingCMS_V002.Controllers
             {
                 ModelFiller MF = new ModelFiller();
                 PDBC db = new PDBC("PandaMarketCMS", true);
-                db.Connect();
                 var ids = Ids.Split(',');
 
                 var Subval = new List<AddPro_SubValues>();
+                db.Connect();
                 for (int i = 0; i < ids.Length; i++)
                 {
                     var model = new AddPro_SubValues()
@@ -154,7 +154,7 @@ namespace ShoppingCMS_V002.Controllers
 
                     Subval.Add(model);
                 }
-
+                db.DC();
                 var result = new AddProductModelV_3()
                 {
                     Id = id,
@@ -213,7 +213,7 @@ namespace ShoppingCMS_V002.Controllers
                     }
                 }
 
-
+                db.DC();
                 return Content("done");
 
             }
@@ -320,6 +320,7 @@ namespace ShoppingCMS_V002.Controllers
                         "SELECT [PicID] ,[PicAddress] ,[alt] ,[uploadPicName]  ,[Descriptions] FROM [v_Images] WHERE [ISDELETE]=0 ORDER BY [CreatedDate] DESC")
                 )
                 {
+                    db.DC();
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         ImageGalleryModel images = new ImageGalleryModel();
@@ -360,7 +361,7 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
-                db.Connect();
+              
                 List<ExcParameters> EXpars = new List<ExcParameters>();
                 ExcParameters par = new ExcParameters()
                 {
@@ -385,10 +386,12 @@ namespace ShoppingCMS_V002.Controllers
                     _KEY = "@Descriptions",
                     _VALUE = picWords
                 };
-                EXpars.Add(par);
+                EXpars.Add(par); 
+                db.Connect();
                 string updateRes =
                     db.Script(
                         "UPDATE [tbl_ADMIN_UploaderStructure] SET  [alt] = @alt  ,[uploadPicName] = @uploadPicName  ,[Descriptions] = @Descriptions WHERE [PicID] = @PicID", EXpars);
+                db.DC();
                 if (updateRes == "1")
                 {
                     //{"name":"1","id":"1"}
@@ -412,7 +415,7 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
-                db.Connect();
+             
                 List<ExcParameters> EXpars = new List<ExcParameters>();
                 ExcParameters par = new ExcParameters()
                 {
@@ -420,9 +423,11 @@ namespace ShoppingCMS_V002.Controllers
                     _VALUE = IDToEdit
                 };
                 EXpars.Add(par);
+                db.Connect();
                 string updateRes =
                     db.Script(
                         "UPDATE [tbl_ADMIN_UploaderStructure] SET  [ISDELETE] = 1 WHERE [PicID] = @PicID", EXpars);
+                db.DC();
                 if (updateRes == "1")
                 {
                     return Content("{\"Res\":\"1\"}");
@@ -467,7 +472,7 @@ namespace ShoppingCMS_V002.Controllers
                         }
 
                         PDBC db = new PDBC("PandaMarketCMS", true);
-                        db.Connect();
+                        
                         ExcParameters par = new ExcParameters()
                         {
                             _KEY = "@uploadPicName",
@@ -475,6 +480,7 @@ namespace ShoppingCMS_V002.Controllers
                         };
                         List<ExcParameters> EXpars = new List<ExcParameters>();
                         EXpars.Add(par);
+                        db.Connect();
                         if (Whattodo == "0")
                         {
 
@@ -504,6 +510,7 @@ namespace ShoppingCMS_V002.Controllers
 
                                 string satt = db.Script(
                                      "INSERT INTO [tbl_ADMIN_UploadStructure_ImageAddress] ([PicID] ,[PicSizeType] ,[PicAddress] ,[PicThumbnailAddress])  VALUES (@PicID ,1 ,@PicAddress  ,@PicThumbnailAddress )", EXpars);
+                                db.DC();
                                 if (satt == "1")
                                 {
                                     return Content(statusResult);
@@ -540,7 +547,7 @@ namespace ShoppingCMS_V002.Controllers
                                 EXpars.Add(par);
 
                                 string satt = db.Script(
-                                    "UPDATE [tbl_ADMIN_UploadStructure_ImageAddress] SET  [PicAddress] = @PicAddress  ,[PicThumbnailAddress] = @PicThumbnailAddress  WHERE [PicID] = @PicID ", EXpars);
+                                    "UPDATE [tbl_ADMIN_UploadStructure_ImageAddress] SET  [PicAddress] = @PicAddress  ,[PicThumbnailAddress] = @PicThumbnailAddress  WHERE [PicID] = @PicID ", EXpars); db.DC();
                                 if (satt == "1")
                                 {
                                     return Content(Whattodo);
@@ -599,7 +606,7 @@ namespace ShoppingCMS_V002.Controllers
                     db.Script("INSERT INTO [tbl_Product_PicConnector] VALUES (" + itmId + "," + item + ")");
 
                 }
-
+                db.DC();
                 return Content(itmId);
             }
             else
@@ -633,15 +640,14 @@ namespace ShoppingCMS_V002.Controllers
         [HttpPost]
         public ActionResult Save_Step4(string json, string ActTodo, int id_MProduct, int Quantity, int QuantityModule, int PricePerquantity, int PriceOff, int offTypeValue, int OffType, int id_MainStarTag, int PriceModule, int PriceShow, string tgs)
         {
-
+        
              string SSSession = ""; if (HttpContext.Request.Cookies["TSHPANDAControll"+ StaticLicense.LicName] != null)  { HttpCookie cookie = HttpContext.Request.Cookies.Get("TSHPANDAControll"+ StaticLicense.LicName); if (cookie != null) { SSSession = cookie.Value; } else { SSSession = "N.A"; } } else { SSSession = "N.A"; } CheckAccess check = new CheckAccess(SSSession);
             if (check.HasAccess)
             {
                 int PriceXquantity = Quantity * PricePerquantity;
                 ModelFiller MF = new ModelFiller();
-                PDBC db = new PDBC("PandaMarketCMS", true);
+               PDBC db = new PDBC("PandaMarketCMS", true);
                 db.Connect();
-
                 if (ActTodo == "insert")
                 {
 
@@ -651,18 +657,10 @@ namespace ShoppingCMS_V002.Controllers
                     foreach (var item in jaygashts)
                     {
                         itemid = MF.MainProduct_Actions(ActTodo, id_MProduct, Quantity, QuantityModule, PriceXquantity, PricePerquantity, PriceOff, offTypeValue, OffType, id_MainStarTag, PriceModule, PriceShow);
-
-
-
                         foreach (var itm in item)
                         {
                             db.Script("INSERT INTO[tbl_Product_connectorToMPC_SCOV] VALUES(" + itemid + "," + itm.ValId + ")");
                         }
-
-
-
-
-
                         string[] str = tgs.Split(',');
 
                         for (int i = 0; i < str.Length; i++)
@@ -672,6 +670,7 @@ namespace ShoppingCMS_V002.Controllers
 
                         }
                     }
+
                 }
                 else if (ActTodo == "update")
                 {
@@ -687,7 +686,7 @@ namespace ShoppingCMS_V002.Controllers
 
                     }
                 }
-
+                db.DC();
                 return Content("Success");
             }
             else
@@ -710,7 +709,7 @@ namespace ShoppingCMS_V002.Controllers
                 {
                     db.Script("UPDATE [tlb_Product_MainProductConnector] SET [ISDELETE] = 0 WHERE id_MPC=" + id);
                 }
-
+                db.DC();
 
                 return Content("success");
             }
@@ -1144,6 +1143,7 @@ namespace ShoppingCMS_V002.Controllers
                 {
                     db.Script("UPDATE [tbl_Product] SET [IS_AVAILABEL] = 0 WHERE id_MProduct=" + id);
                 }
+                db.DC();
                 return Content("Success");
             }
             else

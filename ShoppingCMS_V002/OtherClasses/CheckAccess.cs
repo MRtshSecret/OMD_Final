@@ -17,7 +17,6 @@ namespace ShoppingCMS_V002.OtherClasses
         public string AdminId { get; set; }
         public CheckAccess(string sessionss)
         {
-
             //HasAccess = true;
             //===================================================== coockie check
             if (sessionss == "N.A")
@@ -40,8 +39,9 @@ namespace ShoppingCMS_V002.OtherClasses
 
                     PDBC db = new PDBC("PandaMarketCMS", true);
                     db.Connect();
-                    using (DataTable dt = db.Select("SELECT count(*) FROM [v_ADMIN_mainView] WHERE id_Admin = " + Obj.id_Admin))
+                    using (DataTable dt = db.Select("SELECT Count(*) as [RN] FROM [tbl_ADMIN_main] WHERE [id_Admin]  = " + Obj.id_Admin))
                     {
+
                         if (dt.Rows[0][0].ToString() == "1")
                         {
                             HasAccess = true;

@@ -42,7 +42,7 @@ namespace ShoppingCMS_V002.Controllers
 
         [HttpPost]
         public ActionResult Add_Update_Type(string ActToDo, string Cat_Name, int id = 0)
-        { 
+        {
             string SSSession = ""; if (HttpContext.Request.Cookies["TSHPANDAControll" + StaticLicense.LicName] != null) { HttpCookie cookie = HttpContext.Request.Cookies.Get("TSHPANDAControll" + StaticLicense.LicName); if (cookie != null) { SSSession = cookie.Value; } else { SSSession = "N.A"; } } else { SSSession = "N.A"; }
             CheckAccess check = new CheckAccess(SSSession);
             if (check.HasAccess)
@@ -61,37 +61,38 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
-            if (ActToDo == "Delete")
-            {
+                db.Connect();
+                if (ActToDo == "Delete")
+                {
 
-                db.Script("UPDATE [tbl_Product_Type] SET [ISDelete] = 1 ,[DateDeleted] = GETDATE() WHERE id_PT = " + id);
-                db.Script("UPDATE [tbl_Product]SET[ISDELETE] = 1 WHERE [id_Type]=" + id);
-                db.Script("UPDATE P SET P.ISDelete=1,P.DateDeleted= GETDATE() FROM[tbl_Product_SubCategory] AS P inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
-                db.Script("UPDATE [tbl_Product_MainCategory] SET ISDelete = 1 , DateDeleted= GETDATE() WHERE id_PT=" + id);
-                db.Script("UPDATE R SET R.ISDelete=1,R.DateDeleted= GETDATE() FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
+                    db.Script("UPDATE [tbl_Product_Type] SET [ISDelete] = 1 ,[DateDeleted] = GETDATE() WHERE id_PT = " + id);
+                    db.Script("UPDATE [tbl_Product]SET[ISDELETE] = 1 WHERE [id_Type]=" + id);
+                    db.Script("UPDATE P SET P.ISDelete=1,P.DateDeleted= GETDATE() FROM[tbl_Product_SubCategory] AS P inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
+                    db.Script("UPDATE [tbl_Product_MainCategory] SET ISDelete = 1 , DateDeleted= GETDATE() WHERE id_PT=" + id);
+                    db.Script("UPDATE R SET R.ISDelete=1,R.DateDeleted= GETDATE() FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
 
-            }
-            else if (ActToDo == "DeActive")
-            {
+                }
+                else if (ActToDo == "DeActive")
+                {
 
-                db.Script("UPDATE[tbl_Product_Type] SET [ISDESABLED] = 1 ,[DateDesabled] = GETDATE()  WHERE id_PT = " + id);
-                db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 0 WHERE [id_Type]=" + id);
-                db.Script("UPDATE P SET P.ISDESABLED=1,P.DateDesabled= GETDATE() FROM[tbl_Product_SubCategory] AS P inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
-                db.Script("UPDATE [tbl_Product_MainCategory] SET ISDESABLED = 1 , DateDesabled= GETDATE() WHERE id_PT=" + id);
-                db.Script("UPDATE R SET R.ISDESABLED=1,R.DateDesabled= GETDATE() FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
-            }
-            else if (ActToDo == "Active")
-            {
+                    db.Script("UPDATE[tbl_Product_Type] SET [ISDESABLED] = 1 ,[DateDesabled] = GETDATE()  WHERE id_PT = " + id);
+                    db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 0 WHERE [id_Type]=" + id);
+                    db.Script("UPDATE P SET P.ISDESABLED=1,P.DateDesabled= GETDATE() FROM[tbl_Product_SubCategory] AS P inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
+                    db.Script("UPDATE [tbl_Product_MainCategory] SET ISDESABLED = 1 , DateDesabled= GETDATE() WHERE id_PT=" + id);
+                    db.Script("UPDATE R SET R.ISDESABLED=1,R.DateDesabled= GETDATE() FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
+                }
+                else if (ActToDo == "Active")
+                {
 
 
-                db.Script("UPDATE[tbl_Product_Type] SET [ISDESABLED] = 0 ,[DateDesabled] = GETDATE() WHERE id_PT =" + id);
-                db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 1 WHERE [id_Type]=" + id);
-                db.Script("UPDATE P SET P.ISDESABLED=0 FROM[tbl_Product_SubCategory] AS P inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
-                db.Script("UPDATE [tbl_Product_MainCategory] SET ISDESABLED = 0 WHERE id_PT=" + id);
-                db.Script("UPDATE R SET R.ISDESABLED=0 FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
-            }
-            return Content("Success");
+                    db.Script("UPDATE[tbl_Product_Type] SET [ISDESABLED] = 0 ,[DateDesabled] = GETDATE() WHERE id_PT =" + id);
+                    db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 1 WHERE [id_Type]=" + id);
+                    db.Script("UPDATE P SET P.ISDESABLED=0 FROM[tbl_Product_SubCategory] AS P inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
+                    db.Script("UPDATE [tbl_Product_MainCategory] SET ISDESABLED = 0 WHERE id_PT=" + id);
+                    db.Script("UPDATE R SET R.ISDESABLED=0 FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC inner Join [tbl_Product_MainCategory] As M On P.id_MC=M.id_MC where M.id_PT=" + id);
+                }
+                db.DC();
+                return Content("Success");
             }
             else
                 return Content("NotAccess");
@@ -133,7 +134,7 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 ProductGroup_ModelFiller MF = new ProductGroup_ModelFiller();
-            return Content(MF.Add_Update_ProMainCat(ActToDo, Cat_Name, CatId, id));
+                return Content(MF.Add_Update_ProMainCat(ActToDo, Cat_Name, CatId, id));
             }
             else
                 return Content("NotAccess");
@@ -147,29 +148,30 @@ namespace ShoppingCMS_V002.Controllers
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
                 db.Connect();
-            if (ActToDo == "Delete")
-            {
-                db.Script("UPDATE [tbl_Product_MainCategory] SET [ISDelete] =1 , [DateDeleted] = GETDATE()  WHERE id_MC =" + id);
+                if (ActToDo == "Delete")
+                {
+                    db.Script("UPDATE [tbl_Product_MainCategory] SET [ISDelete] =1 , [DateDeleted] = GETDATE()  WHERE id_MC =" + id);
 
-                db.Script("UPDATE [tbl_Product]SET[ISDELETE] = 1 WHERE [id_MainCategory]=" + id);
-                db.Script("UPDATE[tbl_Product_SubCategory] SET[ISDelete] = 1,[DateDeleted] = GETDATE() WHERE [id_MC]=" + id);
-                db.Script("UPDATE R SET R.ISDelete=1,R.DateDeleted= GETDATE() FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC where P.id_MC=" + id);
-            }
-            else if (ActToDo == "Active")
-            {
-                db.Script("UPDATE [tbl_Product_MainCategory] SET [ISDESABLED] = 0 , [DateDesabled] = GETDATE() WHERE id_MC=" + id);
-                db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 1 WHERE [id_MainCategory]=" + id);
-                db.Script("UPDATE[tbl_Product_SubCategory] SET[ISDESABLED] = 0 WHERE [id_MC]=" + id);
-                db.Script("UPDATE R SET R.DateDesabled=0 FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC where P.id_MC=" + id);
-            }
-            else if (ActToDo == "DeActive")
-            {
-                db.Script("UPDATE [tbl_Product_MainCategory] SET [ISDESABLED] = 1 , [DateDesabled] = GETDATE() WHERE id_MC=" + id);
-                db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 0 WHERE [id_MainCategory]=" + id);
-                db.Script("UPDATE[tbl_Product_SubCategory] SET[ISDESABLED] = 1,[DateDesabled] = GETDATE() WHERE [id_MC]=" + id);
-                db.Script("UPDATE R SET R.ISDESABLED=1,R.DateDesabled= GETDATE() FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC where P.id_MC=" + id);
-            }
-            return Content("Success");
+                    db.Script("UPDATE [tbl_Product]SET[ISDELETE] = 1 WHERE [id_MainCategory]=" + id);
+                    db.Script("UPDATE[tbl_Product_SubCategory] SET[ISDelete] = 1,[DateDeleted] = GETDATE() WHERE [id_MC]=" + id);
+                    db.Script("UPDATE R SET R.ISDelete=1,R.DateDeleted= GETDATE() FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC where P.id_MC=" + id);
+                }
+                else if (ActToDo == "Active")
+                {
+                    db.Script("UPDATE [tbl_Product_MainCategory] SET [ISDESABLED] = 0 , [DateDesabled] = GETDATE() WHERE id_MC=" + id);
+                    db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 1 WHERE [id_MainCategory]=" + id);
+                    db.Script("UPDATE[tbl_Product_SubCategory] SET[ISDESABLED] = 0 WHERE [id_MC]=" + id);
+                    db.Script("UPDATE R SET R.DateDesabled=0 FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC where P.id_MC=" + id);
+                }
+                else if (ActToDo == "DeActive")
+                {
+                    db.Script("UPDATE [tbl_Product_MainCategory] SET [ISDESABLED] = 1 , [DateDesabled] = GETDATE() WHERE id_MC=" + id);
+                    db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 0 WHERE [id_MainCategory]=" + id);
+                    db.Script("UPDATE[tbl_Product_SubCategory] SET[ISDESABLED] = 1,[DateDesabled] = GETDATE() WHERE [id_MC]=" + id);
+                    db.Script("UPDATE R SET R.ISDESABLED=1,R.DateDesabled= GETDATE() FROM[tbl_Product_SubCategoryOptionKey]AS R inner Join [tbl_Product_SubCategory] AS P On R.id_SC=P.id_SC where P.id_MC=" + id);
+                }
+                db.DC();
+                return Content("Success");
             }
             else
                 return Content("NotAccess");
@@ -212,7 +214,7 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 ProductGroup_ModelFiller MF = new ProductGroup_ModelFiller();
-            return Content(MF.Add_Update_ProSubCat(ActToDo, Cat_Name, CatId, id));
+                return Content(MF.Add_Update_ProSubCat(ActToDo, Cat_Name, CatId, id));
             }
             else
                 return Content("NotAccess");
@@ -224,26 +226,27 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
-            if (ActToDo == "Delete")
-            {
-                db.Script("UPDATE [tbl_Product_SubCategory] SET [ISDelete] = 1 , [DateDeleted] = GETDATE()  WHERE id_SC= " + id);
-                db.Script("UPDATE [tbl_Product]SET[ISDELETE] = 1 WHERE [id_SubCategory]=" + id);
-                db.Script("UPDATE[tbl_Product_SubCategoryOptionKey] SET [ISDelete] =1,[DateDeleted] = GETDATE() WHERE id_SC=" + id);
-            }
-            else if (ActToDo == "Active")
-            {
-                db.Script("UPDATE [tbl_Product_SubCategory] SET [ISDESABLED] = 0 , [DateDesabled] = GETDATE() WHERE id_SC=" + id);
-                db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 1 WHERE [id_SubCategory]=" + id);
-                db.Script("UPDATE[tbl_Product_SubCategoryOptionKey] SET [ISDESABLED] =0 WHERE id_SC=" + id);
-            }
-            else if (ActToDo == "DeActive")
-            {
-                db.Script("UPDATE [tbl_Product_SubCategory] SET [ISDESABLED] =1 , [DateDesabled] = GETDATE() WHERE id_SC=" + id);
-                db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 0 WHERE [id_SubCategory]=" + id);
-                db.Script("UPDATE[tbl_Product_SubCategoryOptionKey] SET [ISDESABLED] =1,[DateDesabled] = GETDATE() WHERE id_SC=" + id);
-            }
-            return Content("Success");
+                db.Connect();
+                if (ActToDo == "Delete")
+                {
+                    db.Script("UPDATE [tbl_Product_SubCategory] SET [ISDelete] = 1 , [DateDeleted] = GETDATE()  WHERE id_SC= " + id);
+                    db.Script("UPDATE [tbl_Product]SET[ISDELETE] = 1 WHERE [id_SubCategory]=" + id);
+                    db.Script("UPDATE[tbl_Product_SubCategoryOptionKey] SET [ISDelete] =1,[DateDeleted] = GETDATE() WHERE id_SC=" + id);
+                }
+                else if (ActToDo == "Active")
+                {
+                    db.Script("UPDATE [tbl_Product_SubCategory] SET [ISDESABLED] = 0 , [DateDesabled] = GETDATE() WHERE id_SC=" + id);
+                    db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 1 WHERE [id_SubCategory]=" + id);
+                    db.Script("UPDATE[tbl_Product_SubCategoryOptionKey] SET [ISDESABLED] =0 WHERE id_SC=" + id);
+                }
+                else if (ActToDo == "DeActive")
+                {
+                    db.Script("UPDATE [tbl_Product_SubCategory] SET [ISDESABLED] =1 , [DateDesabled] = GETDATE() WHERE id_SC=" + id);
+                    db.Script("UPDATE [tbl_Product]SET[IS_AVAILABEL] = 0 WHERE [id_SubCategory]=" + id);
+                    db.Script("UPDATE[tbl_Product_SubCategoryOptionKey] SET [ISDESABLED] =1,[DateDesabled] = GETDATE() WHERE id_SC=" + id);
+                }
+                db.DC();
+                return Content("Success");
             }
             else
                 return Content("NotAccess");
@@ -285,7 +288,7 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 ProductGroup_ModelFiller MF = new ProductGroup_ModelFiller();
-            return Content(MF.Add_Update_ProSubCatKey(ActToDo, Cat_Name, CatId, id));
+                return Content(MF.Add_Update_ProSubCatKey(ActToDo, Cat_Name, CatId, id));
             }
             else
                 return Content("NotAccess");
@@ -298,21 +301,22 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
-            if (ActToDo == "Delete")
-            {
-                db.Script("UPDATE[tbl_Product_SubCategoryOptionKey] SET [ISDelete] = 1, [DateDeleted] = GETDATE()  WHERE id_SCOK =" + id);
-                db.Script("DELETE FROM [tbl_Product_SubCategoryOptionValue] WHERE id_SCOK=" + id);
-            }
-            else if (ActToDo == "Active")
-            {
-                db.Script("UPDATE [tbl_Product_SubCategoryOptionKey] SET [ISDESABLED] = 0, [DateDesabled] = GETDATE() WHERE id_SCOK=" + id);
-            }
-            else if (ActToDo == "DeActive")
-            {
-                db.Script("UPDATE [tbl_Product_SubCategoryOptionKey] SET [ISDESABLED] = 1 , [DateDesabled] = GETDATE() WHERE id_SCOK=" + id);
-            }
-            return Content("Success");
+                db.Connect();
+                if (ActToDo == "Delete")
+                {
+                    db.Script("UPDATE[tbl_Product_SubCategoryOptionKey] SET [ISDelete] = 1, [DateDeleted] = GETDATE()  WHERE id_SCOK =" + id);
+                    db.Script("DELETE FROM [tbl_Product_SubCategoryOptionValue] WHERE id_SCOK=" + id);
+                }
+                else if (ActToDo == "Active")
+                {
+                    db.Script("UPDATE [tbl_Product_SubCategoryOptionKey] SET [ISDESABLED] = 0, [DateDesabled] = GETDATE() WHERE id_SCOK=" + id);
+                }
+                else if (ActToDo == "DeActive")
+                {
+                    db.Script("UPDATE [tbl_Product_SubCategoryOptionKey] SET [ISDESABLED] = 1 , [DateDesabled] = GETDATE() WHERE id_SCOK=" + id);
+                }
+                db.DC();
+                return Content("Success");
             }
             else
                 return Content("NotAccess");
@@ -355,7 +359,7 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 ProductGroup_ModelFiller MF = new ProductGroup_ModelFiller();
-            return Content(MF.Add_Update_ProSubCatValue(ActToDo, Cat_Name, CatId, id));
+                return Content(MF.Add_Update_ProSubCatValue(ActToDo, Cat_Name, CatId, id));
             }
             else
                 return Content("NotAccess");
@@ -368,13 +372,13 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
-            if (ActToDo == "Delete")
-            {
-                db.Script("DELETE FROM [tbl_Product_SubCategoryOptionValue] WHERE id_SCOV=" + id);
-            }
-
-            return Content("Success");
+                db.Connect();
+                if (ActToDo == "Delete")
+                {
+                    db.Script("DELETE FROM [tbl_Product_SubCategoryOptionValue] WHERE id_SCOV=" + id);
+                }
+                db.DC();
+                return Content("Success");
             }
             else
                 return Content("NotAccess");
@@ -418,7 +422,7 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 ProductGroup_ModelFiller MF = new ProductGroup_ModelFiller();
-            return Content(MF.Add_Update_ProTags(ActToDo, Cat_Name, CatId, id));
+                return Content(MF.Add_Update_ProTags(ActToDo, Cat_Name, CatId, id));
             }
             else
                 return Content("NotAccess");
@@ -430,14 +434,14 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
-            if (ActToDo == "Delete")
-            {
-                db.Script("DELETE FROM [tbl_Product_tagConnector] WHERE id_TE=" + id);
-                db.Script("DELETE FROM [tbl_Product_TagEnums] WHERE id_TE=" + id);
-            }
-
-            return Content("Success");
+                db.Connect();
+                if (ActToDo == "Delete")
+                {
+                    db.Script("DELETE FROM [tbl_Product_tagConnector] WHERE id_TE=" + id);
+                    db.Script("DELETE FROM [tbl_Product_TagEnums] WHERE id_TE=" + id);
+                }
+                db.DC();
+                return Content("Success");
             }
             else
                 return Content("NotAccess");
@@ -478,7 +482,7 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 ProductGroup_ModelFiller MF = new ProductGroup_ModelFiller();
-            return Content(MF.Add_Update_MainTags(ActToDo, Cat_Name, Discription, id));
+                return Content(MF.Add_Update_MainTags(ActToDo, Cat_Name, Discription, id));
             }
             else
                 return Content("NotAccess");
@@ -490,13 +494,13 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
-            db.Connect();
-            if (ActToDo == "Delete")
-            {
-                db.Script("DELETE FROM [tbl_Product_MainStarTags]WHERE id_MainStarTag=" + id);
-            }
-
-            return Content("Success");
+                db.Connect();
+                if (ActToDo == "Delete")
+                {
+                    db.Script("DELETE FROM [tbl_Product_MainStarTags]WHERE id_MainStarTag=" + id);
+                }
+                db.DC();
+                return Content("Success");
             }
             else
                 return Content("NotAccess");
