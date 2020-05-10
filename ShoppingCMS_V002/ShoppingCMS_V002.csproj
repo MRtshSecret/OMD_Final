@@ -7352,6 +7352,7 @@
     <Content Include="SQL\ORD99\18\PandaSQL.sql" />
     <Content Include="SQL\ORD99\18\PandaSQL_Data.sql" />
     <Content Include="SQL\ORD99\1\PandaSQL.sql" />
+    <Content Include="SQL\ORD99\21\EmptyDB.sql" />
     <Content Include="SQL\ORD99\FinalSQL_5\PandaSQL.sql" />
     <Content Include="SQL\ORD99\FinalSQL_5\PandaSQL_Data.sql" />
     <Content Include="SQL\ORD99\LastEdit\MRMedition.sql" />
