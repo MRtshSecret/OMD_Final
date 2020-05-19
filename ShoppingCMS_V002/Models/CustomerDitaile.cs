@@ -13,6 +13,7 @@ namespace ShoppingCMS_V002.Models
         public string PhoneNum { get; set; }
         public string Discription { get; set; }
         public string registerDate { get; set; }
+        public string Email { get; set; }
         public List<AddressModel> Addresses { get; set; }
     }
 }

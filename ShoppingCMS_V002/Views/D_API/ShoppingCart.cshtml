@@ -80,14 +80,29 @@
             <form action="#" class="form-delivery">
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="form-group"><input id="Name_inp" class="form-control" type="text" placeholder="نام"></div>
+                        <div class="form-group"><input id="Name_inp" class="form-control" type="text" placeholder="نام" value="@Model.Customer.Name"></div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group"><input id="Family_inp" class="form-control" type="text" placeholder="نام خانوادگی"></div>
+                        <div class="form-group"><input id="Family_inp" class="form-control" type="text" placeholder="نام خانوادگی" value="@Model.Customer.Familly"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group"><input id="Phone_inp" class="form-control" type="text" placeholder="تلفن تماس" value="@Model.Customer.PhoneNum"></div>
                     </div>
                     @*<div class="col-md-4">
-                            <div class="form-group">< input class="form-control" type="text" placeholder="کد ملی"></div>
-                        </div>*@
+            <div class="form-group">< input class="form-control" type="text" placeholder="کد ملی"></div>
+        </div>*@
+
+                    <div class="col-md-12">
+                        <div class="form-group selectpicker-wrapper">
+                            <select id="AddressSelect" class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select" onchange="return AddressChange()">
+                                <option selected value="0">آدرس جدید</option>
+                                @foreach (var item in Model.Adresses)
+                                {
+                            <option value="@item.Id"> @item.City - @item.FullAddress</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-md-3">
                         <div class="form-group selectpicker-wrapper">
                             <select id="OstanSelect" class="selectpicker input-price" data-live-search="true" data-width="100%" data-toggle="tooltip" title="Select" onchange="CityChange()">
@@ -116,11 +131,9 @@
                     <div class="col-md-4">
                         <div class="form-group"><input id="Address_hint_inp" class="form-control" type="text" placeholder="کد پستی"></div>
                     </div>
+
                     <div class="col-md-4">
-                        <div class="form-group"><input id="Phone_inp" class="form-control" type="text" placeholder="تلفن تماس"></div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group"><input id="Email_inp" class="form-control" type="text" placeholder="آدرس ایمیل ( اختیاری )"></div>
+                        <div class="form-group"><input id="Email_inp" class="form-control" type="text" placeholder="آدرس ایمیل ( اختیاری )" value="@Model.Customer.Email"></div>
                     </div>
                 </div>
             </form>
@@ -187,7 +200,7 @@
 
     function CityChange() {
         var Ost = $('#OstanSelect').val();
-        alert(Ost);
+       // alert(Ost);
         $('#CitySelect').prop("disabled", false);
 
 
@@ -276,8 +289,13 @@ function FinishFactor() {
     var deposit = $('#deposit').text();
     var PaymentToken = "";
     var PaymentSerial = "";
+    var AddSelect = $('#AddressSelect').val();
 
-    if (Name_inp != "" && Family_inp != "" && CitySelect != "0" && Address_inp != "" && Phone_inp != "" && Address_hint_inp != "") {
+    if (AddSelect != "0") {
+        CitySelect = "0";
+    }
+    alert(CitySelect);
+    if (Name_inp != "" && Family_inp != ""&& Phone_inp != "" && ((CitySelect != "0" && Address_inp != "" && Address_hint_inp != "") ||AddSelect!="0" )) {
 
         PostJson1 = {
             'Name': Name_inp,
@@ -291,7 +309,8 @@ function FinishFactor() {
             'PaymentToken': PaymentToken,
             'PaymentSerial': PaymentSerial,
             'CustomerId': CustomerId,
-            'depositMoney': deposit
+            'depositMoney': deposit,
+            'AddressSelect':AddSelect
         };
 
         $.ajax({
@@ -302,7 +321,7 @@ function FinishFactor() {
             success: function (response) {
                 if (response == "Success") {
 
-                    alert("خرید شما با موفقیت انجام شد");
+                   danger("مشتری عزیز", "خرید شما با موفقیت انجام شد");
                     var url ="@Url.Action("Index", "D_API", null, Request.Url.Scheme)";
                     location.href = url;
 
@@ -321,11 +340,31 @@ function FinishFactor() {
 
 
     } else {
-        alert("لطفا همه ی مقادر ورودی را پر کنید");
+       danger("مشتری عزیز", "لطفا همه ی مقادر ورودی را پر کنید");
     }
 
     return false;
 
-}
+    }
+
+
+    function AddressChange() {
+        var AddSelect = $('#AddressSelect').val();
+        if (AddSelect != "0") {
+            $('#CitySelect').prop("disabled", true);
+            $('#Address_inp').prop("disabled", true);
+            $('#Address_hint_inp').prop("disabled", true);
+            $('#OstanSelect').prop("disabled", true);
+            $('#CitySelect1').prop("disabled", true);
+
+        } else {
+
+            $('#CitySelect').prop("disabled", false);
+            $('#Address_inp').prop("disabled", false);
+            $('#Address_hint_inp').prop("disabled", false);
+            $('#OstanSelect').prop("disabled", false);
+            $('#CitySelect1').prop("disabled", false);
+        }
+    }
 
 </script>

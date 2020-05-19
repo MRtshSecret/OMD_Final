@@ -173,15 +173,39 @@ namespace ShoppingCMS_V002.Controllers
             D_APIModelFiller DMF = new D_APIModelFiller();
             return View(DMF.shoppingCart(factorId));
         }
+
         public ActionResult ShoppingCart(int factorId)
         {
-            D_APIModelFiller DMF = new D_APIModelFiller();
-            var model = new ShoppingCartModelView()
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
             {
-                FactorModel= DMF.shoppingCart(factorId),
-                Ostan=DMF.Ostanha()
-            };
-            return View(model);
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+                    D_APIModelFiller DMF = new D_APIModelFiller();
+                    ModelFiller MF = new ModelFiller();
+                    var model = new ShoppingCartModelView()
+                    {
+                        FactorModel = DMF.shoppingCart(factorId),
+                        Ostan = DMF.Ostanha(),
+                        Adresses = DMF.CustomerAddresses(Convert.ToInt32(act.CustomerId)),
+                        Customer=MF.customerDitail(Convert.ToInt32(act.CustomerId))
+                    };
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("ErrorPage", "D_API");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "D_API");
+            }
+
         }
 
         public ActionResult Product_Detail(int Id)
@@ -311,40 +335,54 @@ namespace ShoppingCMS_V002.Controllers
         [HttpGet]
         public ActionResult MyAccount()
         {
-            HttpCookie reqCookies = Request.Cookies["Cookies"];
 
-            string C_Mobile, C_Password;
-
-            if (reqCookies != null)
-
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
             {
-                C_Mobile = reqCookies["C_Mobile"].ToString();
-                C_Password = reqCookies["C_Password"].ToString();
-
-                PDBC dbo = new PDBC("PandaMarketCMS", true);
-                string query;
-                query = "SELECT [id_Customer],[C_Mobile],[C_Password]FROM[PandaMarketCMS].[dbo].[tbl_Customer_Main]";
-                query += $" where[C_Mobile] = N'{C_Mobile}' AND [C_Password] = N'{C_Password}'";
-                dbo.Connect();
-                using (DataTable dt = dbo.Select(query))
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
                 {
-                    if (dt.Rows.Count > 0)
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
                     {
-                        tbl_Customer_Main data = new tbl_Customer_Main()
-                        {
-                            id_Customer = dt.Rows[0]["id_Customer"].ToString()
-                        };
-
-
-
-                        Session["d1"] = data;
-                        return Redirect("???????");
-                    }
-
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
 
                 }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
             }
-            return View();
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
+
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    return RedirectToAction("myaccount2", "D_API");
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            else
+            {
+                return View();
+            }
+
         }
 
         [HttpPost]
@@ -571,14 +609,492 @@ namespace ShoppingCMS_V002.Controllers
         }
         /// /////////////////////{ end : blog_post }////////////////////////
 
-      
+
+        public ActionResult accountinformation()
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
 
 
 
 
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+                    ModelFiller MF = new ModelFiller();
+                    return View(MF.customerDitail(Convert.ToInt32(act.CustomerId)));
+                }
+                else
+                {
+                    return RedirectToAction("MyAccount", "D_API");
+                }
+            }
+            else
+            {
+                return RedirectToAction("MyAccount", "D_API");
+            }
+
+        }
+
+
+        public ActionResult myaccount2()
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
+
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+
+
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("MyAccount", "D_API");
+                }
+            }
+            else
+            {
+                return RedirectToAction("MyAccount", "D_API");
+            }
+
+        }
+
+        public ActionResult addressBook()
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
+
+
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    D_APIModelFiller DMF = new D_APIModelFiller();
+                    return View(DMF.Ostanha());
+                }
+                else
+                {
+                    return RedirectToAction("ErrorPage", "D_API");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "D_API");
+            }
+
+
+        }
+
+        public ActionResult ChangePass()
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
+
+
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("ErrorPage", "D_API");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "D_API");
+            }
+        }
+
+        public ActionResult newsletter()
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
 
 
 
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
 
+                    //PDBC db = new PDBC("PandaMarketCMS", true);
+                    //db.Connect();
+                    //DataTable dt = db.Select("" + act.CustomerId);
+
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("ErrorPage", "D_API");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "D_API");
+            }
+        }
+
+        public ActionResult orderHistory()
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
+
+
+
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+
+                    D_APIModelFiller DMF = new D_APIModelFiller();
+
+                    return View(DMF.CustomerShops(Convert.ToInt32(act.CustomerId),3));
+                }
+                else
+                {
+                    return RedirectToAction("ErrorPage", "D_API");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "D_API");
+            }
+        }
+
+        public ActionResult Returns()
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
+            //
+
+
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+
+                    D_APIModelFiller DMF = new D_APIModelFiller();
+
+                    return View(DMF.CustomerShops(Convert.ToInt32(act.CustomerId), 0));
+                }
+                else
+                {
+                    return RedirectToAction("ErrorPage", "D_API");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "D_API");
+            }
+
+        }
+
+        public ActionResult reviewRating()
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
+
+
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+
+                    D_APIModelFiller DMF = new D_APIModelFiller();
+
+                    return View(DMF.CustomerComments(Convert.ToInt32(act.CustomerId)));
+                }
+                else
+                {
+                    return RedirectToAction("ErrorPage", "D_API");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "D_API");
+            }
+
+
+
+        }
+        public ActionResult ErrorPage()
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Factor"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Factor");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_FACTOR");
+                    MiniFactorModel minif = JsonConvert.DeserializeObject<MiniFactorModel>(SSSession);
+                    D_APIModelFiller dmf = new D_APIModelFiller();
+                    FactorPopUpModel FPM = dmf.shoppingCart(minif.Id);
+                    FactorMasterModel modell = new FactorMasterModel()
+                    {
+                        ListOfProducts = FPM,
+                        Totality = minif
+                    };
+                    ViewBag.factorMasterModel = modell;
+
+                }
+                else
+                {
+                    ViewBag.factorMasterModel = null;
+                }
+            }
+            else
+            {
+                ViewBag.factorMasterModel = null;
+            }
+            return View();
+        }
     }
 }

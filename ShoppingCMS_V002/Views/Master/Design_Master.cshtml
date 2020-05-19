@@ -42,268 +42,288 @@
 </head>
 
 <body id="home" class="wide">
-<input id="URLFactor" value="@Url.Action("ShoppingCartPopup","D_API",null,Request.Url.Scheme)?factorId=" style="display: none"/>
-<!-- PRELOADER -->
-<div id="preloader">
-    <div id="preloader-status">
-        <div class="spinner">
-            <div class="rect1"></div>
-            <div class="rect2"></div>
-            <div class="rect3"></div>
-            <div class="rect4"></div>
-            <div class="rect5"></div>
+    <input id="URLFactor" value="@Url.Action("ShoppingCartPopup","D_API",null,Request.Url.Scheme)?factorId=" style="display: none" />
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div id="preloader-status">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+            <div id="preloader-title">در حال بارگزاری ...</div>
         </div>
-        <div id="preloader-title">در حال بارگزاری ...</div>
     </div>
-</div>
-<!-- /PRELOADER -->
-<!-- WRAPPER -->
-<div class="wrapper">
+    <!-- /PRELOADER -->
+    <!-- WRAPPER -->
+    <div class="wrapper">
 
-<!-- Popup: Shopping cart items -->
-<div class="modal fade popup-cart" id="popup-cart" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="container">
-            <div class="cart-items">
-                <div class="cart-items-inner">
-                    <div class="media">
-                        @if (OmdModel != null)
-                        {
-                            if (OmdModel.ListOfProducts.items.Count > 0)
-                            {
+        <!-- Popup: Shopping cart items -->
+        <div class="modal fade popup-cart" id="popup-cart" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="container">
+                    <div class="cart-items">
+                        <div class="cart-items-inner">
+                            <div class="media">
+                                @if (OmdModel != null)
+                                {
+                                    if (OmdModel.ListOfProducts.items.Count > 0)
+                                    {
 
-                                foreach (var item in OmdModel.ListOfProducts.items)
+                                        foreach (var item in OmdModel.ListOfProducts.items)
+                                        {
+                                            <div class="media">
+                                                <a class="pull-right" href="#"><img class="media-object item-image" src="@item.ImagePath" alt=""></a>
+                                                <p class="pull-left item-price">@item.PriceOff @OmdModel.ListOfProducts.MoneyQuantity</p>
+
+                                                <div class="media-body">
+                                                    <h4 class="media-heading item-title"><a href="#">@item.Title - @item.number عدد</a></h4>
+                                                    <p class="item-desc">@item.property</p>
+                                                </div>
+
+                                            </div>
+                                        }
+
+                                        <div class="media">
+                                            <p class="pull-left item-price">@OmdModel.ListOfProducts.totality @OmdModel.ListOfProducts.MoneyQuantity</p>
+                                            <div class="media-body"><h4 class="media-heading item-title summary">جمع کل</h4></div>
+                                        </div>
+
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <div>
+                                                    <a href="#" class="btn btn-theme btn-theme-dark" data-dismiss="modal">بستن</a>
+                                                    <!---->
+                                                    <a href="@Url.Action("ShoppingCart", "D_API", new {factorId = OmdModel.ListOfProducts.Id})" class="btn btn-theme btn-theme-transparent btn-call-checkout">پرداخت</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="media">
+                                            <p class="pull-left item-price">موردی برای نمایش وجود ندارد</p>
+
+                                        </div>
+
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <div>
+                                                    <a href="#" class="btn btn-theme btn-theme-dark" data-dismiss="modal">بستن</a>
+                                                    <!---->
+                                                    <a href="#" class="btn btn-theme btn-theme-transparent btn-call-checkout">پرداخت</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
                                 {
                                     <div class="media">
-                                        <a class="pull-right" href="#"><img class="media-object item-image" src="@item.ImagePath" alt=""></a>
-                                        <p class="pull-left item-price">@item.PriceOff @OmdModel.ListOfProducts.MoneyQuantity</p>
+                                        <p class="pull-left item-price">موردی برای نمایش وجود ندارد</p>
 
+                                    </div>
+
+                                    <div class="media">
                                         <div class="media-body">
-                                            <h4 class="media-heading item-title"><a href="#">@item.Title - @item.number عدد</a></h4>
-                                            <p class="item-desc">@item.property</p>
+                                            <div>
+                                                <a href="#" class="btn btn-theme btn-theme-dark" data-dismiss="modal">بستن</a>
+                                                <!---->
+                                                <a href="#" class="btn btn-theme btn-theme-transparent btn-call-checkout">پرداخت</a>
+                                            </div>
                                         </div>
-
                                     </div>
                                 }
-
-                                <div class="media">
-                                    <p class="pull-left item-price">@OmdModel.ListOfProducts.totality @OmdModel.ListOfProducts.MoneyQuantity</p>
-                                    <div class="media-body"><h4 class="media-heading item-title summary">جمع کل</h4></div>
-                                </div>
-
-                                <div class="media">
-                                    <div class="media-body">
-                                        <div>
-                                            <a href="#" class="btn btn-theme btn-theme-dark" data-dismiss="modal">بستن</a>
-                                            <!---->
-                                            <a href="@Url.Action("ShoppingCart", "D_API", new {factorId = OmdModel.ListOfProducts.Id})" class="btn btn-theme btn-theme-transparent btn-call-checkout">پرداخت</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="media">
-                                    <p class="pull-left item-price">موردی برای نمایش وجود ندارد</p>
-
-                                </div>
-
-                                <div class="media">
-                                    <div class="media-body">
-                                        <div>
-                                            <a href="#" class="btn btn-theme btn-theme-dark" data-dismiss="modal">بستن</a>
-                                            <!---->
-                                            <a href="#" class="btn btn-theme btn-theme-transparent btn-call-checkout">پرداخت</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        }
-                        else
-                        {
-                            <div class="media">
-                                <p class="pull-left item-price">موردی برای نمایش وجود ندارد</p>
-
                             </div>
-
-                            <div class="media">
-                                <div class="media-body">
-                                    <div>
-                                        <a href="#" class="btn btn-theme btn-theme-dark" data-dismiss="modal">بستن</a>
-                                        <!---->
-                                        <a href="#" class="btn btn-theme btn-theme-transparent btn-call-checkout">پرداخت</a>
-                                    </div>
-                                </div>
-                            </div>
-                        }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<!-- /Popup: Shopping cart items -->
-<!-- HEADER -->
-<header class="header fixed">
-    <div class="header-wrapper">
-        <div class="container">
+        <!-- /Popup: Shopping cart items -->
+        <!-- HEADER -->
+        <header class="header fixed">
+            <div class="header-wrapper">
+                <div class="container">
 
-            <!-- Logo -->
-            <div class="logo">
-                <a href="@Url.Action("Index", "D_API")"><img src="~/assetsOMD/img/logo-bella-shop.png" alt="عمده داران"/></a>
-            </div>
-            <!-- /Logo -->
-            <!-- Header search -->
-            <div class="header-search">
-                <input id="SearchBox" class="form-control" type="text" placeholder="جست و جوی محصول .."/>
-                <button onclick="return SearchFunction()"><i class="fa fa-search"></i></button>
-            </div>
-            <!-- /Header search -->
-            <!-- Header shopping cart -->
-            <div id="miniFactor_divM" class="header-cart">
-                <div class="cart-wrapper">
-                    <button onclick="return wishListFunction()" class="btn btn-theme-transparent hidden-xs hidden-sm"><i class="fa fa-heart"></i></button>
-                    <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart">
-                        <i class="fa fa-shopping-cart"></i>
-                        <div id="Master_miniFactorId" style="display: none"></div>
-                        @if (OmdModel != null)
-                        {
-                            <span class="hidden-xs" id="Master_miniFactor"> @OmdModel.Totality.Items عدد - @OmdModel.Totality.totality تومان </span>
-                        }
-                        else
-                        {
-                            <span class="hidden-xs" id="Master_miniFactor"> 0 عدد - 0 تومان </span>
-                        }
-                        <i class="fa fa-angle-down"></i>
-                    </a>
-
-                    <!-- Mobile menu toggle button -->
-                    <a href="#" class="menu-toggle btn btn-theme-transparent"><i class="fa fa-bars"></i></a>
-                    <!-- /Mobile menu toggle button -->
-                </div>
-            </div>
-            <!-- Header shopping cart -->
-
-        </div>
-    </div>
-    <div class="navigation-wrapper">
-        <div class="container">
-            <!-- Navigation -->
-            <nav class="navigation closed clearfix">
-                <a href="#" class="menu-toggle-close btn"><i class="fa fa-times"></i></a>
-                <ul class="nav sf-menu">
-                    <li class="sale">
-                        <a href="@Url.Action("Index", "D_API")">صفحه اصلی</a>
-                    </li>
-                    <li>
-                        <a href="#">محصولات</a>
-                        <ul id="Master_CategoryL">
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Blog", "D_API", new {NamePage = "post", page = 1})">اطلاعیه ها</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Terms", "D_API")">قوانین و مقررات</a>
-
-                    </li>
-                    <li><a href="@Url.Action("AboutUs", "D_API")">درباره ما</a></li>
-                    <li><a href="@Url.Action("ContactUs", "D_API")">تماس با ما</a></li>
-                    <li><a href="@Url.Action("MyAccount", "D_API")">حساب کاربری من</a></li>
-                </ul>
-            </nav>
-            <!-- /Navigation -->
-        </div>
-    </div>
-</header>
-<!-- /HEADER -->
-<!-- CONTENT AREA -->
-@RenderBody()
-
-<!-- /CONTENT AREA -->
-<!-- FOOTER -->
-<footer class="footer">
-    <div class="footer-widgets">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-3">
-                    <div class="widget">
-                        <h4 class="widget-title">درباره ما</h4>
-                        <p>مجموعه <a>عمده داران</a> همزمان با رونق کسب و کار ها و فعالیت های صنفی و تجاری در فضای مجازی تشکیل شده و توانسته است در شاخه کفش و صنایع وابسته به شکل موثر و قدرتمندی فعالیت نماید.</p>
-                        <ul class="social-icons">
-                            <li><a href="#" class="facebook"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="https://www.instagram.com/omdedaran/" class="instagram"><i class="fa fa-instagram"></i></a></li>
-                            <li><a href="#" class="pinterest"><i class="fa fa-pinterest"></i></a></li>
-                        </ul>
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a href="@Url.Action("Index", "D_API")"><img src="~/assetsOMD/img/logo-bella-shop.png" alt="عمده داران" /></a>
                     </div>
+                    <!-- /Logo -->
+                    <!-- Header search -->
+                    <div class="header-search">
+                        <input id="SearchBox" class="form-control" type="text" placeholder="جست و جوی محصول .." />
+                        <button onclick="return SearchFunction()"><i class="fa fa-search"></i></button>
+                    </div>
+                    <!-- /Header search -->
+                    <!-- Header shopping cart -->
+                    <div id="miniFactor_divM" class="header-cart">
+                        <div class="cart-wrapper">
+                            <button onclick="return wishListFunction()" class="btn btn-theme-transparent hidden-xs hidden-sm"><i class="fa fa-heart"></i></button>
+                            <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart">
+                                <i class="fa fa-shopping-cart"></i>
+                                <div id="Master_miniFactorId" style="display: none"></div>
+                                @if (OmdModel != null)
+                                {
+                                    <span class="hidden-xs" id="Master_miniFactor"> @OmdModel.Totality.Items عدد - @OmdModel.Totality.totality تومان </span>
+                                }
+                                else
+                                {
+                                    <span class="hidden-xs" id="Master_miniFactor"> 0 عدد - 0 تومان </span>
+                                }
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+
+                            <!-- Mobile menu toggle button -->
+                            <a href="#" class="menu-toggle btn btn-theme-transparent"><i class="fa fa-bars"></i></a>
+                            <!-- /Mobile menu toggle button -->
+                        </div>
+                    </div>
+                    <!-- Header shopping cart -->
+
                 </div>
+            </div>
+            <div class="navigation-wrapper">
+                <div class="container">
+                    <!-- Navigation -->
+                    <nav class="navigation closed clearfix">
+                        <a href="#" class="menu-toggle-close btn"><i class="fa fa-times"></i></a>
+                        <ul class="nav sf-menu">
+                            <li class="sale">
+                                <a href="@Url.Action("Index", "D_API")">صفحه اصلی</a>
+                            </li>
+                            <li>
+                                <a href="#">محصولات</a>
+                                <ul id="Master_CategoryL">
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Blog", "D_API", new {NamePage = "post", page = 1})">اطلاعیه ها</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Terms", "D_API")">قوانین و مقررات</a>
 
-                <div class="col-md-3">
-                    <div class="widget widget-categories">
-                        <h4 class="widget-title">اطلاعات</h4>
-                        <ul>
-                            <li><a href="@Url.Action("Terms", "D_API")">شرایط و ضوابط</a></li>
-                            <li><a href="@Url.Action("Terms", "D_API")">قوانین و مقررات</a></li>
-
+                            </li>
+                            <li><a href="@Url.Action("AboutUs", "D_API")">درباره ما</a></li>
                             <li><a href="@Url.Action("ContactUs", "D_API")">تماس با ما</a></li>
+                            <li><a href="@Url.Action("MyAccount", "D_API")">حساب کاربری من</a></li>
                         </ul>
-                    </div>
+                    </nav>
+                    <!-- /Navigation -->
                 </div>
+            </div>
+        </header>
+        <!-- /HEADER -->
+        <!-- CONTENT AREA -->
+        @RenderBody()
 
-                <div class="col-md-3">
-                    <div class="widget">
-                        <h4 class="widget-title">اخبار</h4>
-                        <p>عمده داران گرد هم آمده اند.</p>
+        <!-- /CONTENT AREA -->
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-widgets">
+                <div class="container">
+                    <div class="row">
 
-                        <form action="#" Style="display: none;">
-                            <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Enter Your Mail and Get $10 Cash"/>
+                        <div class="col-md-3">
+                            <div class="widget">
+                                <h4 class="widget-title">درباره ما</h4>
+                                <p>مجموعه <a>عمده داران</a> همزمان با رونق کسب و کار ها و فعالیت های صنفی و تجاری در فضای مجازی تشکیل شده و توانسته است در شاخه کفش و صنایع وابسته به شکل موثر و قدرتمندی فعالیت نماید.</p>
+                                <ul class="social-icons">
+                                    <li><a href="#" class="facebook"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href="https://www.instagram.com/omdedaran/" class="instagram"><i class="fa fa-instagram"></i></a></li>
+                                    <li><a href="#" class="pinterest"><i class="fa fa-pinterest"></i></a></li>
+                                </ul>
                             </div>
-                            <div class="form-group">
-                                <button class="btn btn-theme btn-theme-transparent">Subscribe</button>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="widget widget-categories">
+                                <h4 class="widget-title">اطلاعات</h4>
+                                <ul>
+                                    <li><a href="@Url.Action("Terms", "D_API")">شرایط و ضوابط</a></li>
+                                    <li><a href="@Url.Action("Terms", "D_API")">قوانین و مقررات</a></li>
+
+                                    <li><a href="@Url.Action("ContactUs", "D_API")">تماس با ما</a></li>
+                                </ul>
                             </div>
-                        </form>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="widget">
+                                <h4 class="widget-title">اخبار</h4>
+                                <p>عمده داران گرد هم آمده اند.</p>
+
+                                <form action="#" Style="display: none;">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" placeholder="Enter Your Mail and Get $10 Cash" />
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-theme btn-theme-transparent">Subscribe</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="widget widget-tag-cloud">
+                                <h4 class="widget-title">برچسب ها</h4>
+                                <ul id="MastertagList">
+                                </ul>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+            </div>
+            <div class="footer-meta">
+                <div class="container">
+                    <div class="row">
 
-                <div class="col-md-3">
-                    <div class="widget widget-tag-cloud">
-                        <h4 class="widget-title">برچسب ها</h4>
-                        <ul id="MastertagList">
-                        </ul>
+                        <div class="col-sm-6">
+                            <div class="copyright"> © کلیه حقوق علمی، مادی و معنوی این وب سایت متعلق به فروشگاه عمده داران می باشد. طراحی شده توسط <a href="https://Omdedaran.com/" target="_blank" title="Top HTML Templates"> . . . MRHF . . . </a></div>
+                        </div>
+
+
                     </div>
                 </div>
+            </div>
+        </footer>
+        <!-- /FOOTER -->
 
+        <div id="to-top" class="to-top"><i class="fa fa-angle-down"></i></div>
+
+    </div>
+    <!-- /WRAPPER -->
+
+
+    <div class="modal fade" id="modal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="border: none!important;">
+                <div class="modal-header" style="background-color: #28a745;width: 100%;">
+                    <h5 class="modal-title" id="modal-title" style="float: right;color:#fff;">title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float: left;color: white">
+                        <span style="color: white!important;" aria-hidden="true"><i style="color: white!important;" class="fa fa-times"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    body
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" style="float:left;background-color: #000;color: #fff;" data-dismiss="modal">تایید</button>
+                </div>
             </div>
         </div>
     </div>
-    <div class="footer-meta">
-        <div class="container">
-            <div class="row">
 
-                <div class="col-sm-6">
-                    <div class="copyright"> © کلیه حقوق علمی، مادی و معنوی این وب سایت متعلق به فروشگاه عمده داران می باشد. طراحی شده توسط <a href="https://Omdedaran.com/" target="_blank" title="Top HTML Templates"> . . . MRHF . . . </a></div>
-                </div>
-
-
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- /FOOTER -->
-
-<div id="to-top" class="to-top"><i class="fa fa-angle-down"></i></div>
-
-</div>
-<!-- /WRAPPER -->
-<!-- JS Global -->
-@Scripts.Render("~/bundles/omd/jquery")
-<script>
+    <!-- JS Global -->
+    @Scripts.Render("~/bundles/omd/jquery")
+    <script>
     $(document).ready(function() {
         MsterFactor();
-
 
         $.ajax({
             url: '/API_Functions/MasterTags',
@@ -390,8 +410,7 @@
                     location.href = url;
 
                 } else {
-                    alert(" لطفا ابتدا وارد حساب کاربری خود شوید.");
-
+                    danger("مشتری عزیز", "لطفا ابتدا وارد حساب کاربری خود شوید.");
                 }
 
             },
@@ -403,7 +422,7 @@
 
         return false;
     }
-</script>
+    </script>
 
 
 </body>

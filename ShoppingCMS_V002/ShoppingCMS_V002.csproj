@@ -171,6 +171,7 @@
     <Compile Include="Models\companies.cs" />
     <Compile Include="Models\CustomerDitaile.cs" />
     <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Models\D_APIModels\ActivationModel.cs" />
     <Compile Include="Models\D_APIModels\blogclass.cs" />
     <Compile Include="Models\D_APIModels\Company_Customers_Model.cs" />
     <Compile Include="Models\D_APIModels\FactorMasterModel.cs" />
@@ -180,8 +181,10 @@
     <Compile Include="Models\D_APIModels\MPCModel.cs" />
     <Compile Include="Models\D_APIModels\OptionModel.cs" />
     <Compile Include="Models\D_APIModels\page.cs" />
+    <Compile Include="Models\D_APIModels\ProductRateModel.cs" />
     <Compile Include="Models\D_APIModels\Product_DesignerModel.cs" />
     <Compile Include="Models\D_APIModels\ShoppingCart_item.cs" />
+    <Compile Include="Models\D_APIModels\ShoppingCart_item_CustomerPortal.cs" />
     <Compile Include="Models\D_APIModels\tbl_BLOG.cs" />
     <Compile Include="Models\D_APIModels\tbl_BLOG_TeamMembers.cs" />
     <Compile Include="Models\D_APIModels\tbl_Customer_Main.cs" />
@@ -7353,6 +7356,7 @@
     <Content Include="SQL\ORD99\18\PandaSQL_Data.sql" />
     <Content Include="SQL\ORD99\1\PandaSQL.sql" />
     <Content Include="SQL\ORD99\21\EmptyDB.sql" />
+    <Content Include="SQL\ORD99\30\PandaSQL.sql" />
     <Content Include="SQL\ORD99\FinalSQL_5\PandaSQL.sql" />
     <Content Include="SQL\ORD99\FinalSQL_5\PandaSQL_Data.sql" />
     <Content Include="SQL\ORD99\LastEdit\MRMedition.sql" />
@@ -7452,6 +7456,16 @@
     <Content Include="Views\D_API\Blog.cshtml" />
     <Content Include="Views\D_API\Blog_Post.cshtml" />
     <Content Include="Views\D_API\ContactUs.cshtml" />
+    <Content Include="Views\D_API\accountinformation.cshtml" />
+    <Content Include="Views\D_API\myaccount2.cshtml" />
+    <Content Include="Views\D_API\_AccountSidebar.cshtml" />
+    <Content Include="Views\D_API\ChangePass.cshtml" />
+    <Content Include="Views\D_API\addressBook.cshtml" />
+    <Content Include="Views\D_API\orderHistory.cshtml" />
+    <Content Include="Views\D_API\reviewRating.cshtml" />
+    <Content Include="Views\D_API\Returns.cshtml" />
+    <Content Include="Views\D_API\newsletter.cshtml" />
+    <Content Include="Views\D_API\ErrorPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

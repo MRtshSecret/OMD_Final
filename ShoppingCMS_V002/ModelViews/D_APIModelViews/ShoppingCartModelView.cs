@@ -11,5 +11,7 @@ namespace ShoppingCMS_V002.ModelViews.D_APIModelViews
     {
         public FactorPopUpModel FactorModel { get; set; }
         public List<Id_ValueModel> Ostan { get; set; }
+        public List<AddressModel> Adresses { get; set; }
+        public CustomerDitaile Customer { get; set; }
     }
 }

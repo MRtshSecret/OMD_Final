@@ -1300,7 +1300,7 @@ namespace ShoppingCMS_V002.OtherClasses
                 AddresList.Add(model);
             }
 
-            DataTable dt = db.Select("SELECT [id_Customer],[C_regDate],[C_Mobile],[C_FirstName],[C_LastNAme],[C_Description] FROM [tbl_Customer_Main]where id_Customer=" + id);
+            DataTable dt = db.Select("SELECT [id_Customer],[C_regDate],[C_Mobile],[C_FirstName],[C_LastNAme],[C_Description],[C_Email] FROM [tbl_Customer_Main]where id_Customer=" + id);
             db.DC();
             var res = new CustomerDitaile();
 
@@ -1313,6 +1313,7 @@ namespace ShoppingCMS_V002.OtherClasses
                 res.Familly = dt.Rows[0]["C_LastNAme"].ToString();
                 res.Discription = dt.Rows[0]["C_Description"].ToString();
                 res.PhoneNum = dt.Rows[0]["C_Mobile"].ToString();
+                res.Email = dt.Rows[0]["C_Email"].ToString();
                 res.registerDate = persianDateTime.ToShortDateString();
                 res.Addresses = AddresList;
             }

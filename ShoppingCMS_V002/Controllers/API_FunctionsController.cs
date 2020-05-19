@@ -1,7 +1,9 @@
-﻿using ShoppingCMS_V002.DBConnect;
+﻿using Newtonsoft.Json;
+using ShoppingCMS_V002.DBConnect;
 using ShoppingCMS_V002.Models.D_APIModels;
 using ShoppingCMS_V002.OtherClasses;
 using ShoppingCMS_V002.OtherClasses.D_APIOtherClasses;
+using ShoppingCMS_V002.OtherClasses.MasterChi_Fu;
 using ShoppingCMS_V002.SMS_Module;
 using System;
 using System.Collections.Generic;
@@ -110,7 +112,7 @@ namespace ShoppingCMS_V002.Controllers
                     _VALUE = ENC.MD5Hash(Pass)
                 };
                 parss.Add(par);
-                int UserId = Convert.ToInt32(db.Script("INSERT INTO [tbl_Customer_Main] OUTPUT inserted.id_Customer VALUES(GETDATE(),@Mobile,N'',N'',N'',0,0,NULL,@PassWord)", parss));
+                int UserId = Convert.ToInt32(db.Script("INSERT INTO [tbl_Customer_Main] OUTPUT inserted.id_Customer VALUES(GETDATE(),@Mobile,N'',N'',N'',0,0,NULL,@PassWord,N'')", parss));
                 Random generator = new Random();
                 string GeneratedCode = generator.Next(100000, 999999).ToString("D6");
                 parss = new List<ExcParameters>();
@@ -197,6 +199,22 @@ namespace ShoppingCMS_V002.Controllers
         [HttpPost]
         public ActionResult AddComment_Product(int ProId, string Email, string Name, string Message)
         {
+            string CustomerId = "0";
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+                    CustomerId = act.CustomerId;
+                }
+            }
+
+
+
             PDBC db = new PDBC("PandaMarketCMS", true);
 
             List<ExcParameters> parss = new List<ExcParameters>();
@@ -212,20 +230,28 @@ namespace ShoppingCMS_V002.Controllers
                 _KEY = "@Email",
                 _VALUE = Email
             };
-            parss.Add(par); par = new ExcParameters()
+            parss.Add(par);
+            par = new ExcParameters()
             {
                 _KEY = "@Name",
                 _VALUE = Name
             };
-            parss.Add(par); par = new ExcParameters()
+            parss.Add(par); 
+            par = new ExcParameters()
             {
                 _KEY = "@Message",
                 _VALUE = Message
             };
             parss.Add(par);
-
+            
+            par = new ExcParameters()
+            {
+                _KEY = "@CustomerId",
+                _VALUE = CustomerId
+            };
+            parss.Add(par);
             db.Connect();
-            string result = db.Script("INSERT INTO [tbl_Product_Comment]VALUES(@Email,@Name,N'',@Message,@ProId,GETDATE())", parss);
+            string result = db.Script("INSERT INTO [tbl_Product_Comment]VALUES(@Email,@Name,N'',@Message,@ProId,GETDATE(),@CustomerId)", parss);
             db.DC();
             if (result == "1")
             {
@@ -460,7 +486,7 @@ namespace ShoppingCMS_V002.Controllers
             return Content("Success");
         }
 
-        public ActionResult AddFactor(string Name, string familly, int cityId, int factorId, string Address, string Email, string Phonenum, string CodePosti, string PaymentToken, string PaymentSerial, int CustomerId, string depositMoney)
+        public ActionResult AddFactor(string Name, string familly, int cityId, int factorId, string Address, string Email, string Phonenum, string CodePosti, string PaymentToken, string PaymentSerial, int CustomerId, string depositMoney,string AddressSelect)
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
            
@@ -492,8 +518,17 @@ namespace ShoppingCMS_V002.Controllers
                 _VALUE = Phonenum
             };
             parss.Add(par);
- db.Connect();
-            db.Script("UPDATE [tbl_Customer_Main]SET [C_Mobile] = @Phonenum,[C_FirstName] =@Name ,[C_LastNAme] =@familly ,[C_ISActivate] = 1 WHERE id_Customer=@CustomerId", parss);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@Email",
+                _VALUE = Email
+            };
+            parss.Add(par);
+
+            db.Connect();
+
+            db.Script("UPDATE [tbl_Customer_Main]SET [C_Mobile] = @Phonenum,[C_FirstName] =@Name ,[C_LastNAme] =@familly ,[C_ISActivate] = 1 ,[C_Email] =@Email  WHERE id_Customer=@CustomerId", parss);
 
             parss = new List<ExcParameters>();
             par = new ExcParameters()
@@ -523,7 +558,18 @@ namespace ShoppingCMS_V002.Controllers
                 _VALUE = CustomerId
             };
             parss.Add(par);
-            string AddresId = db.Script("INSERT INTO [tbl_Customer_Address] output inserted.id_CAddress VALUES( @CustomerId ,@cityId ,@CodePosti,@Address)", parss);
+
+            string AddresId;
+            if (AddressSelect=="0")
+            {
+                AddresId = db.Script("INSERT INTO [tbl_Customer_Address] output inserted.id_CAddress VALUES( @CustomerId ,@cityId ,@CodePosti,@Address)", parss);
+
+            }else
+            {
+                AddresId = AddressSelect;
+            }
+
+
             parss = new List<ExcParameters>();
             par = new ExcParameters()
             {
@@ -583,6 +629,195 @@ namespace ShoppingCMS_V002.Controllers
                 return Content("There Isnt any row with this item");
             }
 
+        }
+
+        public ActionResult AddCustomerAddress(int cityId, string Address,string CodePosti)
+        {
+
+
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+
+                    PDBC db = new PDBC("PandaMarketCMS", true);
+                    db.Connect();
+                    List<ExcParameters> parss = new List<ExcParameters>();
+
+                    ExcParameters par = new ExcParameters()
+                    {
+                        _KEY = "@cityId",
+                        _VALUE = cityId
+                    };
+                    parss.Add(par);
+
+                    par = new ExcParameters()
+                    {
+                        _KEY = "@Address",
+                        _VALUE = Address
+                    };
+                    parss.Add(par);
+
+                    par = new ExcParameters()
+                    {
+                        _KEY = "@CodePosti",
+                        _VALUE = CodePosti
+                    };
+                    parss.Add(par);
+
+                    par = new ExcParameters()
+                    {
+                        _KEY = "@CustomerId",
+                        _VALUE = act.CustomerId
+                    };
+                    parss.Add(par);
+                    string AddresId = db.Script("INSERT INTO [tbl_Customer_Address] output inserted.id_CAddress VALUES( @CustomerId ,@cityId ,@CodePosti,@Address)", parss);
+                    db.DC();
+
+                    return Content("Success");
+                }
+                else
+                {
+                    return Content("Error");
+                }
+            }
+            else
+            {
+                return Content("Login");
+            }
+        }
+
+        public ActionResult UpdateCustomerData(string Name, string familly,string Email, string Phonenum)
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+
+                    PDBC db = new PDBC("PandaMarketCMS", true);
+                    
+                    List<ExcParameters> parss = new List<ExcParameters>();
+                    ExcParameters par = new ExcParameters()
+                    {
+                        _KEY = "@Name",
+                        _VALUE = Name
+                    };
+                    parss.Add(par);
+
+                    par = new ExcParameters()
+                    {
+                        _KEY = "@familly",
+                        _VALUE = familly
+                    };
+                    parss.Add(par);
+
+                    par = new ExcParameters()
+                    {
+                        _KEY = "@CustomerId",
+                        _VALUE = act.CustomerId
+                    };
+                    parss.Add(par);
+
+                    par = new ExcParameters()
+                    {
+                        _KEY = "@Phonenum",
+                        _VALUE = Phonenum
+                    };
+                    parss.Add(par);
+                    par = new ExcParameters()
+                    {
+                        _KEY = "@Email",
+                        _VALUE = Email
+                    };
+                    parss.Add(par);
+
+                    db.Connect();
+
+                    db.Script("UPDATE [tbl_Customer_Main]SET [C_Mobile] = @Phonenum,[C_FirstName] =@Name ,[C_LastNAme] =@familly ,[C_ISActivate] = 1 ,[C_Email] =@Email  WHERE id_Customer=@CustomerId", parss);
+                    db.DC();
+
+                    return Content("Success");
+                }
+                else
+                {
+                    return Content("Error");
+                }
+            }
+            else
+            {
+                return Content("Login");
+            }
+        }
+
+        public ActionResult UpdateCustomerPass(string CurrentPass, string Pass)
+        {
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+
+                    PDBC db = new PDBC("PandaMarketCMS", true);
+                    
+                    List<ExcParameters> parss = new List<ExcParameters>();
+                    ExcParameters par = new ExcParameters()
+                    {
+                        _KEY = "@CurrentPass",
+                        _VALUE = ENC.MD5Hash(CurrentPass)
+                    };
+                    parss.Add(par);
+
+                    par = new ExcParameters()
+                    {
+                        _KEY = "@Pass",
+                        _VALUE = ENC.MD5Hash(Pass)
+                    };
+                    parss.Add(par);
+
+                    par = new ExcParameters()
+                    {
+                        _KEY = "@CustomerId",
+                        _VALUE = act.CustomerId
+                    };
+                    parss.Add(par);
+
+                    db.Connect();
+
+                    if(Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_Customer_Main] WHERE id_Customer= @CustomerId AND C_Password = @CurrentPass", parss).Rows[0][0])!=0)
+                    {
+                        db.Script("UPDATE [tbl_Customer_Main] SET[C_Password] =@Pass  WHERE id_Customer= @CustomerId", parss);
+                        db.DC();
+                        return Content("Success");
+                    }else
+                    {
+                        db.DC();
+                        return Content("WrongPass");
+                    }
+
+                }
+                else
+                {
+                    return Content("Error");
+                }
+            }
+            else
+            {
+                return Content("Login");
+            }
         }
     }
 }

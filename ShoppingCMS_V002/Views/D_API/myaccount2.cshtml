@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "myaccount2";
+    Layout = "~/Views/Master/Design_Master.cshtml";
+}
+
+<!-- CONTENT AREA -->
+<div class="content-area">
+    <section class="page-section">
+        <div class="wrap container">
+            <div class="row">
+                <!--start main contain of page-->
+                <div class="col-lg-9 col-md-9 col-sm-8">
+                    <div class="information-title">حساب من</div>
+                    <div class="details-wrap">
+                        <!--
+                                                <div class="block-title alt"> <i class="fa fa-angle-down"></i> My Account</div>
+            -->
+                        <div class="details-box">
+                            <ul>
+                                <li>
+                                    <a href="@Url.Action("accountinformation","D_API")">ویرایش اطلاعات حساب</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ChangePass","D_API")">تغییر رمز عبور</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("addressBook","D_API")">آدرس ها</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!--
+                                                <div class="block-title alt"> <i class="fa fa-angle-down"></i> My Account</div>
+            -->
+                        <div class="details-box">
+                            <ul>
+                                <li>
+                                    <a href="@Url.Action("orderHistory","D_API")">تاریخچه خرید</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("reviewRating","D_API")">نظرات</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Returns","D_API")">درخواست های تکمیل نشده</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!--
+                                                <div class="block-title alt"> <i class="fa fa-angle-down"></i> Newsletter </div>
+            -->
+                        <div class="details-box">
+                            <ul>
+                                <li>
+                                <a href="#" onclick="return wishListFunction()">علاقه مندی ها</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+                <!--end main contain of page-->
+                <!--start sidebar-->
+                <div class="col-lg-3 col-md-3 col-sm-4">
+                    <div class="widget account-details">
+                        <h2 class="widget-title">حساب</h2>
+                        <ul>
+                            <li class="active"><a href="@Url.Action("myaccount2","D_API")">حساب من</a></li>
+                            <li><a href="@Url.Action("accountinformation","D_API")"> اطلاعات حساب </a></li>
+                            <li><a href="@Url.Action("ChangePass","D_API")">تغییر رمز عبور</a></li>
+                            <li><a href="@Url.Action("addressBook","D_API")">آدرس ها</a></li>
+                            <li><a href="@Url.Action("orderHistory","D_API")">تاریخچه خرید</a></li>
+                            <li><a href="@Url.Action("reviewRating","D_API")">نظرات</a></li>
+                            <li><a href="@Url.Action("Returns","D_API")">درخواست های تکمیل نشده</a></li>
+                            <li><a href="#" onclick="return wishListFunction()">علاقه مندی ها</a></li>
+                            @*<li><a href="myaccount-leftsidebar.html">Left Sidebar</a></li>*@
+                        </ul>
+                    </div>
+                </div>
+                <!--end sidebar-->
+
+            </div>
+
+        </div>
+    </section>
+</div>
+<!-- /CONTENT AREA -->

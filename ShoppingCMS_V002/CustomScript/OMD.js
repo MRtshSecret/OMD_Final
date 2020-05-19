@@ -102,9 +102,9 @@ function AddFavorite(ProId) {
                         var res = response;
                         
                         if (res == "1") {
-                            alert(" محصول به علاقه مندی ها اضافه شد.");
+                            danger("مشتری عزیز", " محصول به علاقه مندی ها اضافه شد.");
                         } else if (res == "0") {
-                            alert(" محصول از علاقه مندی ها حذف شد.");
+                            danger("مشتری عزیز", "محصول از علاقه مندی ها حذف شد.");
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -113,7 +113,7 @@ function AddFavorite(ProId) {
                     }
                 });
             } else {
-                alert(" لطفا ابتدا وارد حساب کاربری خود شوید.");
+                danger("مشتری عزیز", "لطفا ابتدا وارد حساب کاربری خود شوید");
 
             }
 
@@ -200,17 +200,17 @@ function SendCode() {
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     if (response == "Reapited Num") {
-                        alert("حساب کاربری با این شماره موجود است.")
+                        danger("مشتری عزیز", "حساب کاربری با این شماره موجود است.");
                     } else {
                         var Token = response;
                         if (Token.StatusCode == "smsX:200OK") {
-                            alert("پیامک با موفقیت ارسال شد.");
+                            danger("مشتری عزیز", "پیامک با موفقیت ارسال شد");
                             $('#Id_UUU').text(Token.CustomerId);
                             $('#NewAcc').hide();
                             $('#CodeDiv').show();
 
                         } else {
-                            alert("در پروسه ی ارسال پیامک مشکلی ایجاد شده ، لطفا بعد از 60 ثانیه دوباره تلاش کنید ");
+                            danger("مشتری عزیز", "در پروسه ی ارسال پیامک مشکلی ایجاد شده ، لطفا بعد از 60 ثانیه دوباره تلاش کنید");
                             console.log(Token);
                         }
                     }
@@ -220,10 +220,12 @@ function SendCode() {
                 }
             });
         } else {
-            alert("مقدار دو رمز عبور یکسان نیست");
+            
+            danger("مشتری عزیز", "مقدار دو رمز عبور یکسان نیست");
         }
     } else {
-        alert("لطفا مقدار ورودی را پر کنید");
+        
+        danger("مشتری عزیز", "لطفا مقدار ورودی را پر کنید");
     }
 
 
@@ -247,7 +249,7 @@ function CheckCode() {
             var Token = response;
             if (Token == "Success") {
 
-                alert("ثبت نام شما با موفقیت انجام شد.");
+                danger("مشتری عزیز", "ثبت نام شما با موفقیت انجام شد");
                 Enc(Id);
                 $('#miniFactor_divM').show();
                 $('#NewAcc').hide();
@@ -255,10 +257,12 @@ function CheckCode() {
 
             } else if (Token == "Wrong Code") {
 
-                alert("کد وارد شده اشتباه است . دوباره تلاش کنید");
+                
+                danger("مشتری عزیز", "کد وارد شده اشتباه است . دوباره تلاش کنید");
                 $('#C_Token').val("");
             } else {
-                alert("مشکلی در پروسه ی ثبت نام ایجاد شده ، لطفادوباره تلاش کنید");
+                
+                danger("مشتری عزیز", "مشکلی در پروسه ی ثبت نام ایجاد شده ، لطفادوباره تلاش کنید");
                 $('#NewAcc').show();
                 $('#CodeDiv').hide();
             }
@@ -367,7 +371,7 @@ function AddToShoppingCart() {
 
                 
             } else {
-                alert(" لطفا ابتدا وارد حساب کاربری خود شوید.");
+                danger("مشتری عزیز", "لطفا ابتدا وارد حساب کاربری خود شوید.");
 
             }
 
@@ -427,7 +431,8 @@ function ContactUsMessage()
     var Message = $('#input-message').val();
 
     if (Name == "" || Email == "" || Subject == "" || Message == "") {
-        alert("لطفا همه ی مقادیر ورودی را پر کنید");
+
+        danger("مشتری عزیز", "لطفا همه ی مقادیر ورودی را پر کنید");
     } else {
 
         PostJson1 = {
@@ -444,7 +449,8 @@ function ContactUsMessage()
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 if (response == "Success") {
-                    alert("پیام شما با موفقیت ثبت شد !");
+                    
+                    danger("مشتری عزیز", "پیام شما با موفقیت ثبت شد !");
 
                     $('#name').val("");
                     $('#email').val("");
@@ -485,11 +491,12 @@ function login() {
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     if (response == "Wrong value") {
-                        alert("شماره موبایل یا رمز عبور اشتباه است");
+                        danger("مشتری عزیز", "شماره موبایل یا رمز عبور اشتباه است");
                     } else {
                         setCookie("OMD_Active", res, 30);
-                        alert("وارد حساب کاربری خود شدید");
+                        danger("مشتری عزیز", "وارد حساب کاربری خود شدید");
                         $('#Log').hide();
+                        location.reload(true);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -499,7 +506,19 @@ function login() {
         
         
     } else {
-        alert("لطفا مقدار ورودی را پر کنید");
+        danger("مشتری عزیز", "لطفا مقدار ورودی را پر کنید");
     }
+}
+
+
+function danger(title, body) {
+    $(".modal-header").css({ "background-color": "#dc3545" });
+    $(".modal-title").text(title);
+    $(".modal-body").text(body);
+    setTimeout(function () {
+        $("#modal").modal();
+    },
+        200);
+    
 }
 
