@@ -1096,5 +1096,12 @@ namespace ShoppingCMS_V002.Controllers
             }
             return View();
         }
+
+        public ActionResult Category()
+        {
+            D_APIModelFiller DMF = new D_APIModelFiller();
+            return View(DMF.CategoriesAsTree_OneSub("MainCat", 1));
+
+        }
     }
 }

@@ -198,6 +198,7 @@
                             <li>
                                 <a href="#">محصولات</a>
                                 <ul id="Master_CategoryL">
+                                    @{ Html.RenderAction("Category", "D_API"); }
                                 </ul>
                             </li>
                             <li>
@@ -346,7 +347,7 @@
             }
         });
 
-        PostJson = {
+        @*PostJson = {
             'Cat': 'MainCat',
             'Id': 1
         };
@@ -373,7 +374,7 @@
             error: function(jqXHR, textStatus, errorThrown) {
                 alert(textStatus);
             }
-        });
+        });*@
 
 
     });

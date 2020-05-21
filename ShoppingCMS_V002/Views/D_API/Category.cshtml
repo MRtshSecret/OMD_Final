@@ -1,0 +1,22 @@
+﻿@using ShoppingCMS_V002.Models
+@model List<TreeModel>
+@{
+    ViewBag.Title = "Category";
+    
+}
+
+@foreach (var item in Model)
+{
+    <li>
+        <a href="#">@item.NameSub</a>
+        <ul id="Master_CategoryL">
+            <li><a href="@Url.Action("Product_List", "D_API", new { Cat="MainCat",Id=item.Id})">همه</a></li>
+            @foreach (var item2 in item.Subs)
+            {
+                <li><a href="@Url.Action("Product_List","D_API",new {Cat="SubCat",Id=item2.Id })">@item2.NameSub</a></li>
+            }
+        </ul>
+    </li>
+}
+
+

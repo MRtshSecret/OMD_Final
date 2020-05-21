@@ -7466,6 +7466,7 @@
     <Content Include="Views\D_API\Returns.cshtml" />
     <Content Include="Views\D_API\newsletter.cshtml" />
     <Content Include="Views\D_API\ErrorPage.cshtml" />
+    <Content Include="Views\D_API\Category.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
