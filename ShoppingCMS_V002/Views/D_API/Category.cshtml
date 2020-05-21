@@ -2,7 +2,7 @@
 @model List<TreeModel>
 @{
     ViewBag.Title = "Category";
-    
+    Layout = "~/Views/Master/Design_Master.cshtml";
 }
 
 @foreach (var item in Model)
@@ -10,10 +10,10 @@
     <li>
         <a href="#">@item.NameSub</a>
         <ul id="Master_CategoryL">
-            <li><a href="@Url.Action("Product_List", "D_API", new { Cat="MainCat",Id=item.Id})">همه</a></li>
+            <li><a href="@Url.Action("Product_List", "D_API", new { Type="دسته بندی اصلی",Id=item.Id})">همه</a></li>
             @foreach (var item2 in item.Subs)
             {
-                <li><a href="@Url.Action("Product_List","D_API",new {Cat="SubCat",Id=item2.Id })">@item2.NameSub</a></li>
+                <li><a href="@Url.Action("Product_List","D_API",new {Type="گروه اصلی",Id=item2.Id })">@item2.NameSub</a></li>
             }
         </ul>
     </li>
