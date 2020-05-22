@@ -31,8 +31,8 @@
                                     <input id="CPass11" class="form-control" type="password" placeholder="رمز عبور" />
                                 </div>
                             </div>
-                            
-                            
+
+
                             <div class="col-md-6">
                                 <button class="btn btn-theme btn-block btn-theme-dark" onclick="return login()">ورود</button>
 
@@ -100,7 +100,7 @@
                             </div>
 
                         </div>
-                       
+
                         <div class="col-md-12 col-lg-6">
 
                         </div>
@@ -143,32 +143,37 @@
 
 
 </div>
-
+@Scripts.Render("~/bundles/omd/jquery2")
 <script>
     $(document).ready(function () {
         var cookie = getCookie("OMD_Active");
-        PostJson = {
-            'Token': cookie
-        };
 
-        $.ajax({
-            url: '/API_Functions/DecryptOMD',
-            type: "post",
-            data: JSON.stringify(PostJson),
-            contentType: "application/json; charset=utf-8",
-            success: function (response) {
-                var token = JSON.parse(response);
-                if (token.Status == "Active") {
-                    $('#NewAcc').hide();
-                    $('#Log').hide();
+        if (cookie != "") {
+
+            PostJson = {
+                'Token': cookie
+            };
+
+            $.ajax({
+                url: '/API_Functions/DecryptOMD',
+                type: "post",
+                data: JSON.stringify(PostJson),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    var token = JSON.parse(response);
+                    if (token.Status == "Active") {
+                        $('#NewAcc').hide();
+                        $('#Log').hide();
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
+                    result = "";
                 }
+            });
 
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus);
-                result = "";
-            }
-        });
-
+        }
+        
     });
 </script>

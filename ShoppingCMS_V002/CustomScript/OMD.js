@@ -186,7 +186,6 @@ function SendCode() {
 
             setTimeout(function () { $('#SendCodeBtn').attr("disabled", false); }, 60000);
 
-
             PostJson = {
                 'MobileNum': MobileNum,
                 'Pass': Pass1
@@ -200,8 +199,12 @@ function SendCode() {
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     if (response == "Reapited Num") {
+                        $('#SendCodeBtn').attr("disabled", false);
                         danger("مشتری عزیز", "حساب کاربری با این شماره موجود است.");
                     } else {
+                        
+                        
+
                         var Token = response;
                         if (Token.StatusCode == "smsX:200OK") {
                             danger("مشتری عزیز", "پیامک با موفقیت ارسال شد");
@@ -278,6 +281,7 @@ function NewAccount() {
 
     $('#NewAcc').show();
     $('#Log').hide();
+    return false;
 }
 
 function AddToShoppingCart() {
@@ -490,10 +494,12 @@ function login() {
                 data: JSON.stringify(PostJson),
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
+                    
                     if (response == "Wrong value") {
                         danger("مشتری عزیز", "شماره موبایل یا رمز عبور اشتباه است");
                     } else {
-                        setCookie("OMD_Active", res, 30);
+                        
+                        setCookie("OMD_Active", response, 30);
                         danger("مشتری عزیز", "وارد حساب کاربری خود شدید");
                         $('#Log').hide();
                         location.reload(true);

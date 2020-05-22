@@ -19,7 +19,7 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
 
-            ModelFiller MF = new ModelFiller();
+                ModelFiller MF = new ModelFiller();
             return View(MF.FactorTableFiller(act));
             }
             else
@@ -54,7 +54,7 @@ namespace ShoppingCMS_V002.Controllers
             if (check.HasAccess)
             {
 
-            ModelFiller MF = new ModelFiller();
+                ModelFiller MF = new ModelFiller();
             return View(MF.FactorDetailePage(Id));
             }
             else
@@ -68,7 +68,7 @@ namespace ShoppingCMS_V002.Controllers
             CheckAccess check = new CheckAccess(SSSession);
             if (check.HasAccess)
             {
-            ModelFiller MF = new ModelFiller();
+                ModelFiller MF = new ModelFiller();
             return View(MF.Pro_SaleList(Gp,Id));
             }
             else
@@ -82,7 +82,7 @@ namespace ShoppingCMS_V002.Controllers
             CheckAccess check = new CheckAccess(SSSession);
             if (check.HasAccess)
             {
-            ModelFiller MF = new ModelFiller();
+                ModelFiller MF = new ModelFiller();
             return View(MF.Customers());
             }
             else
@@ -93,21 +93,21 @@ namespace ShoppingCMS_V002.Controllers
         [HttpPost]
         public ActionResult User_Actions(string ActToDo, int id)
         {
-            string SSSession = ""; if (HttpContext.Request.Cookies["TSHPANDAControll"] != null) { HttpCookie cookie = HttpContext.Request.Cookies.Get("TSHPANDAControll"); if (cookie != null) { SSSession = cookie.Value; } else { SSSession = "N.A"; } } else { SSSession = "N.A"; }
+            string SSSession = ""; if (HttpContext.Request.Cookies["TSHPANDAControll" + StaticLicense.LicName] != null) { HttpCookie cookie = HttpContext.Request.Cookies.Get("TSHPANDAControll" + StaticLicense.LicName); if (cookie != null) { SSSession = cookie.Value; } else { SSSession = "N.A"; } } else { SSSession = "N.A"; }
             CheckAccess check = new CheckAccess(SSSession);
-            if (check.HasAccess)
-            {
+            if (check.HasAccess) { 
+
                 PDBC db = new PDBC("PandaMarketCMS", true);
                 db.Connect();
-            if (ActToDo == "Active")
-            {
-                db.Script("UPDATE [tbl_Customer_Main] SET [C_ISActivate] = 1 WHERE id_Customer=" + id);
-            }
-            else if (ActToDo == "DeActive")
-            {
-                db.Script("UPDATE [tbl_Customer_Main] SET [C_ISActivate] = 0 WHERE id_Customer=" + id);
-            }
-            db.DC();
+                if (ActToDo == "Active")
+                {
+                    db.Script("UPDATE [tbl_Customer_Main] SET [C_ISActivate] = 1 WHERE id_Customer=" + id);
+                }
+                else if (ActToDo == "DeActive")
+                {
+                    db.Script("UPDATE [tbl_Customer_Main] SET [C_ISActivate] = 0 WHERE id_Customer=" + id);
+                }
+                db.DC();
                 return Content("Success");
             }
             else
@@ -120,7 +120,7 @@ namespace ShoppingCMS_V002.Controllers
             CheckAccess check = new CheckAccess(SSSession);
             if (check.HasAccess)
             {
-            ModelFiller MF = new ModelFiller();
+                ModelFiller MF = new ModelFiller();
             return View(MF.customerDitail(Id));
             }
             else
@@ -134,7 +134,7 @@ namespace ShoppingCMS_V002.Controllers
             CheckAccess check = new CheckAccess(SSSession);
             if (check.HasAccess)
             {
-            ModelFiller MF = new ModelFiller();
+                ModelFiller MF = new ModelFiller();
             return View(MF.Customer_Buy());
 
             }

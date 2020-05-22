@@ -96,8 +96,9 @@ namespace ShoppingCMS_V002.Controllers
         {
             PDBC db = new PDBC("PandaMarketCMS", true);
             db.Connect();
-            if (Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_Customer_Main] WHERE C_Mobile LIKE N'" + MobileNum + "'").Rows[0][0]) == 0)
+            if (Convert.ToInt32(db.Select("SELECT COUNT(*) FROM [tbl_Customer_Main] WHERE C_Mobile LIKE N'" + MobileNum + "' AND C_ISActivate=1").Rows[0][0]) == 0) 
             {
+                db.Script("DELETE FROM [tbl_Customer_Main] WHERE C_Mobile=" + MobileNum);
                 Encryption ENC = new Encryption();
                 List<ExcParameters> parss = new List<ExcParameters>();
                 ExcParameters par = new ExcParameters()
@@ -140,7 +141,8 @@ namespace ShoppingCMS_V002.Controllers
                     _VALUE = 1
                 };
                 parss.Add(par);
-                string result = db.Script("INSERT INTO [dbo].[tbl_sms_ir_CustomerKeys]([id_Customer],[sms_irKeyType],[sms_irSentKey],[sms_irKeyGeneratedDate],[sms_irIsKeyAlive]) VALUES(@id_Customer ,@sms_irKeyType ,@sms_irSentKey ,GETDATE(),@sms_irIsKeyAlive)", parss);
+
+                string result = db.Script("INSERT INTO [tbl_sms_ir_CustomerKeys]([id_Customer],[sms_irKeyType],[sms_irSentKey],[sms_irKeyGeneratedDate],[sms_irIsKeyAlive]) VALUES(@id_Customer ,@sms_irKeyType ,@sms_irSentKey ,GETDATE(),@sms_irIsKeyAlive)", parss);
                 SMS_ir sms = new SMS_ir();
                 db.DC();
                 return Json(sms.SendVerificationCodeWithTemplate(UserId, "VelvetRegister", 2));

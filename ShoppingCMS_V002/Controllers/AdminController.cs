@@ -88,7 +88,6 @@ namespace ShoppingCMS_V002.Controllers
         {
             string SSSession = ""; if (HttpContext.Request.Cookies["TSHPANDAControll" + StaticLicense.LicName] != null) { HttpCookie cookie = HttpContext.Request.Cookies.Get("TSHPANDAControll" + StaticLicense.LicName); if (cookie != null) { SSSession = cookie.Value; } else { SSSession = "N.A"; } } else { SSSession = "N.A"; }
             CheckAccess check = new CheckAccess(SSSession);
-
             if (check.HasAccess)
             {
                 PDBC db = new PDBC("PandaMarketCMS", true);
@@ -114,16 +113,16 @@ namespace ShoppingCMS_V002.Controllers
 
         public ActionResult ShowAdmins()
         {
-            //string SSSession = ""; if (HttpContext.Request.Cookies["TSHPANDAControll"] != null) { HttpCookie cookie = HttpContext.Request.Cookies.Get("TSHPANDAControll"); if (cookie != null) { SSSession = cookie.Value; } else { SSSession = "N.A"; } } else { SSSession = "N.A"; }
-            //CheckAccess check = new CheckAccess(SSSession);
-            //if (check.HasAccess)
-            //{
+            string SSSession = ""; if (HttpContext.Request.Cookies["TSHPANDAControll" + StaticLicense.LicName] != null) { HttpCookie cookie = HttpContext.Request.Cookies.Get("TSHPANDAControll" + StaticLicense.LicName); if (cookie != null) { SSSession = cookie.Value; } else { SSSession = "N.A"; } } else { SSSession = "N.A"; }
+            CheckAccess check = new CheckAccess(SSSession);
+            if (check.HasAccess)
+            {
 
-            ModelFiller MF = new ModelFiller();
+                ModelFiller MF = new ModelFiller();
             return View(MF.Admins());
-            //}
-            //else
-            //    return RedirectToAction("NotAccess", "MS");
+            }
+            else
+                return RedirectToAction("NotAccess", "MS");
         }
 
         public ActionResult Admin_Actions(string ActToDo, int id)

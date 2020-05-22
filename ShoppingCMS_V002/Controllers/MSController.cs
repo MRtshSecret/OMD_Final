@@ -765,9 +765,13 @@ namespace ShoppingCMS_V002.Controllers
 
             if (value == "information")
             {
-                query = "UPDATE [dbo].[tbl_ADMIN_main]SET [ad_firstname] = @ad_firstname,[ad_lastname] = @ad_lastname,[ad_avatarprofile] = @ad_avatarprofile,[ad_email] = @ad_email,[ad_phone] = @ad_phone,[ad_mobile] = @ad_mobile,[ad_NickName] = @ad_NickName WHERE [id_Admin] = @id";
+                query = "UPDATE [tbl_ADMIN_main]SET [ad_firstname] = @ad_firstname,[ad_lastname] = @ad_lastname,[ad_avatarprofile] = @ad_avatarprofile,[ad_email] = @ad_email,[ad_phone] = @ad_phone,[ad_mobile] = @ad_mobile,[ad_NickName] = @ad_NickName WHERE [id_Admin] = @id";
 
+                if(G=="")
+                {
+                    query = "UPDATE [tbl_ADMIN_main]SET [ad_firstname] = @ad_firstname,[ad_lastname] = @ad_lastname,[ad_email] = @ad_email,[ad_phone] = @ad_phone,[ad_mobile] = @ad_mobile,[ad_NickName] = @ad_NickName WHERE [id_Admin] = @id";
 
+                }
                 parameters = new ExcParameters()
                 {
                     _KEY = "@ad_firstname",
@@ -837,7 +841,7 @@ namespace ShoppingCMS_V002.Controllers
 
                 if (A == pass.ToString())
                 {
-                    query = "UPDATE [dbo].[tbl_ADMIN_main] SET [ad_password] = @ad_password WHERE [id_Admin] = @id";
+                    query = "UPDATE [tbl_ADMIN_main] SET [ad_password] = @ad_password WHERE [id_Admin] = @id";
 
                     parameters = new ExcParameters()
                     {
@@ -865,7 +869,7 @@ namespace ShoppingCMS_V002.Controllers
             }
             else if (value == "access")
             {
-                query = "UPDATE [dbo].[tbl_ADMIN_main]SET [ad_typeID] = @ad_typeID,[ad_personalColorHexa] = @ad_personalColorHexa WHERE [id_Admin] =@id_Admin";
+                query = "UPDATE [tbl_ADMIN_main]SET [ad_typeID] = @ad_typeID,[ad_personalColorHexa] = @ad_personalColorHexa WHERE [id_Admin] =@id_Admin";
                 parameters = new ExcParameters()
                 {
                     _KEY = "@ad_typeID",

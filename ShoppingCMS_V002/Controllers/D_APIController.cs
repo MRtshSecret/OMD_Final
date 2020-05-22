@@ -386,27 +386,38 @@ namespace ShoppingCMS_V002.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult login2(string MobileNum,string pass)
         {
             Encryption ENC = new Encryption();
             
                 PDBC dbo = new PDBC("PandaMarketCMS", true);
-                string query;
-                query = "SELECT [id_Customer],[C_Mobile],[C_Password]FROM[PandaMarketCMS].[dbo].[tbl_Customer_Main]";
-                query += $" where[C_Mobile] = N'"+MobileNum+"' AND [C_Password] = N'"+ENC.MD5Hash(pass)+"'";
-                dbo.Connect();
-                using (DataTable dt = dbo.Select(query))
+            List<ExcParameters> parss = new List<ExcParameters>();
+            ExcParameters par = new ExcParameters()
+            {
+                _KEY = "@MobileNum",
+                _VALUE = MobileNum
+            };
+            parss.Add(par);
+
+            par = new ExcParameters()
+            {
+                _KEY = "@pass",
+                _VALUE = ENC.MD5Hash(pass)
+            };
+            parss.Add(par);
+
+            dbo.Connect();
+                using (DataTable dt = dbo.Select("SELECT id_Customer FROM [tbl_Customer_Main] WHERE C_Mobile=@MobileNum AND C_Password=@pass", parss))
                 {
                     if (dt.Rows.Count > 0)
                     {
-
-                        return RedirectToAction("EncryptOMD", "API_Functions",new { Token= dt.Rows[0]["id_Customer"].ToString() });
+                    dbo.DC();
+                    return RedirectToAction("EncryptOMD", "API_Functions", new { Token = dt.Rows[0]["id_Customer"].ToString() });
                     }
                     else
                     {
-                     
-                        return Content("Wrong value");
+                    dbo.DC();
+                    return Content("Wrong value");
 
                     }
                 }
