@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+//helllooooo
 namespace ShoppingCMS_V002.Controllers
 {
     public class FactorController : Controller
