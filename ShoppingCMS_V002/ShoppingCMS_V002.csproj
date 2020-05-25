@@ -251,12 +251,14 @@
     <Content Include="assetsOMD\css\theme.css" />
     <Content Include="assetsOMD\ico\apple-touch-icon-144-precomposed.png" />
     <Content Include="assetsOMD\ico\favicon.ico" />
+    <Content Include="assetsOMD\img\1.jpg" />
     <Content Include="assetsOMD\img\flag.gif" />
     <Content Include="assetsOMD\img\icon-1.png" />
     <Content Include="assetsOMD\img\icon-2.png" />
     <Content Include="assetsOMD\img\icon-grid.png" />
     <Content Include="assetsOMD\img\icon-list.png" />
     <Content Include="assetsOMD\img\logo-bella-shop.png" />
+    <Content Include="assetsOMD\img\Omdedaran.jpg" />
     <Content Include="assetsOMD\img\overlay-banner.png" />
     <Content Include="assetsOMD\img\preview\avatars\avatar-1.jpg" />
     <Content Include="assetsOMD\img\preview\avatars\avatar-2.jpg" />
@@ -410,6 +412,7 @@
     <Content Include="assetsOMD\img\preview\team\team-2.jpg" />
     <Content Include="assetsOMD\img\preview\team\team-3.jpg" />
     <Content Include="assetsOMD\img\preview\team\team-4.jpg" />
+    <Content Include="assetsOMD\img\sdfasdfsdf.jpg" />
     <Content Include="assetsOMD\js\theme-ajax-mail.js" />
     <Content Include="assetsOMD\js\theme-config.js" />
     <Content Include="assetsOMD\js\theme.js" />
