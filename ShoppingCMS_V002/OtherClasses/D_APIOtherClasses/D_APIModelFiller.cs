@@ -279,8 +279,8 @@ namespace ShoppingCMS_V002.OtherClasses.D_APIOtherClasses
                 {
                     var SubModel = new TreeModel()
                     {
-                        Id = Convert.ToInt32(dt.Rows[j]["Id"]),
-                        NameSub = dt.Rows[j]["Name"].ToString()
+                        Id = Convert.ToInt32(dt2.Rows[j]["Id"]),
+                        NameSub = dt2.Rows[j]["Name"].ToString()
                     };
                     Subs.Add(SubModel);
                 }
