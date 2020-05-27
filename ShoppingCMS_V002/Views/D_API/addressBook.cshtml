@@ -1,5 +1,5 @@
-﻿@using ShoppingCMS_V002.Models
-@model List<Id_ValueModel>
+﻿@model ShoppingCMS_V002.ModelViews.D_APIModelViews.AddressBookModelView
+
 @{
     ViewBag.Title = "addressBook";
     Layout = "~/Views/Master/Design_Master.cshtml";
@@ -14,6 +14,27 @@
                 <div class="col-lg-9 col-md-9 col-sm-8">
                     <div class="information-title">اطلاعات شخصی</div>
                     <div class="details-wrap">
+                        <div class="block-title alt"> <i class="fa fa-angle-down"></i> آدرس ها</div>
+                        <div class="details-box">
+                            <form action="#" class="form-delivery">
+                                <div class="row">
+                                    @foreach (var item in Model.Addresses)
+                                    {
+                                        <div class="col-md-9 col-sm-12">
+                                            <div>آدرس</div>
+                                            <div class="form-group"><div class="form-control" type="text" placeholder="">@item.City - @item.FullAddress</div></div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-6">
+                                            <div>کد پستی</div>
+                                            <div class="form-group"><div class="form-control" type="text" placeholder="کد پستی">@item.HintAddress</div></div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="details-wrap">
                         <div class="block-title alt"> <i class="fa fa-angle-down"></i> افزودن آدرس</div>
                         <div class="details-box">
                             <form action="#" class="form-delivery">
@@ -26,7 +47,8 @@
                                             <select id="OstanSelect" style="text-align: right!important;"
                                                     class="selectpicker input-price" data-live-search="true" data-width="100%"
                                                     data-toggle="tooltip" title="Select" onchange="CityChange()">
-                                                @foreach (var item in Model)
+
+                                                @foreach (var item in Model.City)
                                                 {
                                                     <option value="@item.Id">@item.Value</option>
                                                 }
@@ -155,8 +177,9 @@
                 if (response == "Success") {
 
 
-                    danger("مشتری عزیز", "آدرس شما با موفقیت ثبت شد");
-                    location.reload(true);
+                    success("مشتری عزیز", "آدرس شما با موفقیت ثبت شد");
+                    $('#Address_inp').val("");
+                    $('#Address_hint_inp').val("");
 
                 } else {
                     danger("مشتری عزیز", "لطفا ابتدا وارد حساب کابری خود شوید");

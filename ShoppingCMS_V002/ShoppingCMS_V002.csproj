@@ -218,6 +218,7 @@
     <Compile Include="ModelViews\AddProductModelV_4.cs" />
     <Compile Include="ModelViews\AddProductModelV_5.cs" />
     <Compile Include="ModelViews\Blog_Post_insert_Model.cs" />
+    <Compile Include="ModelViews\D_APIModelViews\AddressBookModelView.cs" />
     <Compile Include="ModelViews\D_APIModelViews\D_ProductList_ModelView.cs" />
     <Compile Include="ModelViews\D_APIModelViews\MainPage_ModelView.cs" />
     <Compile Include="ModelViews\D_APIModelViews\ProductDetail_ModelView.cs" />

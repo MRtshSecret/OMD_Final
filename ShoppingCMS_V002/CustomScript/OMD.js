@@ -102,7 +102,7 @@ function AddFavorite(ProId) {
                         var res = response;
                         
                         if (res == "1") {
-                            danger("مشتری عزیز", " محصول به علاقه مندی ها اضافه شد.");
+                            success("مشتری عزیز", " محصول به علاقه مندی ها اضافه شد.");
                         } else if (res == "0") {
                             danger("مشتری عزیز", "محصول از علاقه مندی ها حذف شد.");
                         }
@@ -208,7 +208,7 @@ function SendCode() {
 
                         var Token = response;
                         if (Token.StatusCode == "smsX:200OK") {
-                            danger("مشتری عزیز", "پیامک با موفقیت ارسال شد");
+                            success("مشتری عزیز", "پیامک با موفقیت ارسال شد");
                             $('#Id_UUU').text(Token.CustomerId);
                             $('#NewAcc').hide();
                             $('#CodeDiv').show();
@@ -253,7 +253,7 @@ function CheckCode() {
             var Token = response;
             if (Token == "Success") {
 
-                danger("مشتری عزیز", "ثبت نام شما با موفقیت انجام شد");
+                success("مشتری عزیز", "ثبت نام شما با موفقیت انجام شد");
                 Enc(Id);
                 $('#miniFactor_divM').show();
                 $('#NewAcc').hide();
@@ -317,6 +317,7 @@ function AddToShoppingCart() {
                         success: function (response) {
                             var res = response;
                             setCookie("OMD_Factor", response, 2);
+                            location.reload(true);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             alert(textStatus);
@@ -355,6 +356,7 @@ function AddToShoppingCart() {
                                     var res = response;
                                     deleteCookie("OMD_Factor");
                                     setCookie("OMD_Factor", response, 2);
+                                    location.reload(true);
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
                                     alert(textStatus);
@@ -455,7 +457,7 @@ function ContactUsMessage()
             success: function (response) {
                 if (response == "Success") {
                     
-                    danger("مشتری عزیز", "پیام شما با موفقیت ثبت شد !");
+                    success("مشتری عزیز", "پیام شما با موفقیت ثبت شد !");
 
                     $('#name').val("");
                     $('#email').val("");
@@ -501,7 +503,7 @@ function login() {
                     } else {
                         
                         setCookie("OMD_Active", response, 30);
-                        danger("مشتری عزیز", "وارد حساب کاربری خود شدید");
+                        success("مشتری عزیز", "وارد حساب کاربری خود شدید");
                         $('#Log').hide();
                         location.reload(true);
                     }
@@ -529,3 +531,11 @@ function danger(title, body) {
     
 }
 
+function success(title, body) {
+    $(".modal-header").css({ "background-color": "#28a745" });
+    $(".modal-title").text(title);
+    $(".modal-body").text(body);
+    setTimeout(function () {
+        $("#modal").modal();
+    }, 1000)
+}

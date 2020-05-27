@@ -821,5 +821,38 @@ namespace ShoppingCMS_V002.Controllers
                 return Content("Login");
             }
         }
+
+        [HttpPost]
+        public ActionResult GetCustomerAddress()
+        {
+
+
+            if (HttpContext.Request.Cookies[StaticLicense.LicName + "Active"] != null)
+            {
+                string SSSession = "";
+                HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
+                if (cookie != null)
+                {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+
+                    PDBC db = new PDBC("PandaMarketCMS", true);
+                    db.Connect();
+                    List<ExcParameters> parss = new List<ExcParameters>();
+
+                    D_APIModelFiller DMF = new D_APIModelFiller();
+                    return Json(DMF.CustomerAddresses(Convert.ToInt32(act.CustomerId)));
+                }
+                else
+                {
+                    return Content("Error");
+                }
+            }
+            else
+            {
+                return Content("Login");
+            }
+        }
     }
 }

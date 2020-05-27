@@ -65,7 +65,7 @@
                                         </td>
                                     }
                                     <td class="quantity">
-                                        <input class="form-control qty ; col-md-5" type="number" step="1" min="1" name="quantity" value="@item.number" title="Qty">
+                                        <div class="form-control qty ; col-md-5" type="number" step="1" min="1" name="quantity" value="@item.number" title="Qty">@item.number</div>
                                     </td>
                                     <td class="total">@item.total @Model.FactorModel.MoneyQuantity <button onclick="return deleteItem(@item.Id)"><i class="fa fa-close"></i></button></td>
                                 </tr>
@@ -192,9 +192,24 @@
 <!-- /CONTENT AREA -->
 @Scripts.Render("~/bundles/omd/jquery2");
 <script>
+    var Addresses;
     $(document).ready(function () {
 
         $('#CitySelect').prop("disabled", true);
+
+         $.ajax({
+                url: '/API_Functions/GetCustomerAddress',
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                   Addresses = response;
+                    CheckChanges();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+         });
+
     });
 
 
@@ -321,9 +336,14 @@ function FinishFactor() {
             success: function (response) {
                 if (response == "Success") {
 
-                   danger("مشتری عزیز", "خرید شما با موفقیت انجام شد");
-                    var url ="@Url.Action("Index", "D_API", null, Request.Url.Scheme)";
-                    location.href = url;
+                   success("مشتری عزیز", "خرید شما با موفقیت انجام شد ، پس از چند ثانیه به صفحه ی اصلی منتقل می شوید");
+
+                    setTimeout(function () {
+                        var url = "@Url.Action("Index", "D_API", null, Request.Url.Scheme)";
+                        location.href = url;
+                    }, 2000);
+
+                   
 
                     deleteCookie("OMD_Factor");
                 } else {
@@ -357,6 +377,19 @@ function FinishFactor() {
             $('#OstanSelect').prop("disabled", true);
             $('#CitySelect1').prop("disabled", true);
 
+
+
+            $(Addresses).each(function (e, obj) {
+            
+             
+                if (obj.Id == AddSelect) {
+                    $('#Address_inp').val(obj.FullAddress);
+                    $('#Address_hint_inp').val(obj.HintAddress);
+            }
+            
+        });
+
+
         } else {
 
             $('#CitySelect').prop("disabled", false);
@@ -364,6 +397,8 @@ function FinishFactor() {
             $('#Address_hint_inp').prop("disabled", false);
             $('#OstanSelect').prop("disabled", false);
             $('#CitySelect1').prop("disabled", false);
+            $('#Address_inp').val("");
+            $('#Address_hint_inp').val("");
         }
     }
 

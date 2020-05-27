@@ -772,8 +772,19 @@ namespace ShoppingCMS_V002.Controllers
                 HttpCookie cookie = HttpContext.Request.Cookies.Get(StaticLicense.LicName + "Active");
                 if (cookie != null)
                 {
+                    Encryption ENC = new Encryption();
+                    SSSession = ENC.DecryptText(cookie.Value, "OMD_Token");
+                    ActivationModel act = JsonConvert.DeserializeObject<ActivationModel>(SSSession);
+
                     D_APIModelFiller DMF = new D_APIModelFiller();
-                    return View(DMF.Ostanha());
+                    var model = new AddressBookModelView() {
+                        City = DMF.Ostanha(),
+                        Addresses= DMF.CustomerAddresses(Convert.ToInt32(act.CustomerId))
+
+                    };
+
+
+                    return View(model);
                 }
                 else
                 {
