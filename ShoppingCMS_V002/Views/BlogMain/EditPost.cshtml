@@ -172,6 +172,19 @@
                                     <br />
                                     <div class=" col-lg-12 col-md-12 col-sm-12">
                                         <select class="form-control kt-select2" id="kt_select2_multiple" name="param" multiple="multiple" style="width: 100%;">
+                                            @foreach (var item in Model.Tags)
+                                            {
+                                                if (Model.PostData.tags.Contains(","+item.Id+","))
+                                                {
+                                                    <option value=@item.Id selected>@item.Value</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value=@item.Id>@item.Value</option>
+                                                }
+
+                                            }
+
                                         </select>
 
                                     </div>
@@ -451,6 +464,11 @@
                         $("#ERRAlertEdit1").hide(300);
                         $("#SuccesAlertEdit1").show(300);
                         $('#Edit_Btn').hide();
+
+                        setTimeout(function () {
+                            $("#SuccesAlertEdit1").hide(300);
+                            $('#Edit_Btn').show();
+                        }, 2000);
                     }
 
 

@@ -392,6 +392,7 @@ namespace ShoppingCMS_V002.OtherClasses.Blog
 
                 DataTable dt3 = db.Select("SELECT [Tag_Id] FROM [tbl_BLOG_TagConnector]where[Post_Id]=" + res.Id);
                 StringBuilder Tag = new StringBuilder();
+                Tag.Append(",");
                 for (int i = 0; i < dt3.Rows.Count; i++)
                 {
                     Tag.Append(dt3.Rows[i]["Tag_Id"]);

@@ -333,6 +333,7 @@ namespace ShoppingCMS_V002.Controllers
                     PostData= BMF.EditModelFiller(Post_id)
 
             };
+                Model.Tags = BMF.B_Tags_Filler(Convert.ToInt32(Model.PostData.Category));
 
                 return View(Model);
             }

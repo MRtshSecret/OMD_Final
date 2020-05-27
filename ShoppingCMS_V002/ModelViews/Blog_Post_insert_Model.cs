@@ -14,5 +14,6 @@ namespace ShoppingCMS_V002.ModelViews
         public List<Id_ValueModel> Category { get; set; }
         public PostModel PostData { get; set; }
         public List<Id_ValueModel> Type { get; set; }
+        public List<Id_ValueModel> Tags { get; set; }
     }
 }
